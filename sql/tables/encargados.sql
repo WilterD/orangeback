@@ -1,5 +1,5 @@
 CREATE TABLE encargados (
-id_encargado INT PRIMARY KEY,
+cedula_encargado VARCHAR(15) PRIMARY KEY,
 nombre VARCHAR(50) NOT NULL,
 telefono VARCHAR(15),
 correo VARCHAR(50),
