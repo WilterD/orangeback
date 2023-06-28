@@ -12,7 +12,7 @@ fecha_salida_real DATE,
 hora_salida_real TIME,
 id_personal_recogida INT,
 PRIMARY KEY (id_orden),
-FOREIGN KEY (id_servicio) REFERENCES Servicio(id_servicio) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (id_vehiculo, id_dueño) REFERENCES vehiculos(id_vehiculo, id_dueño) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (id_personal_recogida) REFERENCES personales(id_personal) ON DELETE CASCADE ON UPDATE CASCADE
 );
