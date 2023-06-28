@@ -1,4 +1,4 @@
-CREATE TABLE Trabajador (
+CREATE TABLE trabajadores (
 id_nombre VARCHAR(50) NOT NULL,
 id_cargo VARCHAR(50) NOT NULL,
 id_telefono VARCHAR(15),
