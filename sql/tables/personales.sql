@@ -1,4 +1,4 @@
-CREATE TABLE Personal (
+CREATE TABLE personales (
 cedula VARCHAR(15) NOT NULL PRIMARY KEY,
 nombre VARCHAR(50) NOT NULL,
 id_cargo VARCHAR(50),
