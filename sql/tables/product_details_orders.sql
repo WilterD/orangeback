@@ -3,7 +3,7 @@ id_service INT NOT NULL,
 id_activity INT NOT NULL,
 id_order INT NOT NULL,
 id_product INT NOT NULL,
-precio FLOAT NOT NULL,
+price FLOAT NOT NULL,
 cantidad INT NOT NULL,
 
 PRIMARY KEY (id_service, id_activity, id_order, id_product),
