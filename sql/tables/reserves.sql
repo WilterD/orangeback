@@ -2,12 +2,12 @@ CREATE TABLE reserves (
 id_reserve INT NOT NULL,
 date_exped DATE NOT NULL,
 date_expir DATE NOT NULL,
-dni_client INT NOT NULL,
-id_vehiculo INT NOT NULL,
+dni_client VARCHAR(15),
+plate VARCHAR(10) NOT NULL,
 hour TIME NOT NULL,
 
 PRIMARY KEY (id_reserve),
 
-FOREIGN KEY (dni_client) REFERENCES clients(dni_client) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo) ON DELETE CASCADE ON UPDATE CASCADE
+CONSTRAINT fk_reserves_clients FOREIGN KEY (dni_client) REFERENCES clients(dni_client) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT fk_reserves_vehiculos FOREIGN KEY (plate) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE
 );

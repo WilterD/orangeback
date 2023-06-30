@@ -18,3 +18,4 @@ FOREIGN KEY (id_model) REFERENCES models(id_model),
 CONSTRAINT fk_vehiculos_clients
 FOREIGN KEY (dni_client) REFERENCES clients(dni_client)
 );
+
