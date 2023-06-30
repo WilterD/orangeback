@@ -132,3 +132,75 @@ PRIMARY KEY (id_city),
 
 FOREIGN KEY (id_states) REFERENCES states(id_states)
 );
+
+CREATE TABLE reserves (
+id_reserve INT NOT NULL,
+date_exped DATE NOT NULL,
+date_expir DATE NOT NULL,
+dni_client VARCHAR(15),
+plate VARCHAR(10) NOT NULL,
+hour TIME NOT NULL,
+
+PRIMARY KEY (id_reserve),
+
+CONSTRAINT fk_reserves_clients FOREIGN KEY (dni_client) REFERENCES clients(dni_client) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT fk_reserves_vehiculos FOREIGN KEY (plate) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE products (
+id_product INT,
+product_code VARCHAR(50) NOT NULL,
+short_name_product VARCHAR(50) NOT NULL,
+descriptions VARCHAR(255) NOT NULL,
+supplier VARCHAR(50),
+is_ecology BOOLEAN,
+price DECIMAL(10, 2),
+existence INT,
+level_min INT,
+level_max INT,
+
+PRIMARY KEY (id_product)
+);
+
+
+CREATE TABLE activities (
+id_service INT,
+id_activity INT,
+cost FLOAT,
+descriptions VARCHAR(200),
+PRIMARY KEY (id_service, id_activity),
+CONSTRAINT fk_activities_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE employees (
+dni_employees VARCHAR(15) NOT NULL,
+employee_name VARCHAR(50) NOT NULL,
+id_charge VARCHAR(50),
+tlf_employee VARCHAR(15),
+addres_employee VARCHAR(50),
+
+PRIMARY KEY (dni_employees),
+
+FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+CREATE TABLE orders (
+id_order INT NOT NULL,
+dni_responsible VARCHAR(15) NOT NULL,
+name_responsible VARCHAR(50) NOT NULL,
+entry_date DATE NOT NULL,
+entry_time TIME NOT NULL,
+estimated_departure_date DATE NOT NULL,
+estimated_departure_time TIME NOT NULL,
+actual_departure_date DATE,                          
+actual_departure_time TIME,
+id_reserve INT,
+dni_worker VARCHAR(15),
+id_service INT NOT NULL,
+
+PRIMARY KEY (id_order),
+
+FOREIGN KEY (id_reserve) REFERENCES reserves(id_reserve) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE
+);

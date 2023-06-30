@@ -7,6 +7,6 @@ addres_employee VARCHAR(50),
 
 PRIMARY KEY (dni_employees),
 
-FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE
 
 );

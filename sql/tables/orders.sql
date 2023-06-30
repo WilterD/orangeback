@@ -14,6 +14,6 @@ id_service INT NOT NULL,
 
 PRIMARY KEY (id_order),
 
-FOREIGN KEY (id_reserve) REFERENCES reservas(id_reserve) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (dni_worker) REFERENCES trabajadores(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (id_reserve) REFERENCES reserves(id_reserve) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE
 );
