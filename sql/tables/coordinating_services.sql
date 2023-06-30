@@ -1,9 +1,13 @@
 CREATE TABLE coordinating_services (
-dni_worker VARCHAR(15) NOT NULL,
-id_service INT NOT NULL,
-reserve_times date NOT NULL,
-capacity INT NOT NULL,
-PRIMARY KEY (dni_worker, id_service),
-CONSTRAINT fk_trabajador_coordinating_services FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_servicio_coordinating_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
+  employee_dni VARCHAR(16) NOT NULL,
+  service_id INT NOT NULL,
+  reservation_time date NOT NULL,
+  capacity INT NOT NULL,
+  PRIMARY KEY (employee_dni, service_id),
+  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES workers(employee_dni) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );

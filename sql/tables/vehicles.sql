@@ -1,21 +1,16 @@
 CREATE TABLE vehicles (
-plate VARCHAR(10) NOT NULL,
-nro_serial VARCHAR(50) NOT NULL,
-nro_motor VARCHAR(50) NOT NULL,
-sale_date DATE NOT NULL,
-color VARCHAR(20) NOT NULL,
-descriptions_extra VARCHAR(100) NOT NULL,
-summary_maintenance VARCHAR(100) NOT NULL,
-agency_seller VARCHAR(100) NOT NULL,
-id_model VARCHAR(50) NOT NULL,
-dni_client VARCHAR(15) NOT NULL,
-
-PRIMARY KEY (plate),
-
-CONSTRAINT fk_vehiculos_models
-FOREIGN KEY (id_model) REFERENCES models(id_model),
-
-CONSTRAINT fk_vehiculos_clients
-FOREIGN KEY (dni_client) REFERENCES clients(dni_client)
+  license_plate VARCHAR(16),
+  nro_serial VARCHAR(64) UNIQUE NOT NULL,
+  nro_motor VARCHAR(64) UNIQUE NOT NULL,
+  sale_date DATE NOT NULL,
+  color VARCHAR(32) NOT NULL,
+  extra_descriptions VARCHAR(255) NOT NULL,
+  maintenance_summary VARCHAR(255),
+  agency_seller VARCHAR(64) NOT NULL,
+  model_id VARCHAR(50) NOT NULL,
+  client_dni VARCHAR(16) NOT NULL,
+  PRIMARY KEY (license_plate),
+  CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id),
+  CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients(client_dni)
 );
 

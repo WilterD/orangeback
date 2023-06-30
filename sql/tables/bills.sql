@@ -1,11 +1,11 @@
 CREATE TABLE bills (
-id_bill INT,
-date_bill DATE,
-discount_value INT NOT NULL,
-total_amount DECIMAL(10, 2),
-id_order INT,
-
-PRIMARY KEY (id_bill),
-
-FOREIGN KEY (id_order) REFERENCES orders(id_order) ON DELETE CASCADE ON UPDATE CASCADE
+  bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  date_bill TIMESTAMP NOT NULL,
+  discount_value FLOAT NOT NULL,
+  total_cost FLOAT NOT NULL,
+  order_id INTEGER NOT NULL,
+  PRIMARY KEY (bill_id),
+  CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );

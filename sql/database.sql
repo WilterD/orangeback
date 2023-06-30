@@ -1,235 +1,339 @@
-CREATE TABLE brands (
-id_brand INT,
-name_brand VARCHAR(50) NOT NULL,
-PRIMARY KEY (id_brand)
+CREATE DOMAIN dom_name VARCHAR(64) NOT NULL;
+
+-- 1
+
+CREATE TABLE users (
+  user_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  name dom_name,
+  email VARCHAR(64) UNIQUE NOT NULL,
+  password VARCHAR(64) NOT NULL,
+  PRIMARY KEY (user_id)
 );
 
-CREATE TABLE clients (
-dni_client VARCHAR(15),
-name_client VARCHAR(50) NOT NULL,
-tlf_main VARCHAR(15),
-tlf_secondary VARCHAR(15),
-mail_client VARCHAR(50),
-
-PRIMARY KEY (dni_client)
-
-);
-
-CREATE TABLE charges (
-id_charge VARCHAR(20) NOT NULL,
-descriptions VARCHAR(50) NOT NULL,
-
-PRIMARY KEY (id_charge)
-
-);
-
-CREATE TABLE workers (
-    dni_worker VARCHAR(15),
-    worker_name VARCHAR(50) NOT NULL,
-    tlf_worker VARCHAR(15),
-   address_worker VARCHAR(50),
-    salary int NOT NULL,
-    id_charge VARCHAR(50) NOT NULL,
-
-    PRIMARY KEY (dni_worker),
-
-    FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE RESTRICT ON UPDATE CASCADE
-
-);
-
-CREATE TABLE services (
-id_service INT,
-services_name VARCHAR(50) NOT NULL,
-descriptions VARCHAR(255) NOT NULL,
-cost_hora DECIMAL(10, 2) NOT NULL,
-
-PRIMARY KEY (id_service)
-
-);
-
-CREATE TABLE workers (
-    dni_worker VARCHAR(15),
-    worker_name VARCHAR(50) NOT NULL,
-    tlf_worker VARCHAR(15),
-   address_worker VARCHAR(50),
-    salary int NOT NULL,
-    id_charge VARCHAR(50) NOT NULL,
-
-    PRIMARY KEY (dni_worker),
-
-    FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
-CREATE TABLE workers_specialties (
-dni_worker VARCHAR(15) NOT NULL,
-id_service INT NOT NULL,
-PRIMARY KEY (dni_worker, id_service),
-
-CONSTRAINT fk_trabajador_specialties FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_servicio_specialties FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
-
-);
-
-CREATE TABLE models (
-id_model VARCHAR(50),
-brand VARCHAR(50) NOT NULL,
-brand_name VARCHAR(50) NOT NULL,
-model_kg INT NOT NULL,
-model_year INT NOT NULL,
-refrigerant_type VARCHAR(50) NOT NULL,
-number_posts INT NOT NULL,
-engine_oil_type VARCHAR(50) NOT NULL,
-oil_box VARCHAR(50) NOT NULL,
-octane INT NOT NULL,
-
-PRIMARY KEY (id_model)
-);
-
-CREATE TABLE vehicles (
-plate VARCHAR(10) NOT NULL,
-nro_serial VARCHAR(50) NOT NULL,
-nro_motor VARCHAR(50) NOT NULL,
-sale_date DATE NOT NULL,
-color VARCHAR(20) NOT NULL,
-descriptions_extra VARCHAR(100) NOT NULL,
-summary_maintenance VARCHAR(100) NOT NULL,
-agency_seller VARCHAR(100) NOT NULL,
-id_model VARCHAR(50) NOT NULL,
-dni_client VARCHAR(15) NOT NULL,
-
-PRIMARY KEY (plate),
-
-CONSTRAINT fk_vehiculos_models
-FOREIGN KEY (id_model) REFERENCES models(id_model),
-
-CONSTRAINT fk_vehiculos_clients
-FOREIGN KEY (dni_client) REFERENCES clients(dni_client)
-);
-
-
-CREATE TABLE supply_lines (
-id_supply INT,
-name_supply VARCHAR(50) NOT NULL,
-
-PRIMARY KEY (id_supply)
-
-);
+-- 2
 
 CREATE TABLE states(
-	id_states INTEGER GENERATED ALWAYS AS IDENTITY,
-	name_states TEXT NOT NULL,
+	state_id INTEGER GENERATED ALWAYS AS IDENTITY,
+	name dom_name UNIQUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  PRIMARY KEY (id_states)
+  PRIMARY KEY (state_id)
 );
 
-CREATE TABLE citys (
-id_city INT,
-name_city VARCHAR(50) NOT NULL,
-id_states INT,
+-- 3
 
-PRIMARY KEY (id_city),
-
-FOREIGN KEY (id_states) REFERENCES states(id_states)
+CREATE TABLE cities (
+  city_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  name dom_name UNIQUE,
+  state_id INTEGER NOT NULL,
+  PRIMARY KEY (city_id),
+  CONSTRAINT fk_state_id FOREIGN KEY (state_id) REFERENCES states(state_id)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
 
-CREATE TABLE reserves (
-id_reserve INT NOT NULL,
-date_exped DATE NOT NULL,
-date_expir DATE NOT NULL,
-dni_client VARCHAR(15),
-plate VARCHAR(10) NOT NULL,
-hour TIME NOT NULL,
+-- 4
 
-PRIMARY KEY (id_reserve),
-
-CONSTRAINT fk_reserves_clients FOREIGN KEY (dni_client) REFERENCES clients(dni_client) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_reserves_vehiculos FOREIGN KEY (plate) REFERENCES vehicles(plate) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE agencies (
+  agency_rif VARCHAR(32),
+  business_name dom_name UNIQUE,
+  agency_name dom_name UNIQUE,
+  manager_dni VARCHAR(16) NOT NULL UNIQUE,
+  city_id INTEGER NOT NULL,
+  PRIMARY KEY (agency_rif),
+  CONSTRAINT fk_manager_dni FOREIGN KEY (manager_dni) REFERENCES managers(manager_dni) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES cities(city_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
 
-CREATE TABLE products (
-id_product INT,
-product_code VARCHAR(50) NOT NULL,
-short_name_product VARCHAR(50) NOT NULL,
-descriptions VARCHAR(255) NOT NULL,
-supplier VARCHAR(50),
-is_ecology BOOLEAN,
-price DECIMAL(10, 2),
-existence INT,
-level_min INT,
-level_max INT,
+-- 5
 
-PRIMARY KEY (id_product)
+CREATE TABLE discounts (
+  discount_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  percentage FLOAT NOT NULL,
+  services_min SMALLINT NOT NULL,
+  services_max SMALLINT NOT NULL,
+  agency_rif VARCHAR(32),
+  PRIMARY KEY (discount_id),
+  CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies(agency_rif) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
 
+-- 6
 
-CREATE TABLE activities (
-id_service INT NOT NULL,
-id_activity INT NOT NULL UNIQUE,
-cost FLOAT NOT NULL,
-descriptions VARCHAR(200) NOT NULL,
-PRIMARY KEY (id_service, id_activity),
-CONSTRAINT fk_activities_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE jobs (
+  job_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  description VARCHAR(64) NOT NULL,
+  PRIMARY KEY (job_id)
 );
 
-CREATE TABLE employees (
-dni_employees VARCHAR(15) NOT NULL,
-employee_name VARCHAR(50) NOT NULL,
-id_charge VARCHAR(50),
-tlf_employee VARCHAR(15),
-addres_employee VARCHAR(50),
-
-PRIMARY KEY (dni_employees),
-
-FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE
-
-);
-
-CREATE TABLE orders (
-id_order INT NOT NULL,
-dni_responsible VARCHAR(15) NOT NULL,
-name_responsible VARCHAR(50) NOT NULL,
-entry_date DATE NOT NULL,
-entry_time TIME NOT NULL,
-estimated_departure_date DATE NOT NULL,
-estimated_departure_time TIME NOT NULL,
-actual_departure_date DATE,                          
-actual_departure_time TIME,
-id_reserve INT,
-dni_worker VARCHAR(15),
-id_service INT NOT NULL,
-
-PRIMARY KEY (id_order),
-
-FOREIGN KEY (id_reserve) REFERENCES reserves(id_reserve) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- 7
 
 CREATE TABLE managers (
-dni_manager VARCHAR(15),
-name_manager VARCHAR(50) NOT NULL,
-tlf_main VARCHAR(15) NOT NULL,
-tlf_secondary VARCHAR(15) NOT NULL,
-address_manager VARCHAR(50) NOT NULL,
-mail_manager VARCHAR(50) NOT NULL,
-id_charge VARCHAR(20) NOT NULL,
-
-PRIMARY KEY (dni_manager),
-
-FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE
+  manager_dni VARCHAR(16),
+  name dom_name,
+  main_phone VARCHAR(16) NOT NULL,
+  secondary_phone VARCHAR(16) NOT NULL,
+  address VARCHAR(64) NOT NULL,
+  email VARCHAR(64) NOT NULL,
+  PRIMARY KEY (dni_manager)
 );
+
+-- 8
+
+CREATE TABLE employees (
+  employee_dni VARCHAR(15) NOT NULL,
+  name dom_name,
+  phone VARCHAR(16) NOT NULL,
+  address VARCHAR(64) NOT NULL,
+  salary FLOAT NOT NULL,
+  agency_rif INTEGER NOT NULL,
+  job_id INTEGER NOT NULL,
+  PRIMARY KEY (employee_dni),
+  CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies(agency_rif) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_job_id FOREIGN KEY (job_id) REFERENCES jobs(job_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 9
+
+CREATE TABLE clients (
+  client_dni VARCHAR(16),
+  name dom_name,
+  email VARCHAR(50),
+  main_phone VARCHAR(16) NOT NULL,
+  secondary_phone VARCHAR(16) NOT NULL,
+  PRIMARY KEY (client_dni)
+);
+
+-- 10
+
+CREATE TABLE models (
+  model_id VARCHAR(64),
+  brand VARCHAR(64) NOT NULL,
+  description VARCHAR(64) NOT NULL,
+  model_kg FLOAT NOT NULL,
+  model_year VARCHAR(4) NOT NULL,
+  seats_quantity SMALLINT NOT NULL,
+  refrigerant_type VARCHAR(64) NOT NULL,
+  engine_oil_type VARCHAR(64) NOT NULL,
+  oil_box VARCHAR(64) NOT NULL,
+  octane INT NOT NULL,
+  PRIMARY KEY (id_model)
+);
+
+-- 11
+
+CREATE TABLE vehicles (
+  license_plate VARCHAR(16),
+  nro_serial VARCHAR(64) UNIQUE NOT NULL,
+  nro_motor VARCHAR(64) UNIQUE NOT NULL,
+  sale_date DATE NOT NULL,
+  color VARCHAR(32) NOT NULL,
+  extra_descriptions VARCHAR(255) NOT NULL,
+  maintenance_summary VARCHAR(255),
+  agency_seller VARCHAR(64) NOT NULL,
+  model_id VARCHAR(64) NOT NULL,
+  client_dni VARCHAR(16) NOT NULL,
+  PRIMARY KEY (license_plate),
+  CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients(client_dni)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 12
+
+CREATE TABLE bookings (
+  booking_id INT NOT NULL,
+  expedition_date TIMESTAMP NOT NULL,
+  expiration_date TIMESTAMP NOT NULL,
+  client_dni VARCHAR(16) NOT NULL,
+  license_plate VARCHAR(16) NOT NULL,
+  PRIMARY KEY (booking_id),
+  CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients(client_dni) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_license_plate FOREIGN KEY (license_plate) REFERENCES vehicles(license_plate) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 13
+
+CREATE TABLE services (
+  service_id INT,
+  description VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id_service)
+);
+
+-- 14
+
+CREATE TABLE activities (
+  activity_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  service_id INTEGER NOT NULL,
+  description TEXT NOT NULL,
+  cost_hour FLOAT NOT NULL,
+  PRIMARY KEY (service_id, activity_id),
+  CONSTRAINT fk_service_id FOREIGN KEY (id_service) REFERENCES services(id_service) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 15
+
+CREATE TABLE orders (
+  order_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  responsible_dni VARCHAR(16) DEFAULT NULL,
+  responsible_name VARCHAR(32) DEFAULT NULL,
+  entry_time TIMESTAMP NOT NULL,
+  estimated_departure TIMESTAMP NOT NULL,
+  real_departure TIMESTAMP DEFAULT NULL,                          
+  booking_id INTEGER NOT NULL,
+  employee_dni VARCHAR(16) NOT NULL,
+  PRIMARY KEY (order_id),
+  FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 16
 
 CREATE TABLE bills (
-id_bill INT,
-date_bill DATE,
-discount_value INT NOT NULL,
-total_amount DECIMAL(10, 2),
-id_order INT,
-
-PRIMARY KEY (id_bill),
-
-FOREIGN KEY (id_order) REFERENCES orders(id_order) ON DELETE CASCADE ON UPDATE CASCADE
+  bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  date_bill TIMESTAMP NOT NULL,
+  discount_value FLOAT NOT NULL,
+  total_cost FLOAT NOT NULL,
+  order_id INTEGER NOT NULL,
+  PRIMARY KEY (bill_id),
+  CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
+
+-- 17
+
+CREATE TABLE supply_lines (
+  supply_line_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(64) UNIQUE NOT NULL,
+  PRIMARY KEY (supply_line_id)
+);
+
+-- 18
+
+CREATE TABLE products (
+  product_id VARCHAR(32),
+  short_name_product VARCHAR(64) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  provider VARCHAR(64) NOT NULL,
+  is_ecological BOOLEAN NOT NULL,
+  price FLOAT NOT NULL,
+  supply_line_id INTEGER NOT NULL,
+  PRIMARY KEY (product_id),
+  CONSTRAINT fk_supply_line_id (supply_line_id) REFERENCES supply_lines (supply_line_id)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 19
+
+CREATE TABLE agency_products (
+  agency_rif INTEGER NOT NULL,
+  product_id INTEGER NOT NULL,
+  on_stock INTEGER NOT NULL,
+  max_capacity INTEGER NOT NULL,
+  min_capacity INTEGER NOT NULL,
+  PRIMARY KEY (agency_rif, product_id),
+  CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies (agency_rif)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT gk_product_id FOREIGN KEY (product_id) REFERENCES products (product_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+);
+
+-- 20
+
+CREATE TABLE employee_specialties (
+  employee_dni VARCHAR(16),
+  service_id INTEGER,
+  PRIMARY KEY (employee_dni, service_id),
+  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employee(employee_dni) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- 21
+
+CREATE TABLE services_per_models (
+  service_id INTEGER NOT NULL,
+  model_id VARCHAR(64) NOT NULL,
+  mileage FLOAT NOT NULL,
+  use_time INTEGER NOT NULL,
+  PRIMARY KEY (service_id, model_id),
+  CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 22
+
+CREATE TABLE product_details_orders (
+  service_id INT NOT NULL,
+  activity_id INT NOT NULL,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  price FLOAT NOT NULL,
+  cantidad INTEGER NOT NULL,
+  PRIMARY KEY (service_id, activity_id, order_id, product_id),
+  CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_activity_id FOREIGN KEY (activity_id) REFERENCES activities(activity_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES productos(product_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 23
+
+CREATE TABLE coordinating_services (
+  employee_dni VARCHAR(16) NOT NULL,
+  service_id INT NOT NULL,
+  reservation_time date NOT NULL,
+  capacity INT NOT NULL,
+  PRIMARY KEY (employee_dni, service_id),
+  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES workers(employee_dni) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- 24
 
 CREATE TABLE pays (
 id_pay INT,
@@ -243,68 +347,6 @@ bank_card VARCHAR(50),
 PRIMARY KEY (id_pay),
 
 CONSTRAINT fk_pays_factura FOREIGN KEY (id_bill) REFERENCES bills(id_bill) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE is_recommended (
-id_model VARCHAR(50) NOT NULL,
-id_service INT NOT NULL,
-mileage INT NOT NULL,
-time_use INT NOT NULL,
-
-PRIMARY KEY (id_model, id_service),
-
-CONSTRAINT fk_modelo_recommended FOREIGN KEY (id_model) REFERENCES models(id_model) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_servicio_recommended FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
-
-);
-
-CREATE TABLE coordinating_services (
-dni_worker VARCHAR(15) NOT NULL,
-id_service INT NOT NULL,
-reserve_times date NOT NULL,
-capacity INT NOT NULL,
-PRIMARY KEY (dni_worker, id_service),
-CONSTRAINT fk_trabajador_coordinating_services FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_servicio_coordinating_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE agency (
-rif_agency VARCHAR(20) NOT NULL,
-business_name VARCHAR(50) NOT NULL,
-name_agency VARCHAR(50) NOT NULL,
-id_city int NOT NULL,
-dni_manager VARCHAR(15) NOT NULL,
-
-PRIMARY KEY (rif_agency),
-
-FOREIGN KEY (dni_manager) REFERENCES managers(dni_manager) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (id_city) REFERENCES citys(id_city) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE is_stored (
-rif_agency VARCHAR(15) NOT NULL,
-id_product INT NOT NULL,
-inventory INT NOT NULL,
-max_inventory INT NOT NULL,
-min_inventory INT NOT NULL,
-
-PRIMARY KEY (rif_agency, id_product),
-
-CONSTRAINT fk_concesionario_is_stored FOREIGN KEY (rif_agency) REFERENCES agency(rif_agency) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_producto_is_stored FOREIGN KEY (id_product) REFERENCES products(id_product) ON DELETE CASCADE ON UPDATE CASCADE
-
-);
-
-CREATE TABLE discounts (
-id_discount INT,
-services_min INT,
-services_max INT,
-percentages FLOAT,
-rif_agency VARCHAR(15),
-
-PRIMARY KEY (id_discount),
-
-FOREIGN KEY (rif_agency) REFERENCES agency(rif_agency) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE detail_orders (

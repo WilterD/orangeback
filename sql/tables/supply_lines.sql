@@ -1,7 +1,5 @@
 CREATE TABLE supply_lines (
-id_supply INT,
-name_supply VARCHAR(50) NOT NULL,
-
-PRIMARY KEY (id_supply)
-
+  supply_line_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(64) UNIQUE NOT NULL,
+  PRIMARY KEY (supply_line_id)
 );

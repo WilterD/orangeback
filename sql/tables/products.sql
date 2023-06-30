@@ -1,14 +1,13 @@
 CREATE TABLE products (
-id_product INT,
-product_code VARCHAR(50) NOT NULL,
-short_name_product VARCHAR(50) NOT NULL,
-descriptions VARCHAR(255) NOT NULL,
-supplier VARCHAR(50),
-is_ecology BOOLEAN,
-price DECIMAL(10, 2),
-existence INT,
-level_min INT,
-level_max INT,
-
-PRIMARY KEY (id_product)
+  product_id VARCHAR(32),
+  short_name_product VARCHAR(64) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  provider VARCHAR(64) NOT NULL,
+  is_ecological BOOLEAN NOT NULL,
+  price FLOAT NOT NULL,
+  supply_line_id INTEGER NOT NULL,
+  PRIMARY KEY (product_id),
+  CONSTRAINT fk_supply_line_id (supply_line_id) REFERENCES supply_lines (supply_line_id)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );

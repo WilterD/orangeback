@@ -1,16 +1,21 @@
 CREATE TABLE product_details_orders (
-id_service INT NOT NULL,
-id_activity INT NOT NULL,
-id_order INT NOT NULL,
-id_product INT NOT NULL,
-price FLOAT NOT NULL,
-cantidad INT NOT NULL,
-
-PRIMARY KEY (id_service, id_activity, id_order, id_product),
-
-CONSTRAINT fk_product_details_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_product_details_activities FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_product_details_orders FOREIGN KEY (id_order) REFERENCES orders(id_order) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT fk_product_details_products FOREIGN KEY (id_product) REFERENCES productos(id_product) ON DELETE CASCADE ON UPDATE CASCADE
-
+  service_id INT NOT NULL,
+  activity_id INT NOT NULL,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  price FLOAT NOT NULL,
+  cantidad INTEGER NOT NULL,
+  PRIMARY KEY (service_id, activity_id, order_id, product_id),
+  CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_activity_id FOREIGN KEY (activity_id) REFERENCES activities(activity_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES productos(product_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );

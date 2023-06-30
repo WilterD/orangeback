@@ -1,7 +1,6 @@
 CREATE TABLE states(
-	id_states INTEGER GENERATED ALWAYS AS IDENTITY,
-	name_states TEXT NOT NULL,
+	state_id INTEGER GENERATED ALWAYS AS IDENTITY,
+	name dom_name UNIQUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  PRIMARY KEY (id_states)
+  PRIMARY KEY (state_id)
 );

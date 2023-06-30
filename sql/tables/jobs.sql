@@ -1,0 +1,5 @@
+CREATE TABLE jobs (
+  job_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  description VARCHAR(64) NOT NULL,
+  PRIMARY KEY (job_id)
+);
