@@ -1,16 +1,18 @@
 CREATE TABLE orders (
-id_order INT NOT NULL PRIMARY KEY,
-dni_responsible VARCHAR(15) NOT NULL,
-name_responsible VARCHAR(50) NOT NULL,
-entry_date DATE NOT NULL,
-entry_time TIME NOT NULL,
-estimated_departure_date DATE NOT NULL,
-estimated_departure_time TIME NOT NULL,
-actual_departure_date DATE,                          
-actual_departure_time TIME,
-id_reserve INT,
-dni_worker VARCHAR(15),
-id_service INT NOT NULL,
-FOREIGN KEY (id_reserve) REFERENCES reservas(id_reserve) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (dni_worker) REFERENCES trabajadores(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE
+  order_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  responsible_dni dom_dni DEFAULT NULL,
+  responsible_name dom_name DEFAULT NULL,
+  entry_time TIMESTAMP NOT NULL,
+  estimated_departure TIMESTAMP NOT NULL,
+  real_departure TIMESTAMP DEFAULT NULL,                          
+  booking_id INTEGER NOT NULL,
+  employee_dni dom_dni NOT NULL,
+  created_at dom_created_at,
+  PRIMARY KEY (order_id),
+  FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );

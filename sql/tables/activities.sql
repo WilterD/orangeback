@@ -1,8 +1,11 @@
 CREATE TABLE activities (
-id_service INT,
-id_activity INT,
-cost FLOAT,
-descriptions VARCHAR(200),
-PRIMARY KEY (id_service, id_activity),
-CONSTRAINT fk_activities_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE,
+  activity_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  service_id INTEGER NOT NULL,
+  description TEXT NOT NULL,
+  cost_hour FLOAT NOT NULL,
+  created_at dom_created_at,
+  PRIMARY KEY (service_id, activity_id),
+  CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
