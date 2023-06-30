@@ -1,7 +1,14 @@
-export default class StatusError extends Error {
-  constructor (message: string, private readonly statusCode: number) {
-    super(message)
-    Object.setPrototypeOf(this, StatusError.prototype)
+interface StatusErrorOptions {
+  message: string
+  statusCode: number
+}
+
+export class StatusError extends Error {
+  readonly statusCode: number
+
+  constructor ({ message, statusCode }: StatusErrorOptions) {
+    super(`[${statusCode}] ${message}`)
+    this.statusCode = statusCode
   }
 
   getStatus (): number {
