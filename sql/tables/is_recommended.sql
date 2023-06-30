@@ -2,7 +2,7 @@ CREATE TABLE is_recommended (
 id_model VARCHAR(50) NOT NULL,
 id_service INT NOT NULL,
 mileage INT NOT NULL,
-time_use INT NOT NULL
+time_use INT NOT NULL,
 
 PRIMARY KEY (id_model, id_service),
 

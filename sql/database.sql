@@ -164,10 +164,10 @@ PRIMARY KEY (id_product)
 
 
 CREATE TABLE activities (
-id_service INT,
-id_activity INT,
-cost FLOAT,
-descriptions VARCHAR(200),
+id_service INT NOT NULL,
+id_activity INT NOT NULL UNIQUE,
+cost FLOAT NOT NULL,
+descriptions VARCHAR(200) NOT NULL,
 PRIMARY KEY (id_service, id_activity),
 CONSTRAINT fk_activities_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -243,4 +243,81 @@ bank_card VARCHAR(50),
 PRIMARY KEY (id_pay),
 
 CONSTRAINT fk_pays_factura FOREIGN KEY (id_bill) REFERENCES bills(id_bill) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE is_recommended (
+id_model VARCHAR(50) NOT NULL,
+id_service INT NOT NULL,
+mileage INT NOT NULL,
+time_use INT NOT NULL,
+
+PRIMARY KEY (id_model, id_service),
+
+CONSTRAINT fk_modelo_recommended FOREIGN KEY (id_model) REFERENCES models(id_model) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT fk_servicio_recommended FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+CREATE TABLE coordinating_services (
+dni_worker VARCHAR(15) NOT NULL,
+id_service INT NOT NULL,
+reserve_times date NOT NULL,
+capacity INT NOT NULL,
+PRIMARY KEY (dni_worker, id_service),
+CONSTRAINT fk_trabajador_coordinating_services FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT fk_servicio_coordinating_services FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE agency (
+rif_agency VARCHAR(20) NOT NULL,
+business_name VARCHAR(50) NOT NULL,
+name_agency VARCHAR(50) NOT NULL,
+id_city int NOT NULL,
+dni_manager VARCHAR(15) NOT NULL,
+
+PRIMARY KEY (rif_agency),
+
+FOREIGN KEY (dni_manager) REFERENCES managers(dni_manager) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_city) REFERENCES citys(id_city) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE is_stored (
+rif_agency VARCHAR(15) NOT NULL,
+id_product INT NOT NULL,
+inventory INT NOT NULL,
+max_inventory INT NOT NULL,
+min_inventory INT NOT NULL,
+
+PRIMARY KEY (rif_agency, id_product),
+
+CONSTRAINT fk_concesionario_is_stored FOREIGN KEY (rif_agency) REFERENCES agency(rif_agency) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT fk_producto_is_stored FOREIGN KEY (id_product) REFERENCES products(id_product) ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+CREATE TABLE discounts (
+id_discount INT,
+services_min INT,
+services_max INT,
+percentages FLOAT,
+rif_agency VARCHAR(15),
+
+PRIMARY KEY (id_discount),
+
+FOREIGN KEY (rif_agency) REFERENCES agency(rif_agency) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE detail_orders (
+id_service INT NOT NULL,
+id_activity INT NOT NULL,
+id_detail_orden INT NOT NULL,
+price FLOAT NOT NULL,
+hours_taken INT NOT NULL,
+dni_worker VARCHAR(15) NOT NULL,
+
+PRIMARY KEY (id_service, id_activity, id_detail_orden),
+
+CONSTRAINT fk_orden_details FOREIGN KEY (id_detail_orden) REFERENCES orders(id_order)  ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT fk_activities_details_orders FOREIGN KEY (id_activity) REFERENCES activities(id_activity),
+CONSTRAINT fk_trabajador_details_orders FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker)
 );
