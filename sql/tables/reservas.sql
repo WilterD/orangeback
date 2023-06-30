@@ -2,9 +2,9 @@ CREATE TABLE reservas (
 id_reserva INT NOT NULL PRIMARY KEY,
 fecha_exped DATE NOT NULL,
 fecha_expir DATE NOT NULL,
-cedula_cliente INT NOT NULL,
+dni_client INT NOT NULL,
 id_vehiculo INT NOT NULL,
 hora TIME NOT NULL,
-FOREIGN KEY (cedula_cliente) REFERENCES clientes(cedula_cliente) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (dni_client) REFERENCES clients(dni_client) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo) ON DELETE CASCADE ON UPDATE CASCADE
 );
