@@ -204,3 +204,43 @@ PRIMARY KEY (id_order),
 FOREIGN KEY (id_reserve) REFERENCES reserves(id_reserve) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (dni_worker) REFERENCES workers(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE managers (
+dni_manager VARCHAR(15),
+name_manager VARCHAR(50) NOT NULL,
+tlf_main VARCHAR(15) NOT NULL,
+tlf_secondary VARCHAR(15) NOT NULL,
+address_manager VARCHAR(50) NOT NULL,
+mail_manager VARCHAR(50) NOT NULL,
+id_charge VARCHAR(20) NOT NULL,
+
+PRIMARY KEY (dni_manager),
+
+FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE bills (
+id_bill INT,
+date_bill DATE,
+discount_value INT NOT NULL,
+total_amount DECIMAL(10, 2),
+id_order INT,
+
+PRIMARY KEY (id_bill),
+
+FOREIGN KEY (id_order) REFERENCES orders(id_order) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE pays (
+id_pay INT,
+id_bill INT NOT NULL,
+pay_date DATE NOT NULL,
+payment_method VARCHAR(50) NOT NULL,
+amount DECIMAL(10, 2) NOT NULL,
+card_number VARCHAR(20),
+bank_card VARCHAR(50),
+
+PRIMARY KEY (id_pay),
+
+CONSTRAINT fk_pays_factura FOREIGN KEY (id_bill) REFERENCES bills(id_bill) ON DELETE CASCADE ON UPDATE CASCADE
+);
