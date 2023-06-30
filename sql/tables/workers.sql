@@ -1,9 +1,9 @@
-CREATE TABLE trabajadores (
+CREATE TABLE workers (
     dni_worker VARCHAR(15),
-    nombre_trabajador VARCHAR(50) NOT NULL,
-    telefono_trabajador VARCHAR(15),
-    direccion_trabajador VARCHAR(50),
-    sueldo int NOT NULL,
+    worker_name VARCHAR(50) NOT NULL,
+    tlf_worker VARCHAR(15),
+   address_worker VARCHAR(50),
+    salary int NOT NULL,
     id_charge VARCHAR(50) NOT NULL,
 
     PRIMARY KEY (dni_worker),
