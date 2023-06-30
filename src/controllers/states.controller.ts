@@ -9,19 +9,13 @@ import {
 } from '../utils/responses'
 import StatusError from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
-
-const STATUS_OK = 200
-const STATUS_CREATED = 201
-const STATUS_NOT_FOUND = 404
-
-const DEFAULT_PAGE = 1
-const DEFAULT_SIZE = 10
+import { DEFAULT_PAGE, STATUS } from '../utils/constants'
 
 export const getStates = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { page = DEFAULT_PAGE, size = DEFAULT_SIZE } = req.query
+  const { page = DEFAULT_PAGE.page, size = DEFAULT_PAGE.size } = req.query
 
   try {
     let offset = (Number(page) - 1) * Number(size)
@@ -34,7 +28,7 @@ export const getStates = async (
       text: 'SELECT * FROM states'
     })
     if (isEmpty.rowCount === 0) {
-      throw new StatusError('La tabla está vacía', STATUS_NOT_FOUND)
+      throw new StatusError('La tabla está vacía', STATUS.NOT_FOUND)
     }
     const response = await pool.query({
       text: 'SELECT * FROM states ORDER BY state_id LIMIT $1 OFFSET $2',
@@ -45,7 +39,7 @@ export const getStates = async (
       currentPage: Number(page),
       perPage: Number(size)
     }
-    return paginatedItemsResponse(res, STATUS_OK, response.rows, pagination)
+    return paginatedItemsResponse(res, STATUS.OK, response.rows, pagination)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -63,10 +57,10 @@ export const getStateById = async (
     if (response.rowCount === 0) {
       throw new StatusError(
         `No se pudo encontrar el registro de id: ${req.params.stateId}`,
-        STATUS_NOT_FOUND
+        STATUS.NOT_FOUND
       )
     }
-    return successResponse(res, STATUS_OK, response.rows[0])
+    return successResponse(res, STATUS.OK, response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -93,7 +87,7 @@ export const addState = async (
     const response = await pool.query({
       text: `SELECT * FROM states WHERE state_id = ${insertedId}`
     })
-    return successItemsResponse(res, STATUS_CREATED, response.rows[0])
+    return successItemsResponse(res, STATUS.CREATED, response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -114,10 +108,10 @@ export const updateState = async (
     if (response.rowCount === 0) {
       throw new StatusError(
         `No se pudo encontrar el registro de id: ${req.params.stateId}`,
-        STATUS_NOT_FOUND
+        STATUS.NOT_FOUND
       )
     }
-    return successResponse(res, STATUS_OK, 'Estado modificado exitosamente')
+    return successResponse(res, STATUS.OK, 'Estado modificado exitosamente')
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -136,10 +130,10 @@ export const deleteState = async (
     if (response.rowCount === 0) {
       throw new StatusError(
         `No se pudo encontrar el registro de id: ${req.params.stateId}`,
-        STATUS_NOT_FOUND
+        STATUS.NOT_FOUND
       )
     }
-    return successResponse(res, STATUS_OK, 'Estado eliminado')
+    return successResponse(res, STATUS.OK, 'Estado eliminado')
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
