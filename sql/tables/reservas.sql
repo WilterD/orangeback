@@ -1,5 +1,5 @@
 CREATE TABLE reservas (
-id_reserva INT NOT NULL PRIMARY KEY,
+id_reserve INT NOT NULL PRIMARY KEY,
 fecha_exped DATE NOT NULL,
 fecha_expir DATE NOT NULL,
 dni_client INT NOT NULL,

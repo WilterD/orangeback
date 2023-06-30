@@ -1,17 +1,16 @@
-CREATE TABLE ordenes (
-id_orden INT NOT NULL PRIMARY KEY,
-dni_responsable VARCHAR(15) NOT NULL,
-nombre_responsable VARCHAR(50) NOT NULL,
-fecha_entrada DATE NOT NULL,
-hora_entrada TIME NOT NULL,
-fecha_salida_estimada DATE NOT NULL,
-hora_salida_estimada TIME NOT NULL,
-fecha_salida_real DATE,                          
-hora_salida_real TIME,
-id_reserva INT,
-dni_trabajador VARCHAR(15),
+CREATE TABLE orders (
+id_order INT NOT NULL PRIMARY KEY,
+dni_responsible VARCHAR(15) NOT NULL,
+name_responsible VARCHAR(50) NOT NULL,
+entry_date DATE NOT NULL,
+entry_time TIME NOT NULL,
+estimated_departure_date DATE NOT NULL,
+estimated_departure_time TIME NOT NULL,
+actual_departure_date DATE,                          
+actual_departure_time TIME,
+id_reserve INT,
+dni_worker VARCHAR(15),
 id_service INT NOT NULL,
-FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (id_reserva) REFERENCES reservas(id_reserva) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (dni_trabajador) REFERENCES trabajadores(dni_trabajador) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (id_reserve) REFERENCES reservas(id_reserve) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (dni_worker) REFERENCES trabajadores(dni_worker) ON DELETE CASCADE ON UPDATE CASCADE
 );

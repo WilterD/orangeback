@@ -1,5 +1,5 @@
 CREATE TABLE trabajadores (
-    dni_trabajador VARCHAR(15) PRIMARY KEY,
+    dni_worker VARCHAR(15) PRIMARY KEY,
     nombre_trabajador VARCHAR(50) NOT NULL,
     telefono_trabajador VARCHAR(15),
     direccion_trabajador VARCHAR(50),
