@@ -1,5 +1,5 @@
 CREATE TABLE ordenes (
-id_orden INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id_orden INT NOT NULL PRIMARY KEY,
 cedula_responsable VARCHAR(15) NOT NULL,
 nombre_responsable VARCHAR(50) NOT NULL,
 fecha_entrada DATE NOT NULL,

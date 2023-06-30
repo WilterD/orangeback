@@ -1,5 +1,5 @@
 CREATE TABLE facturas (
-id_factura INT PRIMARY KEY AUTO_INCREMENT,
+id_factura INT PRIMARY KEY,
 fecha DATE,
 valor_descuento INT NOT NULL,
 monto_total DECIMAL(10, 2),
