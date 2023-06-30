@@ -1,10 +1,10 @@
 CREATE TABLE pagos (
 id_pago INT PRIMARY KEY,
-id_factura INT,
-fecha DATE,
-modalidad_pago VARCHAR(50),
-monto DECIMAL(10, 2),
+id_factura INT NOT NULL,
+fecha DATE NOT NULL,
+modalidad_pago VARCHAR(50) NOT NULL,
+monto DECIMAL(10, 2) NOT NULL,
 num_tarjeta VARCHAR(20),
 banco_tarjeta VARCHAR(50),
-FOREIGN KEY (id_factura) REFERENCES Facturas(id_factura) ON DELETE CASCADE ON UPDATE CASCADE
+CONSTRAINT fk_pagos_factura FOREIGN KEY (id_factura) REFERENCES Facturas(id_factura) ON DELETE CASCADE ON UPDATE CASCADE
 );
