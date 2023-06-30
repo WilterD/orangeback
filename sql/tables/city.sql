@@ -1,4 +1,4 @@
-CREATE TABLE cities (
+CREATE TABLE city (
 id_city INT,
 name_city VARCHAR(50) NOT NULL,
 id_states INT,
