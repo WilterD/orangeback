@@ -1,12 +1,11 @@
 CREATE TABLE actividades (
-id_actividad INT PRIMARY KEY,
+id_servicio INT,
+id_actividad INT,
 nombre VARCHAR(50) NOT NULL,
 costo FLOAT,
-id_servicio INT,
 descripcion VARCHAR(200),
-
-
-CONSTRAINT fk_actividades_servicios FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio)
+PRIMARY KEY (id_servicio, id_actividad),
+CONSTRAINT fk_actividades_servicios FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio) ON DELETE CASCADE ON UPDATE CASCADE,
 
 
 );
