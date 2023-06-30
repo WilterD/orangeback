@@ -1,9 +1,10 @@
 CREATE TABLE managers (
-  manager_dni VARCHAR(16),
-  name dom_name,
-  main_phone VARCHAR(16) NOT NULL,
-  secondary_phone VARCHAR(16) NOT NULL,
-  address VARCHAR(64) NOT NULL,
-  email VARCHAR(64) NOT NULL,
-  PRIMARY KEY (dni_manager)
+  manager_dni dom_dni,
+  name dom_name NOT NULL,
+  main_phone dom_phone_number NOT NULL,
+  secondary_phone dom_phone_number NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  email dom_email NOT NULL,
+  created_at dom_created_at,
+  PRIMARY KEY (manager_dni)
 );

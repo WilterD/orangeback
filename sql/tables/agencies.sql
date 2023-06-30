@@ -1,9 +1,10 @@
 CREATE TABLE agencies (
-  agency_rif VARCHAR(32),
-  business_name dom_name UNIQUE,
-  agency_name dom_name UNIQUE,
-  manager_dni VARCHAR(16) NOT NULL UNIQUE,
+  agency_rif dom_agency_rif,
+  business_name dom_name NOT NULL UNIQUE,
+  agency_name dom_name NOT NULL UNIQUE,
+  manager_dni dom_dni NOT NULL UNIQUE,
   city_id INTEGER NOT NULL,
+  created_at dom_created_at,
   PRIMARY KEY (agency_rif),
   CONSTRAINT fk_manager_dni FOREIGN KEY (manager_dni) REFERENCES managers(manager_dni) 
     ON DELETE CASCADE 

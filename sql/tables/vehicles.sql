@@ -7,10 +7,14 @@ CREATE TABLE vehicles (
   extra_descriptions VARCHAR(255) NOT NULL,
   maintenance_summary VARCHAR(255),
   agency_seller VARCHAR(64) NOT NULL,
-  model_id VARCHAR(50) NOT NULL,
-  client_dni VARCHAR(16) NOT NULL,
+  model_id VARCHAR(64) NOT NULL,
+  client_dni dom_dni NOT NULL,
+  created_at dom_created_at,
   PRIMARY KEY (license_plate),
-  CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id),
+  CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
   CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients(client_dni)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
-

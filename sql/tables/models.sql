@@ -5,9 +5,10 @@ CREATE TABLE models (
   model_kg FLOAT NOT NULL,
   model_year VARCHAR(4) NOT NULL,
   seats_quantity SMALLINT NOT NULL,
-  refrigerant_type VARCHAR(50) NOT NULL,
-  engine_oil_type VARCHAR(50) NOT NULL,
-  oil_box VARCHAR(50) NOT NULL,
+  refrigerant_type VARCHAR(32) NOT NULL,
+  engine_oil_type VARCHAR(32) NOT NULL,
+  oil_box VARCHAR(32) NOT NULL,
   octane INT NOT NULL,
-  PRIMARY KEY (id_model)
+  created_at dom_created_at,
+  PRIMARY KEY (model_id)
 );
