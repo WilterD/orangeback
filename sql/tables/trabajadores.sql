@@ -4,6 +4,6 @@ CREATE TABLE trabajadores (
     telefono_trabajador VARCHAR(15),
     direccion_trabajador VARCHAR(50),
     sueldo int NOT NULL,
-    id_cargo VARCHAR(50) NOT NULL,
-    FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo) ON DELETE RESTRICT ON UPDATE CASCADE
+    id_charge VARCHAR(50) NOT NULL,
+    FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE RESTRICT ON UPDATE CASCADE
 );

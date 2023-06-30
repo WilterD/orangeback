@@ -1,10 +1,10 @@
 CREATE TABLE personales (
 cedula VARCHAR(15) NOT NULL PRIMARY KEY,
 nombre VARCHAR(50) NOT NULL,
-id_cargo VARCHAR(50),
+id_charge VARCHAR(50),
 telefono VARCHAR(15),
 direccion VARCHAR(50),
 
-FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE,
 
 );

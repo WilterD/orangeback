@@ -1,4 +1,4 @@
-CREATE TABLE cargos (
-id_cargo VARCHAR(20) NOT NULL PRIMARY KEY,
-descripcion VARCHAR(50) NOT NULL
+CREATE TABLE charges (
+id_charge VARCHAR(20) NOT NULL PRIMARY KEY,
+description VARCHAR(50) NOT NULL
 );

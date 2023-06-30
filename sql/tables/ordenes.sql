@@ -10,8 +10,8 @@ fecha_salida_real DATE,
 hora_salida_real TIME,
 id_reserva INT,
 cedula_trabajador VARCHAR(15),
-id_servicio INT NOT NULL,
-FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio) ON DELETE CASCADE ON UPDATE CASCADE,
+id_service INT NOT NULL,
+FOREIGN KEY (id_service) REFERENCES services(id_service) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (id_reserva) REFERENCES reservas(id_reserva) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (cedula_trabajador) REFERENCES trabajadores(cedula_trabajador) ON DELETE CASCADE ON UPDATE CASCADE
 );

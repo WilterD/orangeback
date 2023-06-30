@@ -5,6 +5,6 @@ telefono_principal VARCHAR(15),
 telefono_secundario VARCHAR(15),
 direccion_encargado VARCHAR(50),
 correo_encargado VARCHAR(50),
-id_cargo INT,
-FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo) ON DELETE CASCADE ON UPDATE CASCADE
+id_charge INT,
+FOREIGN KEY (id_charge) REFERENCES charges(id_charge) ON DELETE CASCADE ON UPDATE CASCADE
 );
