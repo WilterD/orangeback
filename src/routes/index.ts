@@ -1,9 +1,9 @@
 import express from 'express'
 
-import estadosRouter from './api/estados'
+import statesRouter from './api/states'
 
 const router = express.Router()
 
-router.use('/estados', estadosRouter)
+router.use('/states', statesRouter)
 
 export default router

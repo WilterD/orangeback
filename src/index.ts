@@ -1,5 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
+import cors from 'cors'
 
 import { PORT } from './config'
 import apiRouter from './routes'
@@ -12,6 +13,7 @@ app.set('port', PORT !== '' ? PORT : 3000)
 
 // Middlewares
 app.use(morgan('dev'))
+app.use(cors())
 app.use(express.json()) // middleware que transforma la req.body a un json
 
 // Routes
