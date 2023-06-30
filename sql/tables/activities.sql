@@ -1,7 +1,7 @@
 CREATE TABLE activities (
 id_service INT,
 id_activity INT,
-nombre VARCHAR(50) NOT NULL,
+name_activity VARCHAR(50) NOT NULL,
 cost FLOAT,
 descriptions VARCHAR(200),
 PRIMARY KEY (id_service, id_activity),
