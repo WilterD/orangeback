@@ -1,4 +1,4 @@
-CREATE TABLE employee_specialties (
+CREATE TABLE employees_specialties (
   employee_dni dom_dni,
   service_id INTEGER,
   created_at dom_created_at,

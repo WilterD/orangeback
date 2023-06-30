@@ -215,7 +215,7 @@ CREATE TABLE services_per_models (
 
 -- 15
 
-CREATE TABLE employee_specialties (
+CREATE TABLE employees_specialties (
   employee_dni dom_dni,
   service_id INTEGER,
   created_at dom_created_at,
@@ -393,7 +393,7 @@ CREATE TABLE products (
 
 -- 26
 
-CREATE TABLE agency_products (
+CREATE TABLE products_per_agencies (
   agency_rif dom_agency_rif NOT NULL,
   product_id VARCHAR(32) NOT NULL,
   on_stock INTEGER NOT NULL,
