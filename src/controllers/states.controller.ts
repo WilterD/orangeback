@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
 import { pool } from '../database'
+import { DEFAULT_PAGE, STATUS } from '../utils/constants'
 import {
   PaginateSettings,
   paginatedItemsResponse,
   successItemsResponse,
   successResponse
 } from '../utils/responses'
-import StatusError from '../utils/responses/status-error'
+import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
-import { DEFAULT_PAGE, STATUS } from '../utils/constants'
 
 export const getStates = async (
   req: Request,
@@ -28,7 +28,10 @@ export const getStates = async (
       text: 'SELECT * FROM states'
     })
     if (isEmpty.rowCount === 0) {
-      throw new StatusError('La tabla está vacía', STATUS.NOT_FOUND)
+      throw new StatusError({
+        message: 'La tabla está vacía',
+        statusCode: STATUS.NOT_FOUND
+      })
     }
     const response = await pool.query({
       text: 'SELECT * FROM states ORDER BY state_id LIMIT $1 OFFSET $2',
@@ -55,10 +58,10 @@ export const getStateById = async (
       values: [req.params.stateId]
     })
     if (response.rowCount === 0) {
-      throw new StatusError(
-        `No se pudo encontrar el registro de id: ${req.params.stateId}`,
-        STATUS.NOT_FOUND
-      )
+      throw new StatusError({
+        message: `No se pudo encontrar el registro de id: ${req.params.stateId}`,
+        statusCode: STATUS.NOT_FOUND
+      })
     }
     return successResponse(res, STATUS.OK, response.rows[0])
   } catch (error: unknown) {
@@ -106,10 +109,10 @@ export const updateState = async (
     })
     console.log(response)
     if (response.rowCount === 0) {
-      throw new StatusError(
-        `No se pudo encontrar el registro de id: ${req.params.stateId}`,
-        STATUS.NOT_FOUND
-      )
+      throw new StatusError({
+        message: `No se pudo encontrar el registro de id: ${req.params.stateId}`,
+        statusCode: STATUS.NOT_FOUND
+      })
     }
     return successResponse(res, STATUS.OK, 'Estado modificado exitosamente')
   } catch (error: unknown) {
@@ -128,10 +131,10 @@ export const deleteState = async (
       values: [req.params.stateId]
     })
     if (response.rowCount === 0) {
-      throw new StatusError(
-        `No se pudo encontrar el registro de id: ${req.params.stateId}`,
-        STATUS.NOT_FOUND
-      )
+      throw new StatusError({
+        message: `No se pudo encontrar el registro de id: ${req.params.stateId}`,
+        statusCode: STATUS.NOT_FOUND
+      })
     }
     return successResponse(res, STATUS.OK, 'Estado eliminado')
   } catch (error: unknown) {

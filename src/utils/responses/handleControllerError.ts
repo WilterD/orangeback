@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import StatusError from './status-error'
+import { StatusError } from './status-error'
 import { errorResponse } from '.'
 import { STATUS } from '../constants'
 
