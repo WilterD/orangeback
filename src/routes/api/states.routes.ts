@@ -3,8 +3,8 @@ import {
   getStates,
   getStateById,
   addState,
-  deleteState,
-  updateState
+  updateState,
+  deleteState
 } from '../../controllers/states.controller'
 import { schemaWard } from '../../middlewares/schemaWard'
 import { statesSchema } from '../../schemas/states.schema'
