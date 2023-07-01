@@ -129,7 +129,7 @@ export const updateManager = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, "Estado modificado exitosamente");
+    return successResponse(res, STATUS.OK, "Manager modificado exitosamente");
   } catch (error: unknown) {
     console.log(error);
     return handleControllerError(error, res);
@@ -151,7 +151,7 @@ export const deleteManager = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, "Estado eliminado");
+    return successResponse(res, STATUS.OK, "Manager eliminado");
   } catch (error: unknown) {
     return handleControllerError(error, res);
   }
