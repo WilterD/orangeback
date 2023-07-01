@@ -11,5 +11,3 @@ router.use('/states', statesRouter)
 router.use('/managers', managersRouter)
 
 export default router
-
-// wilter estuvo aki
