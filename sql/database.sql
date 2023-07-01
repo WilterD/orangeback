@@ -70,10 +70,10 @@ CREATE TABLE agencies (
   created_at dom_created_at,
   PRIMARY KEY (agency_rif),
   CONSTRAINT fk_manager_dni FOREIGN KEY (manager_dni) REFERENCES managers(manager_dni) 
-    ON DELETE CASCADE 
+    ON DELETE SET NULL
     ON UPDATE CASCADE,
   CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES cities(city_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -114,10 +114,10 @@ CREATE TABLE employees (
   created_at dom_created_at,
   PRIMARY KEY (employee_dni),
   CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies(agency_rif) 
-    ON DELETE CASCADE
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_job_id FOREIGN KEY (job_id) REFERENCES jobs(job_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -166,10 +166,10 @@ CREATE TABLE vehicles (
   created_at dom_created_at,
   PRIMARY KEY (license_plate),
   CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id)
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients(client_dni)
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -192,7 +192,7 @@ CREATE TABLE activities (
   created_at dom_created_at,
   PRIMARY KEY (service_id, activity_id),
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -206,10 +206,10 @@ CREATE TABLE services_per_models (
   created_at dom_created_at,
   PRIMARY KEY (service_id, model_id),
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -221,10 +221,10 @@ CREATE TABLE employees_specialties (
   created_at dom_created_at,
   PRIMARY KEY (employee_dni, service_id),
   CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
-    ON DELETE CASCADE
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
-    ON DELETE CASCADE
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -238,10 +238,10 @@ CREATE TABLE employees_coordinate_services (
   created_at dom_created_at,
   PRIMARY KEY (employee_dni, service_id),
   CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -256,10 +256,10 @@ CREATE TABLE bookings (
   created_at dom_created_at,
   PRIMARY KEY (booking_id),
   CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients(client_dni) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_license_plate FOREIGN KEY (license_plate) REFERENCES vehicles(license_plate) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -271,10 +271,10 @@ CREATE TABLE bookings_per_services (
   created_at dom_created_at,
   PRIMARY KEY (booking_id, service_id),
   CONSTRAINT fk_booking_id FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
-    ON DELETE CASCADE
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
-    ON DELETE CASCADE
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -292,10 +292,10 @@ CREATE TABLE orders (
   created_at dom_created_at,
   PRIMARY KEY (order_id),
   FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -312,13 +312,13 @@ CREATE TABLE order_details (
   PRIMARY KEY (service_id, activity_id, order_id),
   CONSTRAINT fk_12 FOREIGN KEY (service_id, activity_id) 
     REFERENCES activities(service_id, activity_id)
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id)
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni)
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -333,7 +333,7 @@ CREATE TABLE bills (
   created_at dom_created_at,
   PRIMARY KEY (bill_id),
   CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -349,7 +349,7 @@ CREATE TABLE payments (
   created_at dom_created_at,
   PRIMARY KEY (bill_id, payment_id),
   CONSTRAINT fk_pays_factura FOREIGN KEY (bill_id) REFERENCES bills(bill_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -361,7 +361,7 @@ CREATE TABLE card_banks (
   created_at dom_created_at,
   PRIMARY KEY (card_number),
   CONSTRAINT fk_card_number FOREIGN KEY (card_number) REFERENCES payments(card_number) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -387,7 +387,7 @@ CREATE TABLE products (
   created_at dom_created_at,
   PRIMARY KEY (product_id),
   CONSTRAINT fk_supply_line_id FOREIGN KEY (supply_line_id) REFERENCES supply_lines(supply_line_id)
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -402,10 +402,10 @@ CREATE TABLE products_per_agencies (
   created_at dom_created_at,
   PRIMARY KEY (agency_rif, product_id),
   CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies(agency_rif)
-    ON DELETE CASCADE
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES products(product_id)
-    ON DELETE CASCADE
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -422,9 +422,9 @@ CREATE TABLE products_in_order_details (
   PRIMARY KEY (service_id, activity_id, order_id, product_id),
   CONSTRAINT fk_order_details FOREIGN KEY (service_id, activity_id, order_id) 
     REFERENCES order_details(service_id, activity_id, order_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES products(product_id) 
-    ON DELETE CASCADE 
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
