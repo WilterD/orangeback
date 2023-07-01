@@ -119,7 +119,7 @@ export const updateManager = async (
     const updatedManager = getManagersDataFromRequestBody(req);
     updatedManager.push(req.params.managerId);
     const response = await pool.query({
-      text: "UPDATE managers SET manager_dni = $1, name = $2, main_phone = $3, secondary_phone = 4$, address= 5$, email= 6$,  WHERE manager_dni = $6",
+      text: "UPDATE managers SET manager_dni = $1, name = $2, main_phone = $3, secondary_phone = $4, address = $5, email = $6 WHERE manager_dni = $7",
       values: updatedManager,
     });
     if (response.rowCount === 0) {
