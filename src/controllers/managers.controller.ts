@@ -119,10 +119,9 @@ export const updateManager = async (
     const updatedManager = getManagersDataFromRequestBody(req);
     updatedManager.push(req.params.managerId);
     const response = await pool.query({
-      text: "UPDATE managers SET name = $1 WHERE manager_dni = $2",
+      text: "UPDATE managers SET name = $1, main_phone =$2, secondary_phone = 3$, address=4$, email=5$,  WHERE manager_dni = $6",
       values: updatedManager,
     });
-    console.log(response);
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
