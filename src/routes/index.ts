@@ -9,3 +9,5 @@ router.use('/admins', adminsRouter)
 router.use('/states', statesRouter)
 
 export default router
+
+// ejemplo master
