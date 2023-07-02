@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
 import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
@@ -68,8 +67,8 @@ export const getCityById = async (
 }
 
 const getCitiesDataFromRequestBody = (req: Request): any[] => {
-  const { name, state_id } = req.body
-  const newCity = [name, state_id]
+  const { name, stateId } = req.body
+  const newCity = [name, stateId]
   return newCity
 }
 

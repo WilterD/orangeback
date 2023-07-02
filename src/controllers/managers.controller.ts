@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
 import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
@@ -69,18 +68,18 @@ export const getManagerById = async (
 
 const getManagersDataFromRequestBody = (req: Request): any[] => {
   const {
-    manager_dni,
+    managerDni,
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   } = req.body
   const newManager = [
-    manager_dni,
+    managerDni,
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   ]
@@ -95,7 +94,7 @@ export const addManager = async (
     const newManager = getManagersDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO managers (manager_dni,name,main_phone,secondary_phone,address,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING manager_dni',
+      text: 'INSERT INTO managers (manager_dni, name, main_phone, secondary_phone, address, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING manager_dni',
       values: newManager
     })
     const insertedId: string = insertar.rows[0].manager_dni
@@ -113,16 +112,16 @@ export const addManager = async (
 const getManagersUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   } = req.body
 
   const updatedManager = [
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   ]

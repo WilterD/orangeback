@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import { pool } from '../database'
