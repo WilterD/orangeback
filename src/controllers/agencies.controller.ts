@@ -4,9 +4,7 @@ import { pool } from "../database";
 import { DEFAULT_PAGE, STATUS } from "../utils/constants";
 import {
   PaginateSettings,
-  paginatedItemsResponse,
-  successItemsResponse,
-  successResponse,
+  paginatedItemsResponse
 } from "../utils/responses";
 import { StatusError } from "../utils/responses/status-error";
 import { handleControllerError } from "../utils/responses/handleControllerError";
@@ -63,7 +61,7 @@ export const getAgencyById = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, response.rows[0]);
+    return res.status(STATUS.OK).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res);
   }
@@ -104,7 +102,7 @@ export const addAgency = async (
     const response = await pool.query({
       text: `SELECT * FROM agencies WHERE agency_rif = ${insertedId}`,
     });
-    return successItemsResponse(res, STATUS.CREATED, response.rows[0]);
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res);
@@ -145,7 +143,7 @@ export const updateAgency = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, "Agencia modificada éxitosamente");
+    return res.status(STATUS.OK).json({message: "Agencia Modificada Exitosamente"})
   } catch (error: unknown) {
     console.log(error);
     return handleControllerError(error, res);
@@ -167,7 +165,7 @@ export const deleteAgency = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, "Agencia eliminada");
+    return res.status(STATUS.OK).json({message: "Agencia eliminada"})
   } catch (error: unknown) {
     return handleControllerError(error, res);
   }
