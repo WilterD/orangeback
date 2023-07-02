@@ -71,18 +71,14 @@ const getAgenciesDataFromRequestBody = (req: Request): any[] => {
   const {
     agency_rif,
     business_name,
-    agency_name,
     manager_dni,
-    city_id, 
-    created_at 
+    city_id
   } = req.body;
   const newAgency = [
     agency_rif,
     business_name,
-    agency_name,
     manager_dni,
-    city_id, 
-    created_at
+    city_id
   ];
   return newAgency;
 };
@@ -95,12 +91,13 @@ export const addAgency = async (
     const newAgency = getAgenciesDataFromRequestBody(req);
 
     const insertar = await pool.query({
-      text: "INSERT INTO agencies (agency_rif,business_name,agency_name,manager_dni,city_id) VALUES ($1,$2,$3,$4,$5,$6) RETURNING agency_rif",
+      text: "INSERT INTO agencies (agency_rif,business_name,manager_dni,city_id) VALUES ($1,$2,$3,$4) RETURNING agency_rif",
       values: newAgency,
     });
     const insertedId: string = insertar.rows[0].agency_rif;
     const response = await pool.query({
-      text: `SELECT * FROM agencies WHERE agency_rif = ${insertedId}`,
+      text: 'SELECT * FROM agencies WHERE agency_rif = $1',
+      values: [insertedId]
     });
     return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
@@ -112,14 +109,12 @@ export const addAgency = async (
 const getAgenciesUpdateDataFromRequestBody = (req: Request): any[] => {
   const { 
     business_name,
-    agency_name,
     manager_dni,
     city_id
     } = req.body;
 
   const updatedAgency = [
     business_name, 
-    agency_name, 
     manager_dni, 
     city_id
   ];
@@ -134,7 +129,7 @@ export const updateAgency = async (
     const updatedAgency = getAgenciesUpdateDataFromRequestBody(req);
     updatedAgency.push(req.params.agencyId);
     const response = await pool.query({
-      text: "UPDATE agencies SET business_name = $1, agency_name = $2, manager_dni = $3, city_id = $4 WHERE agency_rif = $6",
+      text: "UPDATE agencies SET business_name = $1, manager_dni = $2, city_id = $3 WHERE agency_rif = $4",
       values: updatedAgency,
     });
     if (response.rowCount === 0) {
