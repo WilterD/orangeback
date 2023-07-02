@@ -71,7 +71,6 @@ export const getManagerById = async (
 
 const getManagersDataFromRequestBody = (req: Request): any[] => {
   const {
-    manager_dni,
     name,
     main_phone,
     secondary_phone,
@@ -79,7 +78,6 @@ const getManagersDataFromRequestBody = (req: Request): any[] => {
     email 
   } = req.body;
   const newManager = [
-    manager_dni,
     name,
     main_phone,
     secondary_phone,
@@ -119,7 +117,7 @@ export const updateManager = async (
     const updatedManager = getManagersDataFromRequestBody(req);
     updatedManager.push(req.params.managerId);
     const response = await pool.query({
-      text: "UPDATE managers SET manager_dni = $1, name = $2, main_phone = $3, secondary_phone = $4, address = $5, email = $6 WHERE manager_dni = $7",
+      text: "UPDATE managers SET name = $1, main_phone = $2, secondary_phone = $3, address = $4, email = $5 WHERE manager_dni = $6",
       values: updatedManager,
     });
     if (response.rowCount === 0) {
