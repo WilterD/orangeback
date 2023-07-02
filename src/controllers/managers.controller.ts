@@ -5,8 +5,6 @@ import { DEFAULT_PAGE, STATUS } from "../utils/constants";
 import {
   PaginateSettings,
   paginatedItemsResponse,
-  successItemsResponse,
-  successResponse,
 } from "../utils/responses";
 import { StatusError } from "../utils/responses/status-error";
 import { handleControllerError } from "../utils/responses/handleControllerError";
@@ -63,52 +61,69 @@ export const getManagerById = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, response.rows[0]);
+    return res.status(STATUS.OK).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res);
   }
 };
 
 const getManagersDataFromRequestBody = (req: Request): any[] => {
-  const {
-    manager_dni,
-    name,
-    main_phone,
-    secondary_phone,
-    address, 
-    email 
-  } = req.body;
+  const { manager_dni, name, main_phone, secondary_phone, address, email } =
+    req.body;
   const newManager = [
     manager_dni,
     name,
     main_phone,
     secondary_phone,
-    address, 
-    email
+    address,
+    email,
   ];
   return newManager;
 };
 
+
+
+
+
 export const addManager = async (
   req: Request,
   res: Response
-): Promise<Response> => {
-  try {
-    const newManager = getManagersDataFromRequestBody(req);
-
-    const insertar = await pool.query({
-      text: "INSERT INTO managers (manager_dni,name,main_phone,secondary_phone,address,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING manager_dni",
-      values: newManager,
-    });
-    const insertedId: string = insertar.rows[0].manager_dni;
+  ): Promise<Response> => {
+    try {
+      const newManager = getManagersDataFromRequestBody(req);
+      
+      const insertar = await pool.query({
+        text: "INSERT INTO managers (manager_dni,name,main_phone,secondary_phone,address,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING manager_dni",
+        values: newManager,
+      });
+      const insertedId: string = insertar.rows[0].manager_dni;
     const response = await pool.query({
-      text: `SELECT * FROM managers WHERE manager_dni = ${insertedId}`,
+      text: 'SELECT * FROM managers WHERE manager_dni = $1 ',
+      values: [insertedId],
     });
-    return successItemsResponse(res, STATUS.CREATED, response.rows[0]);
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
-    console.log(error)
+    console.log(error);
     return handleControllerError(error, res);
   }
+};
+const getManagersUpdateDataFromRequestBody = (req: Request): any[] => {
+  const { 
+    name,
+    main_phone,
+    secondary_phone,
+    address,
+    email 
+    } = req.body;
+
+  const updatedManager = [
+    name, 
+    main_phone, 
+    secondary_phone, 
+    address, 
+    email
+  ];
+  return updatedManager;
 };
 
 export const updateManager = async (
@@ -116,7 +131,7 @@ export const updateManager = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedManager = getManagersDataFromRequestBody(req);
+    const updatedManager = getManagersUpdateDataFromRequestBody(req);
     updatedManager.push(req.params.managerId);
     const response = await pool.query({
       text: "UPDATE managers SET name = $1, main_phone = $2, secondary_phone = $3, address = $4, email = $5 WHERE manager_dni = $6",
@@ -128,7 +143,7 @@ export const updateManager = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, "Manager modificado exitosamente");
+    return res.status(STATUS.OK).json({message: "Manager modificado exitosamente"})
   } catch (error: unknown) {
     console.log(error);
     return handleControllerError(error, res);
@@ -150,7 +165,7 @@ export const deleteManager = async (
         statusCode: STATUS.NOT_FOUND,
       });
     }
-    return successResponse(res, STATUS.OK, "Manager eliminado");
+    return res.status(STATUS.OK).json({message: "Manager eliminado exitosamente"})
   } catch (error: unknown) {
     return handleControllerError(error, res);
   }
