@@ -90,36 +90,55 @@ const getManagersDataFromRequestBody = (req: Request): any[] => {
 export const addManager = async (
   req: Request,
   res: Response
-): Promise<Response> => {
-  try {
-    const newManager = getManagersDataFromRequestBody(req)
-
-    const insertar = await pool.query({
-      text: 'INSERT INTO managers (manager_dni, name, main_phone, secondary_phone, address, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING manager_dni',
-      values: newManager
-    })
-    const insertedId: string = insertar.rows[0].manager_dni
+  ): Promise<Response> => {
+    try {
+      const newManager = getManagersDataFromRequestBody(req);
+      
+      const insertar = await pool.query({
+        text: "INSERT INTO managers (manager_dni,name,main_phone,secondary_phone,address,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING manager_dni",
+        values: newManager,
+      });
+      const insertedId: string = insertar.rows[0].manager_dni;
     const response = await pool.query({
       text: 'SELECT * FROM managers WHERE manager_dni = $1',
-      values: [insertedId]
+      values: [insertedId],
     })
     return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
-    console.log(error)
-    return handleControllerError(error, res)
+    console.log(error);
+    return handleControllerError(error, res);
   }
 }
+
+const getManagersUpdateDataFromRequestBody = (req: Request): any[] => {
+  const { 
+    name,
+    main_phone,
+    secondary_phone,
+    address,
+    email 
+    } = req.body;
+
+  const updatedManager = [
+    name, 
+    main_phone, 
+    secondary_phone, 
+    address, 
+    email
+  ];
+  return updatedManager;
+};
 
 export const updateManager = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedManager = getManagersDataFromRequestBody(req)
+    const updatedManager = getManagersUpdateDataFromRequestBody(req)
     updatedManager.push(req.params.managerId)
     const response = await pool.query({
-      text: 'UPDATE managers SET manager_dni = $1, name = $2, main_phone = $3, secondary_phone = $4, address = $5, email = $6 WHERE manager_dni = $7',
-      values: updatedManager
+      text: "UPDATE managers SET name = $1, main_phone = $2, secondary_phone = $3, address = $4, email = $5 WHERE manager_dni = $6",
+      values: updatedManager,
     })
     if (response.rowCount === 0) {
       throw new StatusError({
