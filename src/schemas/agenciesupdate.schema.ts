@@ -5,10 +5,6 @@ export const agenciesupdateSchema = z.object({
     .string()
     .nonempty("Es necesario indicar un nombre de agencia")
     .max(64, "El nombre debe ser menor a 64 carácteres"),
-    agency_name: z
-    .string()
-    .nonempty("Es necesario indicar un nombre de agencia")
-    .max(64, "El nombre debe ser menor a 64 carácteres"),
     manager_dni: z
     .string()
     .nonempty("Es necesario indicar una cédula")

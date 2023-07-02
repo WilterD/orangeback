@@ -97,7 +97,7 @@ export const addAgency = async (
     const newAgency = getAgenciesDataFromRequestBody(req);
 
     const insertar = await pool.query({
-      text: "INSERT INTO agencies (agency_rif,business_name,agency_name,manager_dni,city_id,created_at) VALUES ($1,$2,$3,$4,$5,$6) RETURNING agency_rif",
+      text: "INSERT INTO agencies (agency_rif,business_name,agency_name,manager_dni,city_id) VALUES ($1,$2,$3,$4,$5,$6) RETURNING agency_rif",
       values: newAgency,
     });
     const insertedId: string = insertar.rows[0].agency_rif;
@@ -111,15 +111,32 @@ export const addAgency = async (
   }
 };
 
+const getAgenciesUpdateDataFromRequestBody = (req: Request): any[] => {
+  const { 
+    business_name,
+    agency_name,
+    manager_dni,
+    city_id
+    } = req.body;
+
+  const updatedAgency = [
+    business_name, 
+    agency_name, 
+    manager_dni, 
+    city_id
+  ];
+  return updatedAgency;
+};
+
 export const updateAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedAgency = getAgenciesDataFromRequestBody(req);
+    const updatedAgency = getAgenciesUpdateDataFromRequestBody(req);
     updatedAgency.push(req.params.agencyId);
     const response = await pool.query({
-      text: "UPDATE agencies SET business_name = $1, agency_name = $2, manager_dni = $3, city_id = $4, created_at = $5 WHERE agency_rif = $6",
+      text: "UPDATE agencies SET business_name = $1, agency_name = $2, manager_dni = $3, city_id = $4 WHERE agency_rif = $6",
       values: updatedAgency,
     });
     if (response.rowCount === 0) {
