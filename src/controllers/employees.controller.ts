@@ -70,7 +70,7 @@ export const getEmployeeById = async (
 }
 
 const getEmployeesDataFromRequestBody = (req: Request): any[] => {
-  const { employee_dni, name, phone, address, salary, agency_rif, job_id, created_at } = req.body
+  const { employee_dni, name, phone, address, salary, agency_rif, job_id, created_at} = req.body
   const newEmployee = [employee_dni, name, phone, address, salary, agency_rif, job_id, created_at]
   return newEmployee
 }
@@ -83,15 +83,16 @@ export const addEmployee = async (
     const newEmployee = getEmployeesDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO employees (name, phone, address, salary, agency_rif, job_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING employee_id',
+      text: 'INSERT INTO employees (employee_dni, name, phone, address, salary, agency_rif, job_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING employee_dni',
       values: newEmployee
     })
-    const insertedId: string = insertar.rows[0].employee_id
+    const insertedId: string = insertar.rows[0].employee_dni
     const response = await pool.query({
-      text: `SELECT * FROM employees WHERE employee_id = ${insertedId}`
+      text: `SELECT * FROM employees WHERE employee_dni = ${insertedId}`
     })
     return successItemsResponse(res, STATUS.CREATED, response.rows[0])
   } catch (error: unknown) {
+    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -115,7 +116,7 @@ export const updateEmployee = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Employeeistrador modificado exitosamente')
+    return successResponse(res, STATUS.OK, 'Empleado modificado exitosamente')
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
