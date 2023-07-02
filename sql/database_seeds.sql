@@ -1,10 +1,52 @@
 -- admins
 
+INSERT INTO admins (
+  name,
+  email,
+  password
+) VALUES
+('Wilter Díaz', 'wddiaz.20@est.ucab.edu.ve', 'o'),
+('Héctor Ferrer', 'heferrer.19@est.ucab.edu.ve', 'r'),
+('Victor Freitas', 'vmfreitas.21@est.ucab.edu.ve', 'a'),
+('Aurimart García', 'algarcia.21@est.ucab.edu.ve', 'n'),
+('Alejandro Rosas', 'ajrosas.19@est.ucab.edu.ve', 'g'),
+('Franklin Bello', 'fbelloca@ucab.edu.ve', 'e');
+
 -- states
+
+INSERT INTO states (
+  name
+) VALUES
+('Bolívar'),
+('Distrito Capital'),
+('Falcón'),
+('Monagas'),
+('Mérida'),
+('Miranda');
 
 -- cities
 
+INSERT INTO cities (
+  name,
+  state_id
+) VALUES
+('Ciudad Bolívar', 1),
+('Ciudad Guayana', 1),
+('Upata', 1),
+('Caracas', 2),
+('Coro', 3),
+('Punto Fijo', 3),
+('Maturín', 4),
+('Caripe', 4),
+('Mérida', 5),
+('Tovar', 5),
+('Los Teques', 6),
+('Los Altos', 6),
+('Guarenas', 6),
+('Guatire', 6);
+
 -- managers
+
 INSERT INTO managers (
   manager_dni, 
   name, 
@@ -29,6 +71,7 @@ INSERT INTO managers (
 -- discounts
 
 -- jobs
+
 INSERT INTO jobs (description, created_at)
 VALUES 
   ('Analista de seguridad', '2013-10-10 12:12:12'),
