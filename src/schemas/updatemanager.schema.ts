@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-export const managersSchema = z.object({
-  manager_dni: z
-    .string()
-    .nonempty("Es necesario indicar una cédula")
-    .max(16, "la cédula debe ser menor a 16  carácteres")
-    .regex(/^\d+$/, "La cédula debe contener solo números"),
+export const updateManagersSchema = z.object({
   name: z
     .string()
     .nonempty("Es necesario indicar un nombre de encargado")
@@ -28,5 +23,5 @@ export const managersSchema = z.object({
     .string()
     .nonempty("Es necesario indicar un email")
     .max(32, "El email debe ser menor a 32 carácteres")
-    .email("Debe ingresar un email valido"),
+    .email("Debe ingresar un email valido")
 });
