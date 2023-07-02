@@ -5,7 +5,7 @@ export const citiesSchema = z.object({
     .string()
     .nonempty('Es necesario indicar un nombre de estado')
     .max(32, 'El nombre debe ser menor a 32 carácteres'),
-  state_id: z
+  stateId: z
     .number()
     .nonnegative('El id de estado no puede ser negativo')
 })

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
 import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
@@ -8,6 +7,7 @@ import {
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
+import _ from 'lodash'
 
 export const getJobs = async (
   req: Request,
@@ -40,7 +40,12 @@ export const getJobs = async (
       page: Number(page),
       perPage: Number(size)
     }
-    return paginatedItemsResponse(res, STATUS.OK, response.rows, pagination)
+    const camelizatedObjectArray = _.map(response.rows, (item) => {
+      return _.mapKeys(item, (_value, key) => {
+        return _.camelCase(key)
+      })
+    })
+    return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -61,7 +66,10 @@ export const getJobById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json(response.rows[0])
+    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
+      return _.camelCase(key)
+    })
+    return res.status(STATUS.OK).json(camelizatedObject)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -93,7 +101,10 @@ export const addJob = async (
       text: 'SELECT * FROM jobs WHERE job_id = $1',
       values: [insertedId]
     })
-    return res.status(STATUS.CREATED).json(response.rows[0])
+    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
+      return _.camelCase(key)
+    })
+    return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)

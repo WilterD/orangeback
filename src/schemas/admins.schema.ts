@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const adminsSchema = z.object({
-  admin_id: z
+  adminId: z
     .number()
     .optional(),
   name: z

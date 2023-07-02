@@ -40,7 +40,7 @@ export const signIn = async (
     }
 
     const userForToken = {
-      id: data.admin_id,
+      id: data.adminId,
       name: data.name,
       email: data.email
     }

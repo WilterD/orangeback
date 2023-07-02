@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
 import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
@@ -8,6 +7,7 @@ import {
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
+import _ from 'lodash'
 
 export const getManagers = async (
   req: Request,
@@ -40,7 +40,12 @@ export const getManagers = async (
       page: Number(page),
       perPage: Number(size)
     }
-    return paginatedItemsResponse(res, STATUS.OK, response.rows, pagination)
+    const camelizatedObjectArray = _.map(response.rows, (item) => {
+      return _.mapKeys(item, (_value, key) => {
+        return _.camelCase(key)
+      })
+    })
+    return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -61,7 +66,10 @@ export const getManagerById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json(response.rows[0])
+    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
+      return _.camelCase(key)
+    })
+    return res.status(STATUS.OK).json(camelizatedObject)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -69,18 +77,18 @@ export const getManagerById = async (
 
 const getManagersDataFromRequestBody = (req: Request): any[] => {
   const {
-    manager_dni,
+    managerDni,
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   } = req.body
   const newManager = [
-    manager_dni,
+    managerDni,
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   ]
@@ -95,7 +103,7 @@ export const addManager = async (
     const newManager = getManagersDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO managers (manager_dni,name,main_phone,secondary_phone,address,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING manager_dni',
+      text: 'INSERT INTO managers (manager_dni, name, main_phone, secondary_phone, address, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING manager_dni',
       values: newManager
     })
     const insertedId: string = insertar.rows[0].manager_dni
@@ -103,7 +111,10 @@ export const addManager = async (
       text: 'SELECT * FROM managers WHERE manager_dni = $1',
       values: [insertedId]
     })
-    return res.status(STATUS.CREATED).json(response.rows[0])
+    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
+      return _.camelCase(key)
+    })
+    return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -113,16 +124,16 @@ export const addManager = async (
 const getManagersUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   } = req.body
 
   const updatedManager = [
     name,
-    main_phone,
-    secondary_phone,
+    mainPhone,
+    secondaryPhone,
     address,
     email
   ]

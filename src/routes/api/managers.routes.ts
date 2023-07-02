@@ -7,8 +7,7 @@ import {
   deleteManager
 } from '../../controllers/managers.controller'
 import { schemaGuard } from '../../middlewares/schemaGuard'
-import { createManagersSchema } from '../../schemas/createmanager.schema'
-import { updateManagersSchema } from '../../schemas/updatemanager.schema'
+import { createManagersSchema, updateManagersSchema } from '../../schemas/managers.schema'
 
 const router = Router()
 
