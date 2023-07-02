@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
+import bcrypt from 'bcrypt'
 import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
 import {
   PaginateSettings,
-  paginatedItemsResponse,
-  successItemsResponse,
-  successResponse
+  paginatedItemsResponse
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
+import { AUTH_ROUNDS } from '../config'
 
 export const getAdmins = async (
   req: Request,
@@ -39,7 +39,7 @@ export const getAdmins = async (
     })
     const pagination: PaginateSettings = {
       total: response.rowCount,
-      currentPage: Number(page),
+      page: Number(page),
       perPage: Number(size)
     }
     return paginatedItemsResponse(res, STATUS.OK, response.rows, pagination)
@@ -63,15 +63,16 @@ export const getAdminById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, response.rows[0])
+    return res.status(STATUS.OK).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
 }
 
-const getAdminsDataFromRequestBody = (req: Request): any[] => {
+const getAdminsDataFromRequestBody = async (req: Request): Promise<any[]> => {
   const { name, email, password } = req.body
-  const newAdmin = [name, email, password]
+  const passwordHash = await bcrypt.hash(password, Number(AUTH_ROUNDS))
+  const newAdmin = [name, email, passwordHash]
   return newAdmin
 }
 
@@ -80,7 +81,7 @@ export const addAdmin = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newAdmin = getAdminsDataFromRequestBody(req)
+    const newAdmin = await getAdminsDataFromRequestBody(req)
 
     const insertar = await pool.query({
       text: 'INSERT INTO admins (name, email, password) VALUES ($1, $2, $3) RETURNING admin_id',
@@ -88,9 +89,10 @@ export const addAdmin = async (
     })
     const insertedId: string = insertar.rows[0].admin_id
     const response = await pool.query({
-      text: `SELECT * FROM admins WHERE admin_id = ${insertedId}`
+      text: 'SELECT * FROM admins WHERE admin_id = $1',
+      values: [insertedId]
     })
-    return successItemsResponse(res, STATUS.CREATED, response.rows[0])
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -101,22 +103,20 @@ export const updateAdmin = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedAdmin = getAdminsDataFromRequestBody(req)
+    const updatedAdmin = await getAdminsDataFromRequestBody(req)
     updatedAdmin.push(req.params.adminId)
     const response = await pool.query({
       text: 'UPDATE admins SET name = $1, email = $2, password = $3 WHERE admin_id = $4',
       values: updatedAdmin
     })
-    console.log(response)
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.adminId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Administrador modificado exitosamente')
+    return res.status(STATUS.OK).json({ message: 'Administrador modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -136,7 +136,7 @@ export const deleteAdmin = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Administrador eliminado')
+    return res.status(STATUS.OK).json({ message: 'Administrador eliminado exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

@@ -9,7 +9,7 @@ import {
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 
-export const getManagers = async (
+export const getJobs = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -23,7 +23,7 @@ export const getManagers = async (
     }
 
     const isEmpty = await pool.query({
-      text: 'SELECT * FROM managers'
+      text: 'SELECT * FROM jobs'
     })
     if (isEmpty.rowCount === 0) {
       throw new StatusError({
@@ -32,7 +32,7 @@ export const getManagers = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM managers ORDER BY manager_dni LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM jobs ORDER BY job_id LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -46,18 +46,18 @@ export const getManagers = async (
   }
 }
 
-export const getManagerById = async (
+export const getJobById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      text: 'SELECT * FROM jobs WHERE job_id = $1',
+      values: [req.params.jobId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de: ${req.params.jobId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -67,108 +67,79 @@ export const getManagerById = async (
   }
 }
 
-const getManagersDataFromRequestBody = (req: Request): any[] => {
+const getJobsDataFromRequestBody = (req: Request): any[] => {
   const {
-    manager_dni,
-    name,
-    main_phone,
-    secondary_phone,
-    address,
-    email
+    description
   } = req.body
-  const newManager = [
-    manager_dni,
-    name,
-    main_phone,
-    secondary_phone,
-    address,
-    email
+  const newJob = [
+    description
   ]
-  return newManager
+  return newJob
 }
 
-export const addManager = async (
-  req: Request,
-  res: Response
-  ): Promise<Response> => {
-    try {
-      const newManager = getManagersDataFromRequestBody(req);
-      
-      const insertar = await pool.query({
-        text: "INSERT INTO managers (manager_dni,name,main_phone,secondary_phone,address,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING manager_dni",
-        values: newManager,
-      });
-      const insertedId: string = insertar.rows[0].manager_dni;
-    const response = await pool.query({
-      text: 'SELECT * FROM managers WHERE manager_dni = $1',
-      values: [insertedId],
-    })
-    return res.status(STATUS.CREATED).json(response.rows[0])
-  } catch (error: unknown) {
-    console.log(error);
-    return handleControllerError(error, res);
-  }
-}
-
-const getManagersUpdateDataFromRequestBody = (req: Request): any[] => {
-  const { 
-    name,
-    main_phone,
-    secondary_phone,
-    address,
-    email 
-    } = req.body;
-
-  const updatedManager = [
-    name, 
-    main_phone, 
-    secondary_phone, 
-    address, 
-    email
-  ];
-  return updatedManager;
-};
-
-export const updateManager = async (
+export const addJob = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedManager = getManagersUpdateDataFromRequestBody(req)
-    updatedManager.push(req.params.managerId)
-    const response = await pool.query({
-      text: "UPDATE managers SET name = $1, main_phone = $2, secondary_phone = $3, address = $4, email = $5 WHERE manager_dni = $6",
-      values: updatedManager,
+    const newJob = getJobsDataFromRequestBody(req)
+
+    const insertar = await pool.query({
+      text: 'INSERT INTO jobs (description) VALUES ($1) RETURNING job_id',
+      values: newJob
     })
-    if (response.rowCount === 0) {
-      throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
-        statusCode: STATUS.NOT_FOUND
-      })
-    }
-    return res.status(STATUS.OK).json({ message: 'Encargado modificado exitosamente' })
+    const insertedId: string = insertar.rows[0].job_id
+    const response = await pool.query({
+      text: 'SELECT * FROM jobs WHERE job_id = $1',
+      values: [insertedId]
+    })
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
   }
 }
 
-export const deleteManager = async (
+export const updateJob = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const updatedJob = getJobsDataFromRequestBody(req)
+    updatedJob.push(req.params.jobId)
+    const response = await pool.query({
+      text: 'UPDATE jobs SET description = $1 WHERE job_id = $2',
+      values: updatedJob
+    })
+    if (response.rowCount === 0) {
+      throw new StatusError({
+        message: `No se pudo encontrar el registro de id: ${req.params.jobId}`,
+        statusCode: STATUS.NOT_FOUND
+      })
+    }
+    return res.status(STATUS.OK).json({ message: 'Cargo modificado exitosamente' })
+  } catch (error: unknown) {
+    console.log(error)
+    return handleControllerError(error, res)
+  }
+}
+
+export const deleteJob = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      text: 'DELETE FROM jobs WHERE job_id = $1',
+      values: [req.params.jobId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.jobId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Encargado eliminado exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Cargo eliminado exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

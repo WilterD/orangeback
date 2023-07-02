@@ -9,7 +9,7 @@ import {
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 
-export const getManagers = async (
+export const getCities = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -23,7 +23,7 @@ export const getManagers = async (
     }
 
     const isEmpty = await pool.query({
-      text: 'SELECT * FROM managers'
+      text: 'SELECT * FROM cities'
     })
     if (isEmpty.rowCount === 0) {
       throw new StatusError({
@@ -32,7 +32,7 @@ export const getManagers = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM managers ORDER BY manager_dni LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM cities ORDER BY city_id LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -46,18 +46,18 @@ export const getManagers = async (
   }
 }
 
-export const getManagerById = async (
+export const getCityById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      text: 'SELECT * FROM cities WHERE city_id = $1',
+      values: [req.params.cityId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -67,108 +67,75 @@ export const getManagerById = async (
   }
 }
 
-const getManagersDataFromRequestBody = (req: Request): any[] => {
-  const {
-    manager_dni,
-    name,
-    main_phone,
-    secondary_phone,
-    address,
-    email
-  } = req.body
-  const newManager = [
-    manager_dni,
-    name,
-    main_phone,
-    secondary_phone,
-    address,
-    email
-  ]
-  return newManager
+const getCitiesDataFromRequestBody = (req: Request): any[] => {
+  const { name, state_id } = req.body
+  const newCity = [name, state_id]
+  return newCity
 }
 
-export const addManager = async (
-  req: Request,
-  res: Response
-  ): Promise<Response> => {
-    try {
-      const newManager = getManagersDataFromRequestBody(req);
-      
-      const insertar = await pool.query({
-        text: "INSERT INTO managers (manager_dni,name,main_phone,secondary_phone,address,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING manager_dni",
-        values: newManager,
-      });
-      const insertedId: string = insertar.rows[0].manager_dni;
-    const response = await pool.query({
-      text: 'SELECT * FROM managers WHERE manager_dni = $1',
-      values: [insertedId],
-    })
-    return res.status(STATUS.CREATED).json(response.rows[0])
-  } catch (error: unknown) {
-    console.log(error);
-    return handleControllerError(error, res);
-  }
-}
-
-const getManagersUpdateDataFromRequestBody = (req: Request): any[] => {
-  const { 
-    name,
-    main_phone,
-    secondary_phone,
-    address,
-    email 
-    } = req.body;
-
-  const updatedManager = [
-    name, 
-    main_phone, 
-    secondary_phone, 
-    address, 
-    email
-  ];
-  return updatedManager;
-};
-
-export const updateManager = async (
+export const addCity = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedManager = getManagersUpdateDataFromRequestBody(req)
-    updatedManager.push(req.params.managerId)
-    const response = await pool.query({
-      text: "UPDATE managers SET name = $1, main_phone = $2, secondary_phone = $3, address = $4, email = $5 WHERE manager_dni = $6",
-      values: updatedManager,
+    const newCity = getCitiesDataFromRequestBody(req)
+
+    const insertar = await pool.query({
+      text: 'INSERT INTO cities (name, state_id) VALUES ($1, $2) RETURNING city_id',
+      values: newCity
     })
-    if (response.rowCount === 0) {
-      throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
-        statusCode: STATUS.NOT_FOUND
-      })
-    }
-    return res.status(STATUS.OK).json({ message: 'Encargado modificado exitosamente' })
+    const insertedId: string = insertar.rows[0].city_id
+    const response = await pool.query({
+      text: 'SELECT * FROM cities WHERE city_id = $1',
+      values: [insertedId]
+    })
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
   }
 }
 
-export const deleteManager = async (
+export const updateCity = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const updatedCity = getCitiesDataFromRequestBody(req)
+    updatedCity.push(req.params.cityId)
+    const response = await pool.query({
+      text: 'UPDATE cities SET name = $1, state_id = $2 WHERE city_id = $3',
+      values: updatedCity
+    })
+    if (response.rowCount === 0) {
+      throw new StatusError({
+        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
+        statusCode: STATUS.NOT_FOUND
+      })
+    }
+    return res.status(STATUS.OK).json({ message: 'Ciudad modificada exitosamente' })
+  } catch (error: unknown) {
+    console.log(error)
+    return handleControllerError(error, res)
+  }
+}
+
+export const deleteCity = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      text: 'DELETE FROM cities WHERE city_id = $1',
+      values: [req.params.cityId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Encargado eliminado exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Ciudad eliminada exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
