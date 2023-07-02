@@ -1,61 +1,32 @@
 import { Response } from 'express'
 
+export interface SchemaError {
+  field: string | number
+  message: string
+}
+
 export const errorResponse = (
   res: Response,
   status: number,
-  message: string
+  message: string,
+  details?: SchemaError | SchemaError[]
 ): Response => {
   return res.status(status).json({
-    success: false,
-    message
+    message,
+    details
   })
-}
-
-export const errorResponseWithField = (
-  res: Response,
-  status: number,
-  field: string | number,
-  message: string
-): Response => {
-  return res.status(status).json({
-    success: false,
-    field,
-    message
-  })
-}
-
-export const successResponse = <T>(
-  res: Response,
-  status: number,
-  item: T
-): Response => {
-  return res.status(status).json({
-    success: true,
-    item
-  })
-}
-
-export const successItemsResponse = <T>(
-  res: Response,
-  status: number,
-  items: T[]
-): Response => {
-  return res.status(status).json({
-    success: true,
-    items
-  })
-}
-
-export interface PaginateSettings {
-  total: number
-  currentPage: number
-  perPage: number
 }
 
 export const numberOfPages = (total: number, perPage: number): number => {
   if (total === 0 || perPage === 0) return 0
 
   return Math.ceil(total / perPage)
+}
+
+export interface PaginateSettings {
+  total: number
+  page: number
+  perPage: number
 }
 
 export const paginatedItemsResponse = <T>(
@@ -66,7 +37,6 @@ export const paginatedItemsResponse = <T>(
 ): Response => {
   const pages = numberOfPages(paginate.total, paginate.perPage)
   return res.status(status).json({
-    success: true,
     paginate: {
       ...paginate,
       pages

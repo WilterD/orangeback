@@ -4,9 +4,7 @@ import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
 import {
   PaginateSettings,
-  paginatedItemsResponse,
-  successItemsResponse,
-  successResponse
+  paginatedItemsResponse
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
@@ -39,7 +37,7 @@ export const getStates = async (
     })
     const pagination: PaginateSettings = {
       total: response.rowCount,
-      currentPage: Number(page),
+      page: Number(page),
       perPage: Number(size)
     }
     return paginatedItemsResponse(res, STATUS.OK, response.rows, pagination)
@@ -63,7 +61,7 @@ export const getStateById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, response.rows[0])
+    return res.status(STATUS.OK).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -90,7 +88,7 @@ export const addState = async (
     const response = await pool.query({
       text: `SELECT * FROM states WHERE state_id = ${insertedId}`
     })
-    return successItemsResponse(res, STATUS.CREATED, response.rows[0])
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -107,16 +105,14 @@ export const updateState = async (
       text: 'UPDATE states SET name = $1 WHERE state_id = $2',
       values: updatedState
     })
-    console.log(response)
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.stateId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Estado modificado exitosamente')
+    return res.status(STATUS.OK).json({ message: 'Estado modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -136,7 +132,7 @@ export const deleteState = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Estado eliminado')
+    return res.status(STATUS.OK).json({ message: 'Estado eliminado exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

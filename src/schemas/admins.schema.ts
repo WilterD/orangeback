@@ -1,9 +1,12 @@
 import { z } from 'zod'
 
 export const adminsSchema = z.object({
+  admin_id: z
+    .number()
+    .optional(),
   name: z
     .string()
-    .nonempty('Es necesario indicar un nombre de administrado')
+    .nonempty('Es necesario indicar un nombre de administrador')
     .max(64, 'El nombre debe ser menor a 64 carácteres'),
   email: z
     .string()
