@@ -88,7 +88,8 @@ export const addEmployee = async (
     })
     const insertedId: string = insertar.rows[0].employee_dni
     const response = await pool.query({
-      text: `SELECT * FROM employees WHERE employee_dni = ${insertedId}`
+      text: 'SELECT * FROM employees WHERE employee_dni = $1',
+      values: [insertedId]
     })
     return successItemsResponse(res, STATUS.CREATED, response.rows[0])
   } catch (error: unknown) {
@@ -106,7 +107,7 @@ export const updateEmployee = async (
     updatedEmployee.push(req.params.employeeId)
     const response = await pool.query({
         // employee_dni, name, phone, address, salary, agency_rif, job_id, created_at
-      text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = 6$  WHERE employee_dni = $8',
+      text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = 6$  WHERE employee_dni = $7',
       values: updatedEmployee
     })
     console.log(response)
