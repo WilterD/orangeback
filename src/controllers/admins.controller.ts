@@ -89,7 +89,8 @@ export const addAdmin = async (
     })
     const insertedId: string = insertar.rows[0].admin_id
     const response = await pool.query({
-      text: `SELECT * FROM admins WHERE admin_id = ${insertedId}`
+      text: 'SELECT * FROM admins WHERE admin_id = $1',
+      values: [insertedId]
     })
     return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {

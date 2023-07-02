@@ -4,9 +4,7 @@ import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
 import {
   PaginateSettings,
-  paginatedItemsResponse,
-  successItemsResponse,
-  successResponse
+  paginatedItemsResponse
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
@@ -39,7 +37,7 @@ export const getCities = async (
     })
     const pagination: PaginateSettings = {
       total: response.rowCount,
-      currentPage: Number(page),
+      page: Number(page),
       perPage: Number(size)
     }
     return paginatedItemsResponse(res, STATUS.OK, response.rows, pagination)
@@ -63,7 +61,7 @@ export const getCityById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, response.rows[0])
+    return res.status(STATUS.OK).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -88,9 +86,10 @@ export const addCity = async (
     })
     const insertedId: string = insertar.rows[0].city_id
     const response = await pool.query({
-      text: `SELECT * FROM cities WHERE city_id = ${insertedId}`
+      text: 'SELECT * FROM cities WHERE city_id = $1',
+      values: [insertedId]
     })
-    return successItemsResponse(res, STATUS.CREATED, response.rows[0])
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -114,7 +113,7 @@ export const updateCity = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Ciudad modificado exitosamente')
+    return res.status(STATUS.OK).json({ message: 'Ciudad modificada exitosamente' })
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -136,7 +135,7 @@ export const deleteCity = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Ciudad eliminado')
+    return res.status(STATUS.OK).json({ message: 'Ciudad eliminada exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

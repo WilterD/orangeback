@@ -86,7 +86,8 @@ export const addState = async (
     })
     const insertedId: string = insertar.rows[0].state_id
     const response = await pool.query({
-      text: `SELECT * FROM states WHERE state_id = ${insertedId}`
+      text: 'SELECT * FROM states WHERE state_id = $1',
+      values: [insertedId]
     })
     return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
