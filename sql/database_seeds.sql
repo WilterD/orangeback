@@ -86,7 +86,9 @@ INSERT INTO agencies (
   ('10', 'KLM Agency', '01234567', 10);
 
 --models
-INSERT INTO
+
+-- INSERT INTO
+
 -- discounts
 
 -- jobs

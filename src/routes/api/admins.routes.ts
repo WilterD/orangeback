@@ -17,7 +17,7 @@ const router = Router()
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getAdmins)
 router.get('/:adminId', tokenGuard(), verifyToken(), getAdminById)
-router.post('/', schemaGuard(adminsSchema), addAdmin)
+router.post('/', tokenGuard(), verifyToken(), schemaGuard(adminsSchema), addAdmin)
 router.put('/:adminId', tokenGuard(), verifyToken(), schemaGuard(adminsSchema), updateAdmin)
 router.delete('/:adminId', tokenGuard(), verifyToken(), deleteAdmin)
 
