@@ -9,6 +9,10 @@ export const createModelsSchema = z.object({
     .string()
     .nonempty('Es necesario indicar una marca del modelo del vehiculo')
     .max(64, 'El nombre debe ser menor a 64 carácteres'),
+  description: z
+    .string()
+    .nonempty('Es necesario agregar una descripcion del modelo')
+    .max(64, 'El modelo debe tener menos de 64 caracteres'),
   modelKg: z
     .number(),
   modelYear: z
@@ -39,6 +43,10 @@ export const updateModelsSchema = z.object({
     .string()
     .nonempty('Es necesario indicar una marca del modelo del vehiculo')
     .max(64, 'El nombre debe ser menor a 64 carácteres'),
+  description: z
+    .string()
+    .nonempty('Es necesario agregar una descripcion del modelo')
+    .max(64, 'El modelo debe tener menos de 64 caracteres'),
   modelKg: z
     .number(),
   modelYear: z

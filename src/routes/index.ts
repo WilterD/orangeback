@@ -8,6 +8,7 @@ import managersRouter from './api/managers.routes'
 import agenciesRouter from './api/agencies.routes'
 import jobsRouter from './api/jobs.routes'
 import employeesRouter from './api/employees.routes'
+import modelsRouter from './api/models.routes'
 
 const router = express.Router()
 
@@ -19,5 +20,6 @@ router.use('/managers', managersRouter)
 router.use('/agencies', agenciesRouter)
 router.use('/jobs', jobsRouter)
 router.use('/employees', employeesRouter)
+router.use('/models', modelsRouter)
 
 export default router

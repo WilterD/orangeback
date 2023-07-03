@@ -134,3 +134,21 @@ INSERT INTO employees (
 -- clients
 
 -- models
+INSERT INTO models (
+  model_id,
+  brand,
+  description, 
+  model_kg, 
+  model_year, 
+  seats_quantity, 
+  refrigerant_type, 
+  engine_oil_type,
+  oil_box,
+  octane
+) VALUES
+
+  ('Civic', 'Honda', 'morado viejo', 190,'2003', 4, 'organico', 'gasolina', 'Motul 100318', 95),
+  ('Aveo', 'Chevrolett', 'Azul nuevo', 170,'2002', 3, 'inorganico', 'gasolina', 'Motul 100314', 95),
+  ('Model S', 'Tesla', 'Rojo viejo', 140,'2001', 2, 'organico', 'gasolina', 'Motul 100318', 91),
+  ('Evolution', 'Mitsubishi', 'Negro cromado', 120,'2013', 1, 'inorganico', 'gasolina', 'Motul 100318', 95),
+  ('Odyssea', 'Honda', 'Rosa y Vinotinto', 156 ,'2020', 4, 'organico', 'gasolina', 'Motul 100318', 95);
