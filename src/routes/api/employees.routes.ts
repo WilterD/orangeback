@@ -9,14 +9,16 @@ import {
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { createEmployeesSchema, updateEmployeesSchema } from '../../schemas/employees.Schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'
+import { tokenGuard } from '../../middlewares/tokenGuard'
+import { verifyToken } from '../../middlewares/auth'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-router.get('/', paginationGuard(), getEmployees)
-router.get('/:employeeId', getEmployeeById)
-router.post('/', schemaGuard(createEmployeesSchema), addEmployee)
-router.put('/:employeeId', schemaGuard(updateEmployeesSchema), updateEmployee)
-router.delete('/:employeeId', deleteEmployee)
+router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getEmployees)
+router.get('/:employeeId', tokenGuard(), verifyToken(), getEmployeeById)
+router.post('/', tokenGuard(), verifyToken(), schemaGuard(createEmployeesSchema), addEmployee)
+router.put('/:employeeId', tokenGuard(), verifyToken(), schemaGuard(updateEmployeesSchema), updateEmployee)
+router.delete('/:employeeId', tokenGuard(), verifyToken(), deleteEmployee)
 
 export default router
