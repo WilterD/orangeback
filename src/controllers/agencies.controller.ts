@@ -9,7 +9,7 @@ import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 import _ from 'lodash'
 
-export const getManagers = async (
+export const getAgencies = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -23,7 +23,7 @@ export const getManagers = async (
     }
 
     const isEmpty = await pool.query({
-      text: 'SELECT * FROM managers'
+      text: 'SELECT * FROM agencies'
     })
     if (isEmpty.rowCount === 0) {
       throw new StatusError({
@@ -32,7 +32,7 @@ export const getManagers = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM managers ORDER BY manager_dni LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM agencies ORDER BY agency_rif LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -51,18 +51,18 @@ export const getManagers = async (
   }
 }
 
-export const getManagerById = async (
+export const getAgencyById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      text: 'SELECT * FROM agencies WHERE agency_rif = $1',
+      values: [req.params.agencyId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de: ${req.params.agencyId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -75,40 +75,36 @@ export const getManagerById = async (
   }
 }
 
-const getManagersCreateDataFromRequestBody = (req: Request): any[] => {
+const getAgenciesCreateDataFromRequestBody = (req: Request): any[] => {
   const {
+    agencyRif,
+    businessName,
     managerDni,
-    name,
-    mainPhone,
-    secondaryPhone,
-    address,
-    email
+    cityId
   } = req.body
-  const newManager = [
+  const newAgency = [
+    agencyRif,
+    businessName,
     managerDni,
-    name,
-    mainPhone,
-    secondaryPhone,
-    address,
-    email
+    cityId
   ]
-  return newManager
+  return newAgency
 }
 
-export const addManager = async (
+export const addAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const newManager = getManagersCreateDataFromRequestBody(req)
+    const newAgency = getAgenciesCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO managers (manager_dni, name, main_phone, secondary_phone, address, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING manager_dni',
-      values: newManager
+      text: 'INSERT INTO agencies (agency_rif,business_name,manager_dni,city_id) VALUES ($1,$2,$3,$4) RETURNING agency_rif',
+      values: newAgency
     })
-    const insertedId: string = insertar.rows[0].manager_dni
+    const insertedId: string = insertar.rows[0].agency_rif
     const response = await pool.query({
-      text: 'SELECT * FROM managers WHERE manager_dni = $1',
+      text: 'SELECT * FROM agencies WHERE agency_rif = $1',
       values: [insertedId]
     })
     const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
@@ -121,65 +117,61 @@ export const addManager = async (
   }
 }
 
-const getManagersUpdateDataFromRequestBody = (req: Request): any[] => {
+const getAgenciesUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
-    name,
-    mainPhone,
-    secondaryPhone,
-    address,
-    email
+    businessName,
+    managerDni,
+    cityId
   } = req.body
 
-  const updatedManager = [
-    name,
-    mainPhone,
-    secondaryPhone,
-    address,
-    email
+  const updatedAgency = [
+    businessName,
+    managerDni,
+    cityId
   ]
-  return updatedManager
+  return updatedAgency
 }
 
-export const updateManager = async (
+export const updateAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedManager = getManagersUpdateDataFromRequestBody(req)
-    updatedManager.push(req.params.managerId)
+    const updatedAgency = getAgenciesUpdateDataFromRequestBody(req)
+    updatedAgency.push(req.params.agencyId)
     const response = await pool.query({
-      text: 'UPDATE managers SET name = $1, main_phone = $2, secondary_phone = $3, address = $4, email = $5 WHERE manager_dni = $6',
-      values: updatedManager
+      text: 'UPDATE agencies SET business_name = $1, manager_dni = $2, city_id = $3 WHERE agency_rif = $4',
+      values: updatedAgency
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.agencyId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Encargado modificado exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Agencia Modificada Exitosamente' })
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
   }
 }
 
-export const deleteManager = async (
+export const deleteAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      text: 'DELETE FROM agencies WHERE agency_rif = $1',
+      values: [req.params.agencyId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.agencyId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Encargado eliminado exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Agencia eliminada' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
