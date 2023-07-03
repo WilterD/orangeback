@@ -1,13 +1,6 @@
 import { z } from 'zod'
 
-export const adminsSchema = z.object({
-  adminId: z
-    .number()
-    .optional(),
-  name: z
-    .string()
-    .nonempty('Es necesario indicar un nombre de administrador')
-    .max(64, 'El nombre debe ser menor a 64 carácteres'),
+export const loginSchema = z.object({
   email: z
     .string()
     .nonempty('Es necesario indicar un correo electrónico')
@@ -18,5 +11,3 @@ export const adminsSchema = z.object({
     .nonempty('Es necesario ingresar una contraseña')
     .max(64, 'El nombre debe ser menor a 64 carácteres')
 })
-
-export type Admin = z.infer<typeof adminsSchema>

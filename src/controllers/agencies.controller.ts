@@ -9,7 +9,7 @@ import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 import _ from 'lodash'
 
-export const getCities = async (
+export const getAgencies = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -23,7 +23,7 @@ export const getCities = async (
     }
 
     const isEmpty = await pool.query({
-      text: 'SELECT * FROM cities'
+      text: 'SELECT * FROM agencies'
     })
     if (isEmpty.rowCount === 0) {
       throw new StatusError({
@@ -32,7 +32,7 @@ export const getCities = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM cities ORDER BY city_id LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM agencies ORDER BY agency_rif LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -51,18 +51,18 @@ export const getCities = async (
   }
 }
 
-export const getCityById = async (
+export const getAgencyById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM cities WHERE city_id = $1',
-      values: [req.params.cityId]
+      text: 'SELECT * FROM agencies WHERE agency_rif = $1',
+      values: [req.params.agencyId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
+        message: `No se pudo encontrar el registro de: ${req.params.agencyId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -75,26 +75,36 @@ export const getCityById = async (
   }
 }
 
-const getCitiesDataFromRequestBody = (req: Request): any[] => {
-  const { name, stateId } = req.body
-  const newCity = [name, stateId]
-  return newCity
+const getAgenciesCreateDataFromRequestBody = (req: Request): any[] => {
+  const {
+    agencyRif,
+    businessName,
+    managerDni,
+    cityId
+  } = req.body
+  const newAgency = [
+    agencyRif,
+    businessName,
+    managerDni,
+    cityId
+  ]
+  return newAgency
 }
 
-export const addCity = async (
+export const addAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const newCity = getCitiesDataFromRequestBody(req)
+    const newAgency = getAgenciesCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO cities (name, state_id) VALUES ($1, $2) RETURNING city_id',
-      values: newCity
+      text: 'INSERT INTO agencies (agency_rif,business_name,manager_dni,city_id) VALUES ($1,$2,$3,$4) RETURNING agency_rif',
+      values: newAgency
     })
-    const insertedId: string = insertar.rows[0].city_id
+    const insertedId: string = insertar.rows[0].agency_rif
     const response = await pool.query({
-      text: 'SELECT * FROM cities WHERE city_id = $1',
+      text: 'SELECT * FROM agencies WHERE agency_rif = $1',
       values: [insertedId]
     })
     const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
@@ -107,46 +117,61 @@ export const addCity = async (
   }
 }
 
-export const updateCity = async (
+const getAgenciesUpdateDataFromRequestBody = (req: Request): any[] => {
+  const {
+    businessName,
+    managerDni,
+    cityId
+  } = req.body
+
+  const updatedAgency = [
+    businessName,
+    managerDni,
+    cityId
+  ]
+  return updatedAgency
+}
+
+export const updateAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedCity = getCitiesDataFromRequestBody(req)
-    updatedCity.push(req.params.cityId)
+    const updatedAgency = getAgenciesUpdateDataFromRequestBody(req)
+    updatedAgency.push(req.params.agencyId)
     const response = await pool.query({
-      text: 'UPDATE cities SET name = $1, state_id = $2 WHERE city_id = $3',
-      values: updatedCity
+      text: 'UPDATE agencies SET business_name = $1, manager_dni = $2, city_id = $3 WHERE agency_rif = $4',
+      values: updatedAgency
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.agencyId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Ciudad modificada exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Agencia Modificada Exitosamente' })
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
   }
 }
 
-export const deleteCity = async (
+export const deleteAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM cities WHERE city_id = $1',
-      values: [req.params.cityId]
+      text: 'DELETE FROM agencies WHERE agency_rif = $1',
+      values: [req.params.agencyId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.agencyId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Ciudad eliminada exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Agencia eliminada' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

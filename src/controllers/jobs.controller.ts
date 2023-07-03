@@ -9,7 +9,7 @@ import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 import _ from 'lodash'
 
-export const getCities = async (
+export const getJobs = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -23,7 +23,7 @@ export const getCities = async (
     }
 
     const isEmpty = await pool.query({
-      text: 'SELECT * FROM cities'
+      text: 'SELECT * FROM jobs'
     })
     if (isEmpty.rowCount === 0) {
       throw new StatusError({
@@ -32,7 +32,7 @@ export const getCities = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM cities ORDER BY city_id LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM jobs ORDER BY job_id LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -51,18 +51,18 @@ export const getCities = async (
   }
 }
 
-export const getCityById = async (
+export const getJobById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM cities WHERE city_id = $1',
-      values: [req.params.cityId]
+      text: 'SELECT * FROM jobs WHERE job_id = $1',
+      values: [req.params.jobId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
+        message: `No se pudo encontrar el registro de: ${req.params.jobId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -75,26 +75,30 @@ export const getCityById = async (
   }
 }
 
-const getCitiesDataFromRequestBody = (req: Request): any[] => {
-  const { name, stateId } = req.body
-  const newCity = [name, stateId]
-  return newCity
+const getJobsDataFromRequestBody = (req: Request): any[] => {
+  const {
+    description
+  } = req.body
+  const newJob = [
+    description
+  ]
+  return newJob
 }
 
-export const addCity = async (
+export const addJob = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const newCity = getCitiesDataFromRequestBody(req)
+    const newJob = getJobsDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO cities (name, state_id) VALUES ($1, $2) RETURNING city_id',
-      values: newCity
+      text: 'INSERT INTO jobs (description) VALUES ($1) RETURNING job_id',
+      values: newJob
     })
-    const insertedId: string = insertar.rows[0].city_id
+    const insertedId: string = insertar.rows[0].job_id
     const response = await pool.query({
-      text: 'SELECT * FROM cities WHERE city_id = $1',
+      text: 'SELECT * FROM jobs WHERE job_id = $1',
       values: [insertedId]
     })
     const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
@@ -107,46 +111,46 @@ export const addCity = async (
   }
 }
 
-export const updateCity = async (
+export const updateJob = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedCity = getCitiesDataFromRequestBody(req)
-    updatedCity.push(req.params.cityId)
+    const updatedJob = getJobsDataFromRequestBody(req)
+    updatedJob.push(req.params.jobId)
     const response = await pool.query({
-      text: 'UPDATE cities SET name = $1, state_id = $2 WHERE city_id = $3',
-      values: updatedCity
+      text: 'UPDATE jobs SET description = $1 WHERE job_id = $2',
+      values: updatedJob
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.jobId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Ciudad modificada exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Cargo modificado exitosamente' })
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
   }
 }
 
-export const deleteCity = async (
+export const deleteJob = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM cities WHERE city_id = $1',
-      values: [req.params.cityId]
+      text: 'DELETE FROM jobs WHERE job_id = $1',
+      values: [req.params.jobId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.cityId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.jobId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Ciudad eliminada exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Cargo eliminado exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
