@@ -7,7 +7,7 @@ export class StatusError extends Error {
   readonly statusCode: number
 
   constructor ({ message, statusCode }: StatusErrorOptions) {
-    super(`[${statusCode}] ${message}`)
+    super(message)
     this.statusCode = statusCode
   }
 

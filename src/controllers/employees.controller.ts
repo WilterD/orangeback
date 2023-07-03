@@ -32,7 +32,7 @@ export const getEmployees = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM employees ORDER BY employee_dni LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM employees ORDER BY name LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

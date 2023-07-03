@@ -133,4 +133,23 @@ INSERT INTO employees (
 
 -- clients
 
+INSERT INTO clients (
+  client_dni, 
+  name,
+  email,
+  main_phone, 
+  secondary_phone
+) VALUES
+  ('12345678', 'Pedro Pérez', 'pedro.perez@gmail.com', '04121234567', '02121234567'),
+  ('23456789', 'María González', 'maria.gonzalez@hotmail.com', '04241234567', '02121234567'),
+  ('34567890', 'Juan Rodríguez', 'juan.rodriguez@yahoo.com', '04161234567', '02121234567'),
+  ('45678901', 'Ana Ruiz', 'ana.ruiz@gmail.com', '04261234567', '02121234567'),
+  ('56789012', 'Carlos Hernández', 'carlos.hernandez@hotmail.com', '04181234567', '02121234567'),
+  ('67890123', 'Gabriela Sánchez', 'gabriela.sanchez@yahoo.com', '04281234567', '02121234567'),
+  ('78901234', 'Luisa Martínez', 'luisa.martinez@gmail.com', '04191234567', '02121234567'),
+  ('89012345', 'Jorge Gómez', 'jorge.gomez@hotmail.com', '04291234567', '02121234567'),
+  ('90123456', 'Mónica Pérez', 'monica.perez@yahoo.com', '04121234568', '02121234569'),
+  ('01234567', 'José González', 'jose.gonzalez@gmail.com', '04121234569', '02121234568'),
+  ('11111111', 'José Pñrez 🎉', 'jose.perez@gmail.com', '04121234567', '02121234567');
+
 -- models

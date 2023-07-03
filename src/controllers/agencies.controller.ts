@@ -32,7 +32,7 @@ export const getAgencies = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM agencies ORDER BY agency_rif LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM agencies ORDER BY business_name LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
