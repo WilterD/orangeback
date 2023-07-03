@@ -93,8 +93,10 @@ INSERT INTO agencies (
 
 -- jobs
 
-INSERT INTO jobs (description, created_at)
-VALUES 
+INSERT INTO jobs (
+  description, 
+  created_at
+) VALUES 
   ('Analista de seguridad', '2013-10-10 12:12:12'),
   ('Desarrollador web', '2022-01-01 10:00:00'),
   ('Analista de datos', '2022-02-15 14:30:00'),

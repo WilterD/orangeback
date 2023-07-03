@@ -34,7 +34,7 @@ export const getAdmins = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM admins ORDER BY admin_id LIMIT $1 OFFSET $2',
+      text: 'SELECT admin_id, name, email FROM admins ORDER BY admin_id LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -59,7 +59,7 @@ export const getAdminById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM admins WHERE admin_id = $1',
+      text: 'SELECT admin_id, name, email FROM admins WHERE admin_id = $1',
       values: [req.params.adminId]
     })
     if (response.rowCount === 0) {
