@@ -34,7 +34,7 @@ export const getAdmins = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT admin_id, name, email FROM admins ORDER BY admin_id LIMIT $1 OFFSET $2',
+      text: 'SELECT admin_id, name, email FROM admins ORDER BY name LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

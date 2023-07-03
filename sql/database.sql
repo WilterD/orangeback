@@ -56,7 +56,8 @@ CREATE TABLE managers (
   address VARCHAR(255) NOT NULL,
   email dom_email NOT NULL,
   created_at dom_created_at,
-  PRIMARY KEY (manager_dni)
+  PRIMARY KEY (manager_dni),
+  CONSTRAINT check_main_phone_not_equal_secondary_phone CHECK (main_phone <> secondary_phone)
 );
 
 -- 5
@@ -129,7 +130,8 @@ CREATE TABLE clients (
   main_phone dom_phone_number NOT NULL,
   secondary_phone dom_phone_number NOT NULL,
   created_at dom_created_at,
-  PRIMARY KEY (client_dni)
+  PRIMARY KEY (client_dni),
+  CONSTRAINT check_main_phone_not_equal_secondary_phone CHECK (main_phone <> secondary_phone)
 );
 
 -- 10
