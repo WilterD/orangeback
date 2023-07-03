@@ -68,6 +68,23 @@ INSERT INTO managers (
 
 -- agencies
 
+INSERT INTO agencies (
+  agency_rif, 
+  business_name, 
+  manager_dni, 
+  city_id
+) VALUES 
+  ('111', 'JKL Agency', '12345678', 1),
+  ('222', 'MNO Agency', '23456789', 2),
+  ('333', 'PQR Agency', '34567890', 3),
+  ('444', 'STU Agency', '45678901', 4),
+  ('555', 'VWX Agency', '56789012', 5),
+  ('666', 'YZA Agency', '67890123', 6),
+  ('777', 'BCD Agency', '78901234', 7),
+  ('888', 'EFG Agency', '89012345', 8),
+  ('999', 'HIJ Agency', '90123456', 9),
+  ('123', 'KLM Agency', '01234567', 10);
+
 -- discounts
 
 -- jobs
@@ -87,6 +104,19 @@ VALUES
   ('Especialista en recursos humanos', '2022-10-22 10:30:00');
 
 -- employees
+
+INSERT INTO employees (employee_dni, name, phone, address, salary, agency_rif, job_id, created_at)
+VALUES
+('444555666', 'Alex Brown', '5554444', '789 Oak St', 5500.00, '2', 2, CURRENT_TIMESTAMP),
+('555666777', 'Jessica Lee', '5555555', '123 Main St', 6000.00, '2', 3, CURRENT_TIMESTAMP),
+('666777888', 'Michael Johnson', '5556666', '456 Elm St', 7000.00, '3', 1, CURRENT_TIMESTAMP),
+('777888999', 'David Kim', '5557777', '123 Main St', 5500.00, '3', 2, CURRENT_TIMESTAMP),
+('888999000', 'Lisa Patel', '5558888', '456 Elm St', 6000.00, '4', 3, CURRENT_TIMESTAMP),
+('999000111', 'Kevin Lee', '5559999', '789 Oak St', 7000.00, '4', 1, CURRENT_TIMESTAMP),
+('000111222', 'Laura Davis', '5550000', '123 Main St', 5500.00, '5', 2, CURRENT_TIMESTAMP),
+('111222333', 'Steve Park', '5551111', '456 Elm St', 6000.00, '5', 3, CURRENT_TIMESTAMP),
+('222333444', 'Jenny Kim', '5552222', '789 Oak St', 7000.00, '6', 1, CURRENT_TIMESTAMP),
+('333444555', 'Daniel Lee', '5553333', '123 Main St', 5500.00, '6', 2, CURRENT_TIMESTAMP);
 
 -- clients
 
