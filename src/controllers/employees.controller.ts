@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Request, Response } from 'express'
 import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
@@ -8,6 +7,7 @@ import {
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
+import _ from 'lodash'
 
 export const getEmployees = async (
   req: Request,
@@ -37,10 +37,15 @@ export const getEmployees = async (
     })
     const pagination: PaginateSettings = {
       total: response.rowCount,
-      currentPage: Number(page),
+      page: Number(page),
       perPage: Number(size)
     }
-    return paginatedItemsResponse(res, STATUS.OK, response.rows, pagination)
+    const camelizatedObjectArray = _.map(response.rows, (item) => {
+      return _.mapKeys(item, (_value, key) => {
+        return _.camelCase(key)
+      })
+    })
+    return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -61,32 +66,33 @@ export const getEmployeeById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json(response.rows[0])
+    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
+      return _.camelCase(key)
+    })
+    return res.status(STATUS.OK).json(camelizatedObject)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
 }
 
 const getEmployeesDataFromRequestBody = (req: Request): any[] => {
-  const { 
-    employee_dni, 
-    name, 
-    phone, 
-    address, 
-    salary, 
-    agency_rif, 
-    job_id, 
-    created_at
+  const {
+    employeeDni,
+    name,
+    phone,
+    address,
+    salary,
+    agencyRif,
+    jobId
   } = req.body
   const newEmployee = [
-    employee_dni, 
-    name, 
-    phone, 
-    address, 
-    salary, 
-    agency_rif, 
-    job_id, 
-    created_at
+    employeeDni,
+    name,
+    phone,
+    address,
+    salary,
+    agencyRif,
+    jobId
   ]
   return newEmployee
 }
@@ -99,7 +105,7 @@ export const addEmployee = async (
     const newEmployee = getEmployeesDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO employees (employee_dni, name, phone, address, salary, agency_rif, job_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING employee_dni',
+      text: 'INSERT INTO employees (employee_dni, name, phone, address, salary, agency_rif, job_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING employee_dni',
       values: newEmployee
     })
     const insertedId: string = insertar.rows[0].employee_dni
@@ -107,7 +113,10 @@ export const addEmployee = async (
       text: 'SELECT * FROM employees WHERE employee_dni = $1',
       values: [insertedId]
     })
-    return res.status(STATUS.CREATED).json(response.rows[0])
+    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
+      return _.camelCase(key)
+    })
+    return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -115,25 +124,25 @@ export const addEmployee = async (
 }
 
 const getEmployeesUpdateDataFromRequestBody = (req: Request): any[] => {
-  const { 
-    name, 
-    phone, 
-    address, 
-    salary, 
-    agency_rif, 
-    job_id
-    } = req.body;
+  const {
+    name,
+    phone,
+    address,
+    salary,
+    agencyRif,
+    jobId
+  } = req.body
 
   const updateEmployee = [
-    name, 
-    phone, 
-    address, 
-    salary, 
-    agency_rif, 
-    job_id
-  ];
-  return updateEmployee;
-};
+    name,
+    phone,
+    address,
+    salary,
+    agencyRif,
+    jobId
+  ]
+  return updateEmployee
+}
 
 export const updateEmployee = async (
   req: Request,
@@ -153,9 +162,8 @@ export const updateEmployee = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-   
-    return res.status(STATUS.OK).json({message: "Empleado modificado exitosamente"})
-    
+
+    return res.status(STATUS.OK).json({ message: 'Empleado modificado exitosamente' })
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -177,7 +185,7 @@ export const deleteEmployee = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({message: "Empleado Eliminado exitosamente"})
+    return res.status(STATUS.OK).json({ message: 'Empleado Eliminado exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

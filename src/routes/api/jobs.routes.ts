@@ -8,11 +8,12 @@ import {
 } from '../../controllers/jobs.controller'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { jobsSchema } from '../../schemas/jobs.schema'
+import { paginationGuard } from '../../middlewares/paginationGuard'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-router.get('/', getJobs)
+router.get('/', paginationGuard(), getJobs)
 router.get('/:jobId', getJobById)
 router.post('/', schemaGuard(jobsSchema), addJob)
 router.put('/:jobId', schemaGuard(jobsSchema), updateJob)

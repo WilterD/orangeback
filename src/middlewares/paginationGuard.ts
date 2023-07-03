@@ -17,7 +17,7 @@ const schema = z.object({
     .optional()
 })
 
-export const paginationWard =
+export const paginationGuard =
   () => (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.query)

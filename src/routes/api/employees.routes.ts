@@ -6,17 +6,17 @@ import {
   updateEmployee,
   deleteEmployee
 } from '../../controllers/employees.controller'
-import { schemaWard } from '../../middlewares/schemaWard'
-import { createEmployeeSchema } from '../../schemas/createemployee.schema'
-import { updateEmployeeSchema } from '../../schemas/updateemployee.schema'
+import { schemaGuard } from '../../middlewares/schemaGuard'
+import { createEmployeesSchema, updateEmployeesSchema } from '../../schemas/employees.Schema'
+import { paginationGuard } from '../../middlewares/paginationGuard'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-router.get('/', getEmployees)
+router.get('/', paginationGuard(), getEmployees)
 router.get('/:employeeId', getEmployeeById)
-router.post('/', schemaWard(createEmployeeSchema), addEmployee)
-router.put('/:employeeId', schemaWard(updateEmployeeSchema), updateEmployee)
+router.post('/', schemaGuard(createEmployeesSchema), addEmployee)
+router.put('/:employeeId', schemaGuard(updateEmployeesSchema), updateEmployee)
 router.delete('/:employeeId', deleteEmployee)
 
 export default router
