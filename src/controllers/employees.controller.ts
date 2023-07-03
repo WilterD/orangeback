@@ -4,9 +4,7 @@ import { pool } from '../database'
 import { DEFAULT_PAGE, STATUS } from '../utils/constants'
 import {
   PaginateSettings,
-  paginatedItemsResponse,
-  successItemsResponse,
-  successResponse
+  paginatedItemsResponse
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
@@ -63,7 +61,7 @@ export const getEmployeeById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, response.rows[0])
+    return res.status(STATUS.OK).json(response.rows[0])
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -109,7 +107,7 @@ export const addEmployee = async (
       text: 'SELECT * FROM employees WHERE employee_dni = $1',
       values: [insertedId]
     })
-    return successItemsResponse(res, STATUS.CREATED, response.rows[0])
+    return res.status(STATUS.CREATED).json(response.rows[0])
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -145,7 +143,7 @@ export const updateEmployee = async (
     const updateEmployee = getEmployeesUpdateDataFromRequestBody(req)
     updateEmployee.push(req.params.employeeId)
     const response = await pool.query({
-      text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = 6$  WHERE employee_dni = $7',
+      text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = $6  WHERE employee_dni = $7',
       values: updateEmployee
     })
     console.log(response)
@@ -155,7 +153,9 @@ export const updateEmployee = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Empleado modificado exitosamente')
+   
+    return res.status(STATUS.OK).json({message: "Empleado modificado exitosamente"})
+    
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
@@ -177,7 +177,7 @@ export const deleteEmployee = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return successResponse(res, STATUS.OK, 'Empleado eliminado')
+    return res.status(STATUS.OK).json({message: "Empleado Eliminado exitosamente"})
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
