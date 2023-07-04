@@ -196,6 +196,18 @@ INSERT INTO models (
 
 -- Employees_Coordinates_Services
 
+INSERT INTO employees_coordinate_services VALUES
+  ('444555666', 1,1,1),
+  ('555666777', 1,1,1),
+  ('666777888', 1,1,1),
+  ('777888999', 1,1,1),
+  ('888999000', 1,1,1),
+  ('999000111', 1,1,1),
+  ('000111222', 1,1,1),
+  ('111222333', 1,1,1),
+  ('222333444', 1,1,1),
+  ('333444555', 1,1,1);
+
 -- Bookings
 
 -- Bookings_Per_Services
