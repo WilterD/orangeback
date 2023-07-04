@@ -26,10 +26,7 @@ export const getDiscounts = async (
       text: 'SELECT * FROM discounts'
     })
     if (isEmpty.rowCount === 0) {
-      throw new StatusError({
-        message: 'La tabla está vacía',
-        statusCode: STATUS.NOT_FOUND
-      })
+      return res.status(STATUS.OK).json([])
     }
     const response = await pool.query({
       text: 'SELECT * FROM discounts ORDER BY agency_rif, percentage LIMIT $1 OFFSET $2',

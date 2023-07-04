@@ -26,10 +26,7 @@ export const getManagers = async (
       text: 'SELECT * FROM managers'
     })
     if (isEmpty.rowCount === 0) {
-      throw new StatusError({
-        message: 'La tabla está vacía',
-        statusCode: STATUS.NOT_FOUND
-      })
+      return res.status(STATUS.OK).json([])
     }
     const response = await pool.query({
       text: 'SELECT * FROM managers ORDER BY name LIMIT $1 OFFSET $2',
