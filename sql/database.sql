@@ -178,7 +178,7 @@ CREATE TABLE vehicles (
 -- 12
 
 CREATE TABLE services (
-  service_id INTEGER,
+  service_id INTEGER GENERATED ALWAYS AS IDENTITY,
   description VARCHAR(255) NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (service_id)
@@ -187,8 +187,8 @@ CREATE TABLE services (
 -- 13
 
 CREATE TABLE activities (
-  activity_id INTEGER GENERATED ALWAYS AS IDENTITY,
   service_id INTEGER NOT NULL,
+  activity_id INTEGER GENERATED ALWAYS AS IDENTITY,
   description TEXT NOT NULL,
   cost_hour FLOAT NOT NULL,
   created_at dom_created_at,
