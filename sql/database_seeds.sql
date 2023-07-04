@@ -192,7 +192,20 @@ INSERT INTO models (
 
 -- Services_Per_Models
 
--- Employee_Specialties
+-- Employees_Specialties
+
+INSERT INTO employees_specialties VALUES
+  ('444555666', 1),
+  ('555666777', 1),
+  ('666777888', 1),
+  ('777888999', 1),
+  ('888999000', 1),
+  ('999000111', 1),
+  ('000111222', 1),
+  ('111222333', 1),
+  ('222333444', 1),
+  ('333444555', 1);
+
 
 -- Employees_Coordinates_Services
 
