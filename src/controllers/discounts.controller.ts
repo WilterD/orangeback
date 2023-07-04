@@ -32,7 +32,7 @@ export const getDiscounts = async (
       })
     }
     const response = await pool.query({
-      text: 'SELECT * FROM discounts ORDER BY discount_id LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM discounts ORDER BY agency_rif, percentage LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -79,15 +79,15 @@ export const getDiscountById = async (
 const getDiscountsDataFromRequestBody = (req: Request): any[] => {
   const {
     percentage,
-    services_min,
-    services_max,
-    agency_rif
+    servicesMin,
+    servicesMax,
+    agencyRif
   } = req.body
   const newDiscount = [
     percentage,
-    services_min,
-    services_max,
-    agency_rif
+    servicesMin,
+    servicesMax,
+    agencyRif
   ]
   return newDiscount
 }
@@ -118,29 +118,12 @@ export const addDiscount = async (
   }
 }
 
-const getDiscountsUpdateDataFromRequestBody = (req: Request): any[] => {
-  const {
-    percentage,
-    services_min,
-    services_max,
-    agency_rif
-  } = req.body
-
-  const updatedDiscount = [
-    percentage,
-    services_min,
-    services_max,
-    agency_rif
-  ]
-  return updatedDiscount
-}
-
 export const updateDiscount = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedDiscount = getDiscountsUpdateDataFromRequestBody(req)
+    const updatedDiscount = getDiscountsDataFromRequestBody(req)
     updatedDiscount.push(req.params.discountId)
     const response = await pool.query({
       text: 'UPDATE discounts SET percentage = $1, services_min = $2, services_max = $3, agency_rif = $4 WHERE discount_id = $5',

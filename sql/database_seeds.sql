@@ -87,6 +87,22 @@ INSERT INTO agencies (
 
 -- discounts
 
+INSERT INTO discounts (
+  percentage,
+  services_min,
+  services_max,
+  agency_rif
+) VALUES
+  (5, 2, 3, 1),
+  (15, 4, 7, 1),
+  (20, 8, 99, 1),
+  (10, 3, 6, 2),
+  (15, 4, 15, 2),
+  (5, 1, 2, 3),
+  (10, 3, 5, 3),
+  (15, 6, 8, 3),
+  (25, 9, 15, 3);
+
 -- jobs
 
 INSERT INTO jobs (
@@ -162,9 +178,42 @@ INSERT INTO models (
   oil_box,
   octane
 ) VALUES
-
   ('Civic', 'Honda', 'morado viejo', 190,'2003', 4, 'organico', 'gasolina', 'Motul 100318', 95),
   ('Aveo', 'Chevrolett', 'Azul nuevo', 170,'2002', 3, 'inorganico', 'gasolina', 'Motul 100314', 95),
   ('Model S', 'Tesla', 'Rojo viejo', 140,'2001', 2, 'organico', 'gasolina', 'Motul 100318', 91),
   ('Evolution', 'Mitsubishi', 'Negro cromado', 120,'2013', 1, 'inorganico', 'gasolina', 'Motul 100318', 95),
   ('Odyssea', 'Honda', 'Rosa y Vinotinto', 156 ,'2020', 4, 'organico', 'gasolina', 'Motul 100318', 95);
+
+-- Vehicles
+
+-- Services
+
+-- Activities
+
+-- Services_Per_Models
+
+-- Employee_Specialties
+
+-- Employees_Coordinates_Services
+
+-- Bookings
+
+-- Bookings_Per_Services
+
+-- Orders
+
+-- Order_Details
+
+-- Bills
+
+-- Payments
+
+-- Card_Banks
+
+-- Supply Lines
+
+-- Products
+
+-- Products_Per_Agencies
+
+-- Products_In_Order_Details
