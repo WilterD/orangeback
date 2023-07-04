@@ -95,13 +95,14 @@ export const addE_Specialties = async (
     const newE_Specialty = getE_SpecialtiesDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO employees_specialties (employee_dni, service_id) VALUES ($1, $2) RETURNING employee_dni',
+      text: 'INSERT INTO employees_specialties (employee_dni, service_id) VALUES ($1, $2) RETURNING employee_dni, service_id',
       values: newE_Specialty
     })
     const insertedId: string = insertar.rows[0].e_specialty_id
+    const insertedServiceId: string = insertar.rows[0].service_id
     const response = await pool.query({
-      text: 'SELECT * FROM employees_specialties WHERE employee_dni = $1',
-      values: [insertedId]
+      text: 'SELECT * FROM employees_specialties WHERE employee_dni = $1 AND service_id = $2',
+      values: [insertedId,insertedServiceId]
     })
     const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
       return _.camelCase(key)
