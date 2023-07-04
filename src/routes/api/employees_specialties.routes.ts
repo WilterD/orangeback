@@ -14,6 +14,7 @@ import { verifyToken } from '../../middlewares/auth'
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getE_Specialties)
 router.get('/:e_spcialtyId/:service_id', tokenGuard(), verifyToken(), getE_SpecialtiesById)
 router.post('/', schemaGuard(E_SpecialtySchema), tokenGuard(), verifyToken(), addE_Specialties)
