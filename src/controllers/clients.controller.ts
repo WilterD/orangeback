@@ -111,7 +111,6 @@ export const addClient = async (
     })
     return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -145,7 +144,6 @@ export const updateClient = async (
       text: 'UPDATE clients SET name = $1, email = $2, main_phone = $3, secondary_phone = $4 WHERE client_dni = $5',
       values: updatedClient
     })
-    console.log(response)
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.clientId}`,
@@ -155,7 +153,6 @@ export const updateClient = async (
 
     return res.status(STATUS.OK).json({ message: 'Cliente modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

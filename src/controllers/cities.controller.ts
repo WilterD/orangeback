@@ -99,7 +99,6 @@ export const addCity = async (
     })
     return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -123,7 +122,6 @@ export const updateCity = async (
     }
     return res.status(STATUS.OK).json({ message: 'Ciudad modificada exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

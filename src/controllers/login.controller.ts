@@ -48,7 +48,6 @@ export const signIn = async (
       name: data.name,
       email: data.email
     }
-    console.log(userForToken)
     const token = jwt.sign(userForToken, String(AUTH_SECRET), {
       expiresIn: String(AUTH_EXPIRE)
     })

@@ -115,7 +115,6 @@ export const addEmployee = async (
     })
     return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -152,7 +151,6 @@ export const updateEmployee = async (
       text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = $6  WHERE employee_dni = $7',
       values: updateEmployee
     })
-    console.log(response)
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.employeeId}`,
@@ -162,7 +160,6 @@ export const updateEmployee = async (
 
     return res.status(STATUS.OK).json({ message: 'Empleado modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

@@ -109,7 +109,6 @@ export const addAgency = async (
     })
     return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -148,7 +147,6 @@ export const updateAgency = async (
     }
     return res.status(STATUS.OK).json({ message: 'Agencia Modificada Exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

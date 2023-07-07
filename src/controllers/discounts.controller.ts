@@ -44,7 +44,6 @@ export const getDiscounts = async (
     })
     return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -110,7 +109,6 @@ export const addDiscount = async (
     })
     return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -126,7 +124,6 @@ export const updateDiscount = async (
       text: 'UPDATE discounts SET percentage = $1, services_min = $2, services_max = $3, agency_rif = $4 WHERE discount_id = $5',
       values: updatedDiscount
     })
-    console.log(response)
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.discountId}`,
@@ -136,7 +133,6 @@ export const updateDiscount = async (
 
     return res.status(STATUS.OK).json({ message: 'Descuento modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

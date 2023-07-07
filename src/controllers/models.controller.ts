@@ -121,7 +121,6 @@ export const addModel = async (
     })
     return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -172,7 +171,6 @@ export const updateModel = async (
     }
     return res.status(STATUS.OK).json({ message: 'Modelo modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

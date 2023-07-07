@@ -103,7 +103,6 @@ export const addJob = async (
     })
     return res.status(STATUS.CREATED).json(camelizatedObject)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -127,7 +126,6 @@ export const updateJob = async (
     }
     return res.status(STATUS.OK).json({ message: 'Cargo modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
