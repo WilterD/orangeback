@@ -9,7 +9,7 @@ import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 import _ from 'lodash'
 
-export const getModels = async (
+export const getServices = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -23,13 +23,13 @@ export const getModels = async (
     }
 
     const isEmpty = await pool.query({
-      text: 'SELECT * FROM models'
+      text: 'SELECT * FROM services'
     })
     if (isEmpty.rowCount === 0) {
       return res.status(STATUS.OK).json([])
     }
     const response = await pool.query({
-      text: 'SELECT * FROM models ORDER BY model_id LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM services ORDER BY description LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -48,18 +48,18 @@ export const getModels = async (
   }
 }
 
-export const getModelsById = async (
+export const getServiceById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM models WHERE model_id = $1',
-      values: [req.params.modelId]
+      text: 'SELECT * FROM services WHERE service_id = $1',
+      values: [req.params.serviceId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.modelId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.serviceId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -72,48 +72,26 @@ export const getModelsById = async (
   }
 }
 
-const getModelsCreateDataFromRequestBody = (req: Request): any[] => {
-  const {
-    modelId,
-    brand,
-    description,
-    modelKg,
-    modelYear,
-    seatsQuantity,
-    refrigerantType,
-    engineOilType,
-    oilBox,
-    octane
-  } = req.body
-  const newModel = [
-    modelId,
-    brand,
-    description,
-    modelKg,
-    modelYear,
-    seatsQuantity,
-    refrigerantType,
-    engineOilType,
-    oilBox,
-    octane
-  ]
-  return newModel
+const getServicesDataFromRequestBody = (req: Request): any[] => {
+  const { description } = req.body
+  const newService = [description]
+  return newService
 }
 
-export const addModel = async (
+export const addService = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const newModel = getModelsCreateDataFromRequestBody(req)
+    const newService = getServicesDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO models (model_id, brand, description, model_kg, model_year, seats_quantity, refrigerant_type, engine_oil_type, oil_box, octane) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING model_id',
-      values: newModel
+      text: 'INSERT INTO services (description) VALUES ($1) RETURNING service_id',
+      values: newService
     })
-    const insertedId: string = insertar.rows[0].model_id
+    const insertedId: string = insertar.rows[0].service_id
     const response = await pool.query({
-      text: 'SELECT * FROM models WHERE model_id = $1',
+      text: 'SELECT * FROM services WHERE service_id = $1',
       values: [insertedId]
     })
     const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
@@ -125,72 +103,45 @@ export const addModel = async (
   }
 }
 
-const getModelsUpdateDataFromRequestBody = (req: Request): any[] => {
-  const {
-    brand,
-    description,
-    modelKg,
-    modelYear,
-    seatsQuantity,
-    refrigerantType,
-    engineOilType,
-    oilBox,
-    octane
-  } = req.body
-
-  const updateModel = [
-    brand,
-    description,
-    modelKg,
-    modelYear,
-    seatsQuantity,
-    refrigerantType,
-    engineOilType,
-    oilBox,
-    octane
-  ]
-  return updateModel
-}
-
-export const updateModel = async (
+export const updateService = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updateModel = getModelsUpdateDataFromRequestBody(req)
-    updateModel.push(req.params.modelId)
+    const updatedService = getServicesDataFromRequestBody(req)
+    updatedService.push(req.params.serviceId)
     const response = await pool.query({
-      text: 'UPDATE models SET brand = $1, description = $2, model_kg = $3,model_year = $4, seats_quantity = $5, refrigerant_type = $6, engine_oil_type = $7, oil_box = $8, octane = $9 WHERE model_id = $10',
-      values: updateModel
+      text: 'UPDATE services SET description = $1 WHERE service_id = $2',
+      values: updatedService
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.modelId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.serviceId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Modelo modificado exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Servicio modificado exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
 }
 
-export const deleteModel = async (
+export const deleteService = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM models WHERE model_id = $1',
-      values: [req.params.modelId]
+      text: 'DELETE FROM services WHERE service_id = $1',
+      values: [req.params.serviceId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.modelId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.serviceId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Modelo eliminado exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Servicio eliminado exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
