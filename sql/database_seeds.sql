@@ -192,6 +192,15 @@ INSERT INTO models (
 
 -- Services_Per_Models
 
+
+INSERT INTO services_per_models VALUES 
+(1,'Civic',1000,2),
+(1,'Aveo',1234,2),
+(1,'Model S',2223,1),
+(1,'Evolution',0,2),
+(1,'Odyssea',10000,2);
+
+
 -- Employee_Specialties
 
 -- Employees_Coordinates_Services
