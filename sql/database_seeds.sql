@@ -5,12 +5,12 @@ INSERT INTO admins (
   email,
   password
 ) VALUES
-  ('Wilter Díaz', 'wddiaz.20@est.ucab.edu.ve', 'o'),
-  ('Héctor Ferrer', 'heferrer.19@est.ucab.edu.ve', 'r'),
-  ('Victor Freitas', 'vmfreitas.21@est.ucab.edu.ve', 'a'),
-  ('Aurimart García', 'algarcia.21@est.ucab.edu.ve', 'n'),
-  ('Alejandro Rosas', 'ajrosas.19@est.ucab.edu.ve', 'g'),
-  ('Franklin Bello', 'fbelloca@ucab.edu.ve', 'e');
+  ('Wilter Díaz', 'wddiaz.20@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Héctor Ferrer', 'heferrer.19@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Victor Freitas', 'vmfreitas.21@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Aurimart García', 'algarcia.21@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Alejandro Rosas', 'ajrosas.19@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Franklin Bello', 'fbelloca@ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi');
 
 -- states
 
