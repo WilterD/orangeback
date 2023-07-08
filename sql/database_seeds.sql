@@ -24,6 +24,12 @@ INSERT INTO states (
   ('Mérida'),
   ('Miranda');
 
+INSERT INTO states (
+  name,
+  created_at
+) VALUES
+  ('Bolívddar', '23-07-2023');
+
 -- cities
 
 INSERT INTO cities (

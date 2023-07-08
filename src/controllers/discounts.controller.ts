@@ -7,7 +7,7 @@ import {
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
-import _ from 'lodash'
+import camelizeObject from '../utils/camelizeObject'
 
 export const getDiscounts = async (
   req: Request,
@@ -37,14 +37,8 @@ export const getDiscounts = async (
       page: Number(page),
       perPage: Number(size)
     }
-    const camelizatedObjectArray = _.map(response.rows, (item) => {
-      return _.mapKeys(item, (_value, key) => {
-        return _.camelCase(key)
-      })
-    })
-    return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
+    return paginatedItemsResponse(res, STATUS.OK, camelizeObject(response.rows) as any, pagination)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -64,10 +58,7 @@ export const getDiscountById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.OK).json(camelizatedObject)
+    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -105,12 +96,8 @@ export const addDiscount = async (
       text: 'SELECT * FROM discounts WHERE discount_id = $1',
       values: [insertedId]
     })
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.CREATED).json(camelizatedObject)
+    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -126,7 +113,6 @@ export const updateDiscount = async (
       text: 'UPDATE discounts SET percentage = $1, services_min = $2, services_max = $3, agency_rif = $4 WHERE discount_id = $5',
       values: updatedDiscount
     })
-    console.log(response)
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.discountId}`,
@@ -136,7 +122,6 @@ export const updateDiscount = async (
 
     return res.status(STATUS.OK).json({ message: 'Descuento modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
