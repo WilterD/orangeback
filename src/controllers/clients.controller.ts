@@ -48,11 +48,11 @@ export const getClientById = async (
   try {
     const response = await pool.query({
       text: 'SELECT * FROM clients WHERE client_dni = $1',
-      values: [req.params.clientId]
+      values: [req.params.clientDni]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.clientId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.clientDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -126,14 +126,14 @@ export const updateClient = async (
 ): Promise<Response> => {
   try {
     const updatedClient = getClientsUpdateDataFromRequestBody(req)
-    updatedClient.push(req.params.clientId)
+    updatedClient.push(req.params.clientDni)
     const response = await pool.query({
       text: 'UPDATE clients SET name = $1, email = $2, main_phone = $3, secondary_phone = $4 WHERE client_dni = $5',
       values: updatedClient
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.clientId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.clientDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -151,11 +151,11 @@ export const deleteClient = async (
   try {
     const response = await pool.query({
       text: 'DELETE FROM clients WHERE client_dni = $1',
-      values: [req.params.clientId]
+      values: [req.params.clientDni]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.clientId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.clientDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }

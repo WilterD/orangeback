@@ -26,7 +26,7 @@ router.get(
   getEmployeesCoordinateServices
 )
 router.get(
-  '/employee/:employeeId/service/:serviceId',
+  '/employee/:employeeDni/service/:serviceId',
   tokenGuard(),
   verifyToken(),
   getEmployeeCoordinateServiceById
@@ -39,14 +39,14 @@ router.post(
   addEmployeeCoordinateService
 )
 router.put(
-  '/employee/:employeeId/service/:serviceId',
+  '/employee/:employeeDni/service/:serviceId',
   tokenGuard(),
   verifyToken(),
   schemaGuard(updateEmployeesCoordinateServicesSchema),
   updateEmployeeCoordinateService
 )
 router.delete(
-  '/employee/:employeeId/service/:serviceId',
+  '/employee/:employeeDni/service/:serviceId',
   tokenGuard(),
   verifyToken(),
   deleteEmployeeCoordinateService

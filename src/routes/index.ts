@@ -28,6 +28,6 @@ router.use('/employees', employeesRouter)
 router.use('/clients', clientsRouter)
 router.use('/models', modelsRouter)
 router.use('/services', servicesRouter)
-router.use('/employeesCoordServices', employeesCoordServicesRouter)
+router.use('/employees-coordinate-services', employeesCoordServicesRouter)
 
 export default router

@@ -16,9 +16,9 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getManagers)
-router.get('/:managerId', tokenGuard(), verifyToken(), getManagerById)
+router.get('/:managerDni', tokenGuard(), verifyToken(), getManagerById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createManagersSchema), addManager)
-router.put('/:managerId', tokenGuard(), verifyToken(), schemaGuard(updateManagersSchema), updateManager)
-router.delete('/:managerId', tokenGuard(), verifyToken(), deleteManager)
+router.put('/:managerDni', tokenGuard(), verifyToken(), schemaGuard(updateManagersSchema), updateManager)
+router.delete('/:managerDni', tokenGuard(), verifyToken(), deleteManager)
 
 export default router
