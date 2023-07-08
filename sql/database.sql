@@ -194,7 +194,7 @@ CREATE TABLE activities (
   created_at dom_created_at,
   PRIMARY KEY (service_id, activity_id),
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE CASCADE
 );
 
@@ -312,7 +312,7 @@ CREATE TABLE order_details (
   employee_dni dom_dni NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (service_id, activity_id, order_id),
-  CONSTRAINT fk_12 FOREIGN KEY (service_id, activity_id) 
+  CONSTRAINT fk_activities FOREIGN KEY (service_id, activity_id) 
     REFERENCES activities(service_id, activity_id)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,

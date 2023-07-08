@@ -7,7 +7,7 @@ import {
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
-import _ from 'lodash'
+import camelizeObject from '../utils/camelizeObject'
 
 export const getStates = async (
   req: Request,
@@ -37,12 +37,7 @@ export const getStates = async (
       page: Number(page),
       perPage: Number(size)
     }
-    const camelizatedObjectArray = _.map(response.rows, (item) => {
-      return _.mapKeys(item, (_value, key) => {
-        return _.camelCase(key)
-      })
-    })
-    return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
+    return paginatedItemsResponse(res, STATUS.OK, camelizeObject(response.rows) as any, pagination)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -63,10 +58,7 @@ export const getStateById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.OK).json(camelizatedObject)
+    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -94,10 +86,7 @@ export const addState = async (
       text: 'SELECT * FROM states WHERE state_id = $1',
       values: [insertedId]
     })
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.CREATED).json(camelizatedObject)
+    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
