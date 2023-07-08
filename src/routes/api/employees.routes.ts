@@ -16,9 +16,9 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getEmployees)
-router.get('/:clientId', tokenGuard(), verifyToken(), getEmployeeById)
+router.get('/:employeeDni', tokenGuard(), verifyToken(), getEmployeeById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createEmployeesSchema), addEmployee)
-router.put('/:clientId', tokenGuard(), verifyToken(), schemaGuard(updateEmployeesSchema), updateEmployee)
-router.delete('/:clientId', tokenGuard(), verifyToken(), deleteEmployee)
+router.put('/:employeeDni', tokenGuard(), verifyToken(), schemaGuard(updateEmployeesSchema), updateEmployee)
+router.delete('/:employeeDni', tokenGuard(), verifyToken(), deleteEmployee)
 
 export default router

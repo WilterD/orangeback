@@ -48,11 +48,11 @@ export const getManagerById = async (
   try {
     const response = await pool.query({
       text: 'SELECT * FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      values: [req.params.managerDni]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.managerDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -129,14 +129,14 @@ export const updateManager = async (
 ): Promise<Response> => {
   try {
     const updatedManager = getManagersUpdateDataFromRequestBody(req)
-    updatedManager.push(req.params.managerId)
+    updatedManager.push(req.params.managerDni)
     const response = await pool.query({
       text: 'UPDATE managers SET name = $1, main_phone = $2, secondary_phone = $3, address = $4, email = $5 WHERE manager_dni = $6',
       values: updatedManager
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.managerDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -153,11 +153,11 @@ export const deleteManager = async (
   try {
     const response = await pool.query({
       text: 'DELETE FROM managers WHERE manager_dni = $1',
-      values: [req.params.managerId]
+      values: [req.params.managerDni]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.managerId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.managerDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }

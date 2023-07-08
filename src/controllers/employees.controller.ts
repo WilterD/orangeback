@@ -48,11 +48,11 @@ export const getEmployeeById = async (
   try {
     const response = await pool.query({
       text: 'SELECT * FROM employees WHERE employee_dni = $1',
-      values: [req.params.employeeId]
+      values: [req.params.employeeDni]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.employeeId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -133,14 +133,14 @@ export const updateEmployee = async (
 ): Promise<Response> => {
   try {
     const updateEmployee = getEmployeesUpdateDataFromRequestBody(req)
-    updateEmployee.push(req.params.employeeId)
+    updateEmployee.push(req.params.employeeDni)
     const response = await pool.query({
       text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = $6  WHERE employee_dni = $7',
       values: updateEmployee
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.employeeId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -158,11 +158,11 @@ export const deleteEmployee = async (
   try {
     const response = await pool.query({
       text: 'DELETE FROM employees WHERE employee_dni = $1',
-      values: [req.params.employeeId]
+      values: [req.params.employeeDni]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.employeeId}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }

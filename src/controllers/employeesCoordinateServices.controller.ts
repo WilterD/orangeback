@@ -48,7 +48,7 @@ export const getEmployeeCoordinateServiceById = async (
   try {
     const response = await pool.query({
       text: 'SELECT * FROM employees_coordinate_services WHERE employee_dni = $1 AND service_id = $2',
-      values: [req.params.coordId, req.params.serviceId]
+      values: [req.params.employeeDni, req.params.serviceId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
@@ -122,7 +122,7 @@ export const updateEmployeeCoordinateService = async (
 ): Promise<Response> => {
   try {
     const updatedEmployeeCoordinatesService = getEmployeeCoordinateServiceUpdateDataFromRequestBody(req)
-    updatedEmployeeCoordinatesService.push(req.params.coordId)
+    updatedEmployeeCoordinatesService.push(req.params.employeeDni)
     updatedEmployeeCoordinatesService.push(req.params.serviceId)
     const response = await pool.query({
       text: 'UPDATE employees_coordinate_services SET reservation_time = $1, capacity = $2 WHERE employee_dni = $3 AND service_id = $4',
@@ -148,7 +148,7 @@ export const deleteEmployeeCoordinateService = async (
   try {
     const response = await pool.query({
       text: 'DELETE FROM employees_coordinate_services WHERE employee_dni = $1 AND service_id = $2',
-      values: [req.params.coordId, req.params.serviceId]
+      values: [req.params.employeeDni, req.params.serviceId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
