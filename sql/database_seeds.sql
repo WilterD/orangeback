@@ -5,12 +5,12 @@ INSERT INTO admins (
   email,
   password
 ) VALUES
-  ('Wilter Díaz', 'wddiaz.20@est.ucab.edu.ve', 'o'),
-  ('Héctor Ferrer', 'heferrer.19@est.ucab.edu.ve', 'r'),
-  ('Victor Freitas', 'vmfreitas.21@est.ucab.edu.ve', 'a'),
-  ('Aurimart García', 'algarcia.21@est.ucab.edu.ve', 'n'),
-  ('Alejandro Rosas', 'ajrosas.19@est.ucab.edu.ve', 'g'),
-  ('Franklin Bello', 'fbelloca@ucab.edu.ve', 'e');
+  ('Wilter Díaz', 'wddiaz.20@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Héctor Ferrer', 'heferrer.19@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Victor Freitas', 'vmfreitas.21@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Aurimart García', 'algarcia.21@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Alejandro Rosas', 'ajrosas.19@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Franklin Bello', 'fbelloca@ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi');
 
 -- states
 
@@ -23,6 +23,12 @@ INSERT INTO states (
   ('Monagas'),
   ('Mérida'),
   ('Miranda');
+
+INSERT INTO states (
+  name,
+  created_at
+) VALUES
+  ('Bolívddar', '23-07-2023');
 
 -- cities
 
@@ -188,7 +194,42 @@ INSERT INTO models (
 
 -- Services
 
+INSERT INTO services (
+  description
+) VALUES 
+  ('Mantenimiento de frenos'),
+  ('Reparación de motor'),
+  ('Cambio de llantas'),
+  ('Lavado de auto'),
+  ('Cambio de batería');
+
 -- Activities
+
+INSERT INTO activities (
+  service_id, 
+  description, 
+  cost_hour
+) VALUES 
+  (1, 'Revisión de pastillas de freno', 25.00),
+  (1, 'Cambio de pastillas de freno', 50.00),
+  (1, 'Cambio de discos de freno', 75.00),
+  (1, 'Sangrado del sistema de frenos', 40.00),
+  (2, 'Revisión y diagnóstico de motor', 50.00),
+  (2, 'Reemplazo de bujías', 35.00),
+  (2, 'Reemplazo de correa de distribución', 100.00),
+  (2, 'Reemplazo de bomba de agua', 80.00),
+  (3, 'Retiro de llantas antiguas', 10.00),
+  (3, 'Instalación de llantas nuevas', 20.00),
+  (3, 'Balanceo de llantas', 15.00),
+  (3, 'Alineación de llantas', 30.00),
+  (4, 'Lavado exterior a mano', 20.00),
+  (4, 'Lavado de llantas y neumáticos', 10.00),
+  (4, 'Limpieza de ventanas', 10.00),
+  (4, 'Aspirado de alfombras y asientos', 30.00),
+  (5, 'Retiro de batería antigua', 10.00),
+  (5, 'Instalación de batería nueva', 30.00),
+  (5, 'Verificación de carga del alternador', 20.00),
+  (5, 'Conexión de bornes y cableado', 15.00);
 
 -- Services_Per_Models
 

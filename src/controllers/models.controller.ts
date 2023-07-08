@@ -7,7 +7,7 @@ import {
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
-import _ from 'lodash'
+import camelizeObject from '../utils/camelizeObject'
 
 export const getModels = async (
   req: Request,
@@ -37,12 +37,7 @@ export const getModels = async (
       page: Number(page),
       perPage: Number(size)
     }
-    const camelizatedObjectArray = _.map(response.rows, (item) => {
-      return _.mapKeys(item, (_value, key) => {
-        return _.camelCase(key)
-      })
-    })
-    return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
+    return paginatedItemsResponse(res, STATUS.OK, camelizeObject(response.rows) as any, pagination)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -63,10 +58,7 @@ export const getModelsById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.OK).json(camelizatedObject)
+    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -108,7 +100,7 @@ export const addModel = async (
     const newModel = getModelsCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO models (  model_id, brand, description, model_kg, model_year, seats_quantity, refrigerant_type, engine_oil_type, oil_box, octane) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING model_id',
+      text: 'INSERT INTO models (model_id, brand, description, model_kg, model_year, seats_quantity, refrigerant_type, engine_oil_type, oil_box, octane) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING model_id',
       values: newModel
     })
     const insertedId: string = insertar.rows[0].model_id
@@ -116,12 +108,8 @@ export const addModel = async (
       text: 'SELECT * FROM models WHERE model_id = $1',
       values: [insertedId]
     })
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.CREATED).json(camelizatedObject)
+    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -172,7 +160,6 @@ export const updateModel = async (
     }
     return res.status(STATUS.OK).json({ message: 'Modelo modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

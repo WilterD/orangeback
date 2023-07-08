@@ -7,7 +7,7 @@ import { STATUS } from '../utils/constants'
 import { Admin } from '../schemas/admins.schema'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
-import _ from 'lodash'
+import camelizeObject from '../utils/camelizeObject'
 
 const getLoginDataFromRequestBody = (req: Request): any[] => {
   const { email, password } = req.body
@@ -26,10 +26,7 @@ export const signIn = async (
       values: [loginData[0]]
     })
 
-    const camelizatedObject = _.mapKeys(rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    const data: Admin = camelizatedObject as Admin
+    const data: Admin = camelizeObject(rows[0]) as Admin
 
     const isPasswordCorrect =
       rows.length > 0
@@ -48,7 +45,6 @@ export const signIn = async (
       name: data.name,
       email: data.email
     }
-    console.log(userForToken)
     const token = jwt.sign(userForToken, String(AUTH_SECRET), {
       expiresIn: String(AUTH_EXPIRE)
     })

@@ -1,6 +1,6 @@
 CREATE TABLE activities (
-  activity_id INTEGER GENERATED ALWAYS AS IDENTITY,
   service_id INTEGER NOT NULL,
+  activity_id INTEGER GENERATED ALWAYS AS IDENTITY,
   description TEXT NOT NULL,
   cost_hour FLOAT NOT NULL,
   created_at dom_created_at,
