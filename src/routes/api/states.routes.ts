@@ -16,9 +16,9 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getStates)
-router.get('/:serviceId', tokenGuard(), verifyToken(), getStateById)
+router.get('/:stateId', tokenGuard(), verifyToken(), getStateById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(statesSchema), addState)
-router.put('/:serviceId', tokenGuard(), verifyToken(), schemaGuard(statesSchema), updateState)
-router.delete('/:serviceId', tokenGuard(), verifyToken(), deleteState)
+router.put('/:stateId', tokenGuard(), verifyToken(), schemaGuard(statesSchema), updateState)
+router.delete('/:stateId', tokenGuard(), verifyToken(), deleteState)
 
 export default router
