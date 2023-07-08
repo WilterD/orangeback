@@ -232,6 +232,8 @@ CREATE TABLE employees_specialties (
 
 -- 16
 
+
+
 CREATE TABLE employees_coordinate_services (
   employee_dni dom_dni NOT NULL,
   service_id INTEGER NOT NULL,
