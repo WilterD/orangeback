@@ -12,7 +12,7 @@ import employeesRouter from './api/employees.routes'
 import clientsRouter from './api/clients.routes'
 import modelsRouter from './api/models.routes'
 import servicesRouter from './api/services.routes'
-import employeesCoordServicesRouter from './api/employees_coordinate_services.routes'
+import employeesCoordServicesRouter from './api/employeesCoordinateServices.routes'
 
 const router = express.Router()
 

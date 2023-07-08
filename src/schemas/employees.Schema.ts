@@ -4,7 +4,7 @@ export const createEmployeesSchema = z.object({
   employee_dni: z
     .string()
     .nonempty('Es necesario indicar una cédula')
-    .max(16, 'la cédula debe ser menor a 16  carácteres')
+    .max(16, 'la cédula debe ser menor a 16 carácteres')
     .regex(/^\d+$/, 'La cédula debe contener solo números'),
   name: z
     .string()
@@ -20,14 +20,16 @@ export const createEmployeesSchema = z.object({
     .nonempty('Es necesario indicar una dirección')
     .max(255, 'la dirección debe ser menor a 255 carácteres'),
   salary: z
-    .number(),
+    .number()
+    .min(1, 'El salario debe ser mayor o igual a 1'),
   agency_rif: z
     .string()
     .nonempty('Es necesario indicar una cédula')
-    .max(16, 'la cédula debe ser menor a 16  carácteres')
+    .max(16, 'la cédula debe ser menor a 16 carácteres')
     .regex(/^\d+$/, 'La cédula debe contener solo números'),
   job_id: z
     .number()
+    .min(1, 'El id de cargo debe ser mayor o igual a 1')
 })
 
 export const updateEmployeesSchema = z.object({
@@ -45,12 +47,14 @@ export const updateEmployeesSchema = z.object({
     .nonempty('Es necesario indicar una dirección')
     .max(255, 'la dirección debe ser menor a 255 carácteres'),
   salary: z
-    .number(),
+    .number()
+    .min(1, 'El salario debe ser mayor o igual a 1'),
   agency_rif: z
     .string()
     .nonempty('Es necesario indicar una cédula')
-    .max(16, 'la cédula debe ser menor a 16  carácteres')
+    .max(16, 'la cédula debe ser menor a 16 carácteres')
     .regex(/^\d+$/, 'La cédula debe contener solo números'),
   job_id: z
     .number()
+    .min(1, 'El id de cargo debe ser mayor o igual a 1')
 })

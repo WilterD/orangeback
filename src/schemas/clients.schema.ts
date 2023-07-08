@@ -4,7 +4,7 @@ export const createClientsSchema = z.object({
   clientDni: z
     .string()
     .nonempty('Es necesario indicar una cédula')
-    .max(16, 'la cédula debe ser menor a 16  carácteres')
+    .max(16, 'la cédula debe ser menor a 16 carácteres')
     .regex(/^\d+$/, 'La cédula debe contener solo números'),
   name: z
     .string()

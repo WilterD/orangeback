@@ -2,11 +2,14 @@ import { z } from 'zod'
 
 export const discountsSchema = z.object({
   percentage: z
-    .number(),
+    .number()
+    .min(1, 'El porcentaje debe ser mayor o igual a 1'),
   servicesMin: z
-    .number(),
+    .number()
+    .min(1, 'El mínimo de servicios debe ser mayor o igual a 1'),
   servicesMax: z
-    .number(),
+    .number()
+    .min(1, 'El máximo de servicios debe ser mayor o igual a 1'),
   agencyRif: z
     .string()
     .nonempty('Es necesario indicar un rif')

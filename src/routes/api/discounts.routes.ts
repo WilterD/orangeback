@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   getDiscounts,
   getDiscountById,
+  getDiscountByAgencyRif,
   addDiscount,
   updateDiscount,
   deleteDiscount
@@ -16,6 +17,7 @@ const router = Router()
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), getDiscounts)
 router.get('/:discountId', tokenGuard(), verifyToken(), getDiscountById)
+router.get('/agency/:agencyRif', tokenGuard(), verifyToken(), getDiscountByAgencyRif)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(discountsSchema), addDiscount)
 router.put('/:discountId', tokenGuard(), verifyToken(), schemaGuard(discountsSchema), updateDiscount)
 router.delete('/:discountId', tokenGuard(), verifyToken(), deleteDiscount)

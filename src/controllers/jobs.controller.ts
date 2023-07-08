@@ -22,10 +22,10 @@ export const getJobs = async (
       offset = 0
     }
 
-    const isEmpty = await pool.query({
-      text: 'SELECT * FROM jobs'
+    const { rows } = await pool.query({
+      text: 'SELECT COUNT(*) FROM jobs'
     })
-    if (isEmpty.rowCount === 0) {
+    if (Number(rows[0].count) === 0) {
       return res.status(STATUS.OK).json([])
     }
     const response = await pool.query({
@@ -33,7 +33,7 @@ export const getJobs = async (
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
-      total: response.rowCount,
+      total: Number(rows[0].count),
       page: Number(page),
       perPage: Number(size)
     }

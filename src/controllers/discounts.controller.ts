@@ -22,10 +22,10 @@ export const getDiscounts = async (
       offset = 0
     }
 
-    const isEmpty = await pool.query({
-      text: 'SELECT * FROM discounts'
+    const { rows } = await pool.query({
+      text: 'SELECT COUNT(*) FROM discounts'
     })
-    if (isEmpty.rowCount === 0) {
+    if (Number(rows[0].count) === 0) {
       return res.status(STATUS.OK).json([])
     }
     const response = await pool.query({
@@ -33,7 +33,7 @@ export const getDiscounts = async (
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
-      total: response.rowCount,
+      total: Number(rows[0].count),
       page: Number(page),
       perPage: Number(size)
     }
@@ -59,6 +59,27 @@ export const getDiscountById = async (
       })
     }
     return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
+  } catch (error: unknown) {
+    return handleControllerError(error, res)
+  }
+}
+
+export const getDiscountByAgencyRif = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const response = await pool.query({
+      text: 'SELECT * FROM discounts WHERE agency_rif = $1',
+      values: [req.params.agencyRif]
+    })
+    if (response.rowCount === 0) {
+      throw new StatusError({
+        message: `No se pudo encontrar el registro de id: ${req.params.agencyRif}`,
+        statusCode: STATUS.NOT_FOUND
+      })
+    }
+    return res.status(STATUS.OK).json(camelizeObject(response.rows))
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

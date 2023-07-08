@@ -14,14 +14,16 @@ export const createModelsSchema = z.object({
     .nonempty('Es necesario agregar una descripcion del modelo')
     .max(64, 'El modelo debe tener menos de 64 caracteres'),
   modelKg: z
-    .number(),
+    .number()
+    .min(1, 'El peso debe ser mayor o igual a 1'),
   modelYear: z
     .string()
     .nonempty('Es necesario indicar un año de modelo de vehiculo')
     .max(4, 'El año del modelo debe de ser menor de 4 caracteres')
     .regex(/^\d+$/, 'la fecha debe estar escrita en numeros'),
   seatsQuantity: z
-    .number(),
+    .number()
+    .min(1, 'La cantidad de asientos debe ser mayor o igual a 1'),
   refrigerantType: z
     .string()
     .nonempty('Es necesario indicar un tipo de refrigerante')
@@ -36,6 +38,7 @@ export const createModelsSchema = z.object({
     .max(32, 'El modelo de caja de aceite debe ser menor a 32 carácteres'),
   octane: z
     .number()
+    .min(1, 'El octanaje debe ser mayor o igual a 1')
 })
 
 export const updateModelsSchema = z.object({
@@ -48,14 +51,16 @@ export const updateModelsSchema = z.object({
     .nonempty('Es necesario agregar una descripcion del modelo')
     .max(64, 'El modelo debe tener menos de 64 caracteres'),
   modelKg: z
-    .number(),
+    .number()
+    .min(1, 'El peso debe ser mayor o igual a 1'),
   modelYear: z
     .string()
     .nonempty('Es necesario indicar un año de modelo de vehiculo')
     .max(4, 'El año del modelo debe de ser menor de 4 caracteres')
     .regex(/^\d+$/, 'la fecha debe estar escrita en numeros'),
   seatsQuantity: z
-    .number(),
+    .number()
+    .min(1, 'La cantidad de asientos debe ser mayor o igual a 1'),
   refrigerantType: z
     .string()
     .nonempty('Es necesario indicar un tipo de refrigerante')
@@ -70,4 +75,5 @@ export const updateModelsSchema = z.object({
     .max(32, 'El modelo de caja de aceite debe ser menor a 32 carácteres'),
   octane: z
     .number()
+    .min(1, 'El octanaje debe ser mayor o igual a 1')
 })

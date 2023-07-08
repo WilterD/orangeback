@@ -22,10 +22,10 @@ export const getStates = async (
       offset = 0
     }
 
-    const isEmpty = await pool.query({
-      text: 'SELECT * FROM states'
+    const { rows } = await pool.query({
+      text: 'SELECT COUNT(*) FROM states'
     })
-    if (isEmpty.rowCount === 0) {
+    if (Number(rows[0].count) === 0) {
       return res.status(STATUS.OK).json([])
     }
     const response = await pool.query({
@@ -33,7 +33,7 @@ export const getStates = async (
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
-      total: response.rowCount,
+      total: Number(rows[0].count),
       page: Number(page),
       perPage: Number(size)
     }

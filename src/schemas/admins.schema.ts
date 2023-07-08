@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const adminsSchema = z.object({
   adminId: z
     .number()
+    .min(1, 'El id de administrador debe ser mayor o igual a 1')
     .optional(),
   name: z
     .string()

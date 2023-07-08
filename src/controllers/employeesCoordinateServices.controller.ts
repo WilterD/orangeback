@@ -7,9 +7,9 @@ import {
 } from '../utils/responses'
 import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
-import _ from 'lodash'
+import camelizeObject from '../utils/camelizeObject'
 
-export const getEmployees_Coordinate_Services = async (
+export const getEmployeesCoordinateServices = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -22,10 +22,10 @@ export const getEmployees_Coordinate_Services = async (
       offset = 0
     }
 
-    const isEmpty = await pool.query({
-      text: 'SELECT * FROM employees_coordinate_services'
+    const { rows } = await pool.query({
+      text: 'SELECT COUNT(*) FROM employees_coordinate_services'
     })
-    if (isEmpty.rowCount === 0) {
+    if (Number(rows[0].count) === 0) {
       return res.status(STATUS.OK).json([])
     }
     const response = await pool.query({
@@ -33,71 +33,63 @@ export const getEmployees_Coordinate_Services = async (
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
-      total: response.rowCount,
+      total: Number(rows[0].count),
       page: Number(page),
       perPage: Number(size)
     }
-    const camelizatedObjectArray = _.map(response.rows, (item) => {
-      return _.mapKeys(item, (_value, key) => {
-        return _.camelCase(key)
-      })
-    })
-    return paginatedItemsResponse(res, STATUS.OK, camelizatedObjectArray, pagination)
+    return paginatedItemsResponse(res, STATUS.OK, camelizeObject(response.rows) as any, pagination)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
 }
 
-export const getEmployee_Coordinate_ServiceById = async (
+export const getEmployeeCoordinateServiceById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
       text: 'SELECT * FROM employees_coordinate_services WHERE employee_dni = $1 AND service_id = $2',
-      values: [req.params.coordId, req.params.serviceId ]
+      values: [req.params.coordId, req.params.serviceId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro solicitado`,
+        message: 'No se pudo encontrar el registro solicitado',
         statusCode: STATUS.NOT_FOUND
       })
     }
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.OK).json(camelizatedObject)
+    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
 }
 
-const getEmployees_Coordinate_ServicesCreateDataFromRequestBody = (req: Request): any[] => {
+const getEmployeeCoordinateServiceCreateDataFromRequestBody = (req: Request): any[] => {
   const {
-    employee_dni,
-    service_id,
-    reservation_time,
+    employeeDni,
+    serviceId,
+    reservationTime,
     capacity
   } = req.body
-  const newEmployee_Coordinate_Service = [
-    employee_dni,
-    service_id,
-    reservation_time,
+  const newEmployeeCoordinatesService = [
+    employeeDni,
+    serviceId,
+    reservationTime,
     capacity
   ]
-  return newEmployee_Coordinate_Service
+  return newEmployeeCoordinatesService
 }
 
-export const addEmployee_Coordinate_Service = async (
+export const addEmployeeCoordinateService = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const newEmployee_Coordinate_Service = getEmployees_Coordinate_ServicesCreateDataFromRequestBody(req)
+    const newEmployeeCoordinatesService = getEmployeeCoordinateServiceCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
       text: 'INSERT INTO employees_coordinate_services (employee_dni,service_id,reservation_time,capacity) VALUES ($1,$2,$3,$4) RETURNING employee_dni, service_id',
-      values: newEmployee_Coordinate_Service
+      values: newEmployeeCoordinatesService
     })
     const insertedId: string = insertar.rows[0].employee_dni
     const insertedServiceId: string = insertar.rows[0].service_id
@@ -106,44 +98,41 @@ export const addEmployee_Coordinate_Service = async (
       text: 'SELECT * FROM employees_coordinate_services WHERE employee_dni = $1 AND service_id = $2',
       values: [insertedId, insertedServiceId]
     })
-    const camelizatedObject = _.mapKeys(response.rows[0], (_value, key) => {
-      return _.camelCase(key)
-    })
-    return res.status(STATUS.CREATED).json(camelizatedObject)
+    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
   }
 }
 
-const getEmployees_Coordinate_ServicesUpdateDataFromRequestBody = (req: Request): any[] => {
+const getEmployeeCoordinateServiceUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
-    reservation_time,
+    reservationTime,
     capacity
   } = req.body
 
-  const updatedEmployee_Coordinate_Service = [
-    reservation_time,
+  const updatedEmployeeCoordinatesService = [
+    reservationTime,
     capacity
   ]
-  return updatedEmployee_Coordinate_Service
+  return updatedEmployeeCoordinatesService
 }
 
-export const updateEmployee_Coordinate_Service = async (
+export const updateEmployeeCoordinateService = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedEmployee_Coordinate_Service = getEmployees_Coordinate_ServicesUpdateDataFromRequestBody(req)
-    updatedEmployee_Coordinate_Service.push(req.params.coordId)
-    updatedEmployee_Coordinate_Service.push(req.params.serviceId)
+    const updatedEmployeeCoordinatesService = getEmployeeCoordinateServiceUpdateDataFromRequestBody(req)
+    updatedEmployeeCoordinatesService.push(req.params.coordId)
+    updatedEmployeeCoordinatesService.push(req.params.serviceId)
     const response = await pool.query({
       text: 'UPDATE employees_coordinate_services SET reservation_time = $1, capacity = $2 WHERE employee_dni = $3 AND service_id = $4',
-      values: updatedEmployee_Coordinate_Service
+      values: updatedEmployeeCoordinatesService
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro`,
+        message: 'No se pudo encontrar el registro',
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -154,7 +143,7 @@ export const updateEmployee_Coordinate_Service = async (
   }
 }
 
-export const deleteEmployee_Coordinate_Service = async (
+export const deleteEmployeeCoordinateService = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -165,7 +154,7 @@ export const deleteEmployee_Coordinate_Service = async (
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro solicitado`,
+        message: 'No se pudo encontrar el registro solicitado',
         statusCode: STATUS.NOT_FOUND
       })
     }
