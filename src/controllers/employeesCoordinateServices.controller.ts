@@ -25,9 +25,7 @@ export const getEmployeesCoordinateServices = async (
     const { rows } = await pool.query({
       text: 'SELECT COUNT(*) FROM employees_coordinate_services'
     })
-    if (Number(rows[0].count) === 0) {
-      return res.status(STATUS.OK).json([])
-    }
+
     const response = await pool.query({
       text: 'SELECT * FROM employees_coordinate_services ORDER BY employee_dni, service_id LIMIT $1 OFFSET $2',
       values: [size, offset]

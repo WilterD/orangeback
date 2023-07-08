@@ -25,9 +25,7 @@ export const getStates = async (
     const { rows } = await pool.query({
       text: 'SELECT COUNT(*) FROM states'
     })
-    if (Number(rows[0].count) === 0) {
-      return res.status(STATUS.OK).json([])
-    }
+
     const response = await pool.query({
       text: 'SELECT * FROM states ORDER BY name LIMIT $1 OFFSET $2',
       values: [size, offset]

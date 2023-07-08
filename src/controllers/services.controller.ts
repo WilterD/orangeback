@@ -22,9 +22,7 @@ export const getServices = async (
     const { rows } = await pool.query({
       text: 'SELECT COUNT(*) FROM services'
     })
-    if (Number(rows[0].count) === 0) {
-      return res.status(STATUS.OK).json([])
-    }
+
     const response = await pool.query({
       text: 'SELECT s.service_id, s.description, SUM(a.cost_hour) AS total_cost, s.created_at FROM services AS s, activities AS a WHERE s.service_id = a.service_id GROUP BY s.service_id, s.description, s.created_at ORDER BY description LIMIT $1 OFFSET $2',
       values: [size, offset]

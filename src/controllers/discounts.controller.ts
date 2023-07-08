@@ -25,9 +25,7 @@ export const getDiscounts = async (
     const { rows } = await pool.query({
       text: 'SELECT COUNT(*) FROM discounts'
     })
-    if (Number(rows[0].count) === 0) {
-      return res.status(STATUS.OK).json([])
-    }
+
     const response = await pool.query({
       text: 'SELECT * FROM discounts ORDER BY agency_rif, percentage LIMIT $1 OFFSET $2',
       values: [size, offset]

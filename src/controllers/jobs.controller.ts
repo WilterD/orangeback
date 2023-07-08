@@ -25,9 +25,7 @@ export const getJobs = async (
     const { rows } = await pool.query({
       text: 'SELECT COUNT(*) FROM jobs'
     })
-    if (Number(rows[0].count) === 0) {
-      return res.status(STATUS.OK).json([])
-    }
+
     const response = await pool.query({
       text: 'SELECT * FROM jobs ORDER BY job_id LIMIT $1 OFFSET $2',
       values: [size, offset]
