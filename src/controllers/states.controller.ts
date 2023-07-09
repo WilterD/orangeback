@@ -29,19 +29,15 @@ export const getStates = async (
 
   try {
     let offset = (Number(page) - 1) * Number(size)
+    if (Number(page) < 1) { offset = 0 }
 
-    if (Number(page) < 1) {
-      offset = 0
-    }
-
-    const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM states'
-    })
+    const { rows } = await pool.query({ text: 'SELECT COUNT(*) FROM states' })
 
     const response = await pool.query({
       text: 'SELECT * FROM states ORDER BY name LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
+
     const pagination: PaginateSettings = {
       total: Number(rows[0].count),
       page: Number(page),
