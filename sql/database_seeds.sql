@@ -288,6 +288,15 @@ INSERT INTO employees_coordinate_services (
 
 -- Supply Lines
 
+INSERT INTO supply_lines (
+  name
+) VALUES 
+  ('Neumáticos'),
+  ('Baterías'),
+  ('Filtros de aceite'),
+  ('Líquido de frenos'),
+  ('Aceite de motor');
+
 -- Products
 
 -- Products_Per_Agencies
