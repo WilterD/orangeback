@@ -9,6 +9,29 @@ import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 import camelizeObject from '../utils/camelizeObject'
 
+export const getAllCities = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  let whereComplement = ''
+  const whereValues = []
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  if (req.query?.stateId) {
+    whereValues.push(req.query.stateId)
+    whereComplement += 'WHERE state_id = $1'
+  }
+
+  try {
+    const { rows } = await pool.query({
+      text: `SELECT * FROM cities ORDER BY name ${whereComplement}`,
+      values: whereValues
+    })
+    return res.status(STATUS.OK).json(camelizeObject(rows))
+  } catch (error: unknown) {
+    return handleControllerError(error, res)
+  }
+}
+
 export const getCities = async (
   req: Request,
   res: Response

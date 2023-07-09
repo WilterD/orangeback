@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  getAllAgencies,
   getAgencies,
   getAgencyById,
   addAgency,
@@ -16,6 +17,7 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getAgencies)
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllAgencies)
 router.get('/:agencyId', tokenGuard(), verifyToken(), getAgencyById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createAgenciesSchema), addAgency)
 router.put('/:agencyId', tokenGuard(), verifyToken(), schemaGuard(updateAgenciesSchema), updateAgency)

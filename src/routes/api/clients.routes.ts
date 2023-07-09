@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  getAllClients,
   getClients,
   getClientById,
   addClient,
@@ -15,6 +16,7 @@ import { createClientsSchema, updateClientsSchema } from '../../schemas/clients.
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllClients)
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getClients)
 router.get('/:clientDni', tokenGuard(), verifyToken(), getClientById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createClientsSchema), addClient)

@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  getAllManagers,
   getManagers,
   getManagerById,
   addManager,
@@ -15,6 +16,7 @@ import { verifyToken } from '../../middlewares/auth'
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllManagers)
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getManagers)
 router.get('/:managerDni', tokenGuard(), verifyToken(), getManagerById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createManagersSchema), addManager)

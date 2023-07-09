@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  getAllStates,
   getStates,
   getStateById,
   addState,
@@ -15,6 +16,7 @@ import { verifyToken } from '../../middlewares/auth'
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllStates)
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getStates)
 router.get('/:stateId', tokenGuard(), verifyToken(), getStateById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(statesSchema), addState)

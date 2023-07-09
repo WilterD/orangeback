@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  getAllCities,
   getCities,
   getCityById,
   addCity,
@@ -15,6 +16,7 @@ import { verifyToken } from '../../middlewares/auth'
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllCities)
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getCities)
 router.get('/:cityId', tokenGuard(), verifyToken(), getCityById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(citiesSchema), addCity)
