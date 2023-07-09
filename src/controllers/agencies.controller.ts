@@ -153,7 +153,7 @@ export const deleteAgency = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Agencia eliminada' })
+    return res.status(STATUS.OK).json({ message: 'Agencia Eliminada Exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

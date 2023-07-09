@@ -192,6 +192,24 @@ INSERT INTO models (
 
 -- Vehicles
 
+INSERT INTO vehicles (
+  license_plate,
+  nro_serial,
+  nro_motor,
+  sale_date,
+  color,
+  extra_descriptions,
+  maintenance_summary,
+  agency_seller,
+  model_id,
+  client_dni
+) VALUES
+  ('BB123FG', '1G1BL52P2TR115520', 'K20A2-1234567', '2003-10-15', 'Amarillo', 'bonito', 'cada 3 años', 'Agencias Buenos Aires', 'Civic', '12345678'),
+  ('CC456TH', 'JTEBU5JR3G5340762', '1NZ-FE-9876543', '2001-09-10', 'Negro', 'feo', 'cada 4 años', 'Agencias Todo bien', 'Aveo', '12345678'),
+  ('DD789JK', '5FNRL5H66EB104579', 'LS2-3456789', '2013-12-20', 'Blanco', 'bonito', 'cada 2 años', 'Agencias Madrid', 'Model S', '89012345'),
+  ('EE012MN', '1C4HJXDG5JW287685', 'F20C1-2345678', '2023-01-30', 'Rojo', 'medio medio', 'cada año', 'Agencias Barinas', 'Evolution', '90123456'),
+  ('FF345PR', '3FA6P0HD9JR137451', 'B16B-1234567', '2006-03-01', 'Azul', 'xd', 'cada 3 meses', 'Agencias Barcelona', 'Odyssea', '23456789');
+
 -- Services
 
 INSERT INTO services (

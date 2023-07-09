@@ -128,7 +128,7 @@ export const deleteCity = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Ciudad eliminada exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Ciudad Eliminada Exitosamente exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

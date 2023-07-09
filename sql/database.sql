@@ -252,19 +252,18 @@ CREATE TABLE employees_coordinate_services (
 -- 17
 
 CREATE TABLE bookings (
-  booking_id INT NOT NULL,
-  expedition_date TIMESTAMP NOT NULL,
+  booking_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  expedition_date dom_created_at,
   expiration_date TIMESTAMP NOT NULL,
   client_dni dom_dni NOT NULL,
   license_plate VARCHAR(16) NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (booking_id),
-  CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients(client_dni) 
+  CONSTRAINT fk_client_license_plate FOREIGN KEY (client_dni, license_plate) 
+    REFERENCES vehicles (client_dni, license_plate) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  CONSTRAINT fk_license_plate FOREIGN KEY (license_plate) REFERENCES vehicles(license_plate) 
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
+  CONSTRAINT chk_exp_date CHECK (expiration_date > expedition_date)
 );
 
 -- 18

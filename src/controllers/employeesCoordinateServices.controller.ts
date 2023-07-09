@@ -156,7 +156,7 @@ export const deleteEmployeeCoordinateService = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Coordinación de servicio eliminada correctamente' })
+    return res.status(STATUS.OK).json({ message: 'Coordinación de servicio Eliminada Exitosamente correctamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

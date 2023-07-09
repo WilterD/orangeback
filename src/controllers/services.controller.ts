@@ -192,7 +192,7 @@ export const deleteService = async (
     }
     return res
       .status(STATUS.OK)
-      .json({ message: 'Servicio eliminado exitosamente' })
+      .json({ message: 'Servicio Eliminado Exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
