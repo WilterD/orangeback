@@ -253,6 +253,21 @@ INSERT INTO activities (
 
 -- Employee_Specialties
 
+INSERT INTO employees_specialties (
+  employee_dni, 
+  service_id
+) VALUES
+  ('444555666', 1),
+  ('555666777', 2),
+  ('666777888', 3),
+  ('777888999', 1),
+  ('888999000', 4),
+  ('999000111', 5),
+  ('000111222', 2),
+  ('111222333', 3),
+  ('222333444', 4),
+  ('333444555', 5);
+
 -- Employees_Coordinates_Services
 
 INSERT INTO employees_coordinate_services (
@@ -274,7 +289,39 @@ INSERT INTO employees_coordinate_services (
 
 -- Bookings
 
+INSERT INTO bookings (
+  expedition_date, 
+  expiration_date, 
+  client_dni, 
+  license_plate
+) VALUES
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 DAY', '12345678', 'BB123FG'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '2 DAY', '12345678', 'CC456TH'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '3 DAY', '12345678', 'BB123FG'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '4 DAY', '89012345', 'DD789JK'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 DAY', '90123456', 'EE012MN'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '6 DAY', '23456789', 'FF345PR'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '7 DAY', '12345678', 'BB123FG'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '8 DAY', '89012345', 'DD789JK'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '9 DAY', '90123456', 'EE012MN'),
+  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '10 DAY', '23456789', 'FF345PR');
+
 -- Bookings_Per_Services
+
+INSERT INTO bookings_per_services (
+  booking_id, 
+  service_id
+) VALUES
+  (1, 1),
+  (2, 2),
+  (3, 3),
+  (4, 4),
+  (5, 5),
+  (6, 1),
+  (7, 2),
+  (8, 3),
+  (9, 4),
+  (10, 5);
 
 -- Orders
 

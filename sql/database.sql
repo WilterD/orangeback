@@ -259,8 +259,10 @@ CREATE TABLE bookings (
   license_plate VARCHAR(16) NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (booking_id),
-  CONSTRAINT fk_client_license_plate FOREIGN KEY (client_dni, license_plate) 
-    REFERENCES vehicles (client_dni, license_plate) 
+  CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients (client_dni) 
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_license_plate FOREIGN KEY (license_plate) REFERENCES vehicles (license_plate) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT chk_exp_date CHECK (expiration_date > expedition_date)
