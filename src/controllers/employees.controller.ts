@@ -22,16 +22,18 @@ export const getEmployees = async (
       offset = 0
     }
 
-    const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM employees'
+    const isEmpty = await pool.query({
+      text: 'SELECT * FROM employees'
     })
-
+    if (isEmpty.rowCount === 0) {
+      return res.status(STATUS.OK).json([])
+    }
     const response = await pool.query({
       text: 'SELECT * FROM employees ORDER BY name LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
-      total: Number(rows[0].count),
+      total: response.rowCount,
       page: Number(page),
       perPage: Number(size)
     }
@@ -48,11 +50,11 @@ export const getEmployeeById = async (
   try {
     const response = await pool.query({
       text: 'SELECT * FROM employees WHERE employee_dni = $1',
-      values: [req.params.employeeDni]
+      values: [req.params.employeeId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.employeeId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -70,7 +72,8 @@ const getEmployeesDataFromRequestBody = (req: Request): any[] => {
     address,
     salary,
     agencyRif,
-    jobId
+    jobId,
+    servicesId
   } = req.body
   const newEmployee = [
     employeeDni,
@@ -79,9 +82,21 @@ const getEmployeesDataFromRequestBody = (req: Request): any[] => {
     address,
     salary,
     agencyRif,
-    jobId
+    jobId,
+    servicesId
   ]
   return newEmployee
+}
+
+interface EmployeeData {
+  employee_dni: string;
+  name: string;
+  phone: string;
+  address: string;
+  salary: number;
+  agency_rif: string;
+  job_id: number;
+  servicesIds: number[];
 }
 
 export const addEmployee = async (
@@ -89,13 +104,21 @@ export const addEmployee = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newEmployee = getEmployeesDataFromRequestBody(req)
+    const newEmployee: EmployeeData = getEmployeesDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO employees (employee_dni, name, phone, address, salary, agency_rif, job_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING employee_dni',
-      values: newEmployee
+      text: 'INSERT INTO employees (employee_dni, name, phone, address, salary, agency_rif, job_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING employee_dni',
+      values: [newEmployee.employee_dni, newEmployee.name, newEmployee.phone, newEmployee.address, newEmployee.salary, newEmployee.agency_rif, newEmployee.job_id]
     })
-    const insertedId: string = insertar.rows[0].employee_dni
+    const insertedId = insertar.rows[0].employee_dni;
+
+    for (let i = 0; i < newEmployee.servicesIds.length; i++) {
+      await pool.query({
+        text: 'INSERT INTO employees_specialties (employee_dni, service_id) VALUES ($1, $2) RETURNING employee_dni, service_id',
+        values: [insertedId, newEmployee.servicesIds[i]]
+      });
+    }
+
     const response = await pool.query({
       text: 'SELECT * FROM employees WHERE employee_dni = $1',
       values: [insertedId]
@@ -105,6 +128,8 @@ export const addEmployee = async (
     return handleControllerError(error, res)
   }
 }
+
+  
 
 const getEmployeesUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
@@ -133,14 +158,14 @@ export const updateEmployee = async (
 ): Promise<Response> => {
   try {
     const updateEmployee = getEmployeesUpdateDataFromRequestBody(req)
-    updateEmployee.push(req.params.employeeDni)
+    updateEmployee.push(req.params.employeeId)
     const response = await pool.query({
       text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = $6  WHERE employee_dni = $7',
       values: updateEmployee
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.employeeId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -158,11 +183,11 @@ export const deleteEmployee = async (
   try {
     const response = await pool.query({
       text: 'DELETE FROM employees WHERE employee_dni = $1',
-      values: [req.params.employeeDni]
+      values: [req.params.employeeId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
+        message: `No se pudo encontrar el registro de id: ${req.params.employeeId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
