@@ -1,17 +1,15 @@
 import { Router } from 'express'
-import {
-  getAllManagers,
-  getManagers,
-  getManagerById,
-  addManager,
-  updateManager,
-  deleteManager
-} from '../../controllers/managers.controller'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { createManagersSchema, updateManagersSchema } from '../../schemas/managers.schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'
 import { tokenGuard } from '../../middlewares/tokenGuard'
 import { verifyToken } from '../../middlewares/auth'
+import getManagers from '../../controllers/managers.controller/getManagers.action'
+import getManagerById from '../../controllers/managers.controller/getManagerById'
+import addManager from '../../controllers/managers.controller/addManager.action'
+import updateManager from '../../controllers/managers.controller/updateManager.action'
+import deleteManager from '../../controllers/managers.controller/deleteManager.action'
+import getAllManagers from '../../controllers/managers.controller/getAllManagers.action'
 
 const router = Router()
 
