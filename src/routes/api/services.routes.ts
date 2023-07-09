@@ -1,16 +1,15 @@
 import { Router } from 'express'
-import {
-  getServices,
-  getServiceById,
-  addService,
-  updateService,
-  deleteService
-} from '../../controllers/services.controller'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { paginationGuard } from '../../middlewares/paginationGuard'
 import { tokenGuard } from '../../middlewares/tokenGuard'
 import { verifyToken } from '../../middlewares/auth'
 import { servicesSchema } from '../../schemas/services.schema'
+
+import { getServices } from '../../controllers/services.controller/get'
+import { getServiceById } from '../../controllers/services.controller/getById'
+import { addService } from '../../controllers/services.controller/add'
+import { updateService } from '../../controllers/services.controller/update'
+import { deleteService } from '../../controllers/services.controller/delete'
 
 const router = Router()
 
