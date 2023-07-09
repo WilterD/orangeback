@@ -344,6 +344,16 @@ CREATE TABLE bills (
 
 -- 22
 
+
+CREATE TABLE card_banks (
+  card_number VARCHAR(32),
+  bank VARCHAR(32) NOT NULL,
+  created_at dom_created_at,
+  PRIMARY KEY (card_number)
+);
+
+-- 23
+
 CREATE TABLE payments (
   bill_id INTEGER,
   payment_id dom_payments_quantity,
@@ -355,20 +365,18 @@ CREATE TABLE payments (
   PRIMARY KEY (bill_id, payment_id),
   CONSTRAINT fk_pays_factura FOREIGN KEY (bill_id) REFERENCES bills(bill_id) 
     ON DELETE RESTRICT
-    ON UPDATE CASCADE
-);
-
--- 23
-
-CREATE TABLE card_banks (
-  card_number VARCHAR(32),
-  bank VARCHAR(32) NOT NULL,
-  created_at dom_created_at,
-  PRIMARY KEY (card_number),
-  CONSTRAINT fk_card_number FOREIGN KEY (card_number) REFERENCES payments(card_number) 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_card_number FOREIGN KEY (card_number) REFERENCES card_banks(card_number)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
+
+
+
+
+
+
+
 
 -- 24
 
