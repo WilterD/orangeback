@@ -5,6 +5,18 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import { ServiceData } from './interface'
 import getServiceById from './getServiceById.util'
 
+function getServicesCreateDataFromRequestBody (
+  req: Request
+): [ServiceCreatePayload, ActivityCreatePayload[]] {
+  const { description, activities } = req.body as ServiceData
+  const newService = [description]
+  const newActivities = activities.map((activity) => [
+    activity.description,
+    activity.costHour
+  ])
+  return [newService, newActivities]
+}
+
 export const addService = async (
   req: Request,
   res: Response
@@ -23,18 +35,6 @@ export const addService = async (
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
-}
-
-function getServicesCreateDataFromRequestBody (
-  req: Request
-): [ServiceCreatePayload, ActivityCreatePayload[]] {
-  const { description, activities } = req.body as ServiceData
-  const newService = [description]
-  const newActivities = activities.map((activity) => [
-    activity.description,
-    activity.costHour
-  ])
-  return [newService, newActivities]
 }
 
 async function createNewService (payload: ServiceCreatePayload): Promise<string> {
