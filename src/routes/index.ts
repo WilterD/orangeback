@@ -13,6 +13,7 @@ import clientsRouter from './api/clients.routes'
 import modelsRouter from './api/models.routes'
 import servicesRouter from './api/services.routes'
 import employeesCoordServicesRouter from './api/employeesCoordinateServices.routes'
+import billsRouter from './api/bills.routes'
 
 const router = express.Router()
 
@@ -29,5 +30,6 @@ router.use('/clients', clientsRouter)
 router.use('/models', modelsRouter)
 router.use('/services', servicesRouter)
 router.use('/employees-coordinate-services', employeesCoordServicesRouter)
+router.use('/bills', billsRouter)
 
 export default router
