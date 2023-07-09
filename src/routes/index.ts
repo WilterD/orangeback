@@ -11,6 +11,7 @@ import jobsRouter from './api/jobs.routes'
 import employeesRouter from './api/employees.routes'
 import clientsRouter from './api/clients.routes'
 import modelsRouter from './api/models.routes'
+import vehiclesRouter from './api/vehicles.routes'
 import servicesRouter from './api/services.routes'
 import employeesCoordServicesRouter from './api/employeesCoordinateServices.routes'
 import bookingsRouter from './api/bookings.routes'
@@ -29,6 +30,7 @@ router.use('/jobs', jobsRouter)
 router.use('/employees', employeesRouter)
 router.use('/clients', clientsRouter)
 router.use('/models', modelsRouter)
+router.use('/vehicles', vehiclesRouter)
 router.use('/services', servicesRouter)
 router.use('/employees-coordinate-services', employeesCoordServicesRouter)
 router.use('/bookings', bookingsRouter)

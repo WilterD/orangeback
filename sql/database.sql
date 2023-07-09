@@ -161,7 +161,7 @@ CREATE TABLE vehicles (
   sale_date DATE NOT NULL,
   color VARCHAR(32) NOT NULL,
   extra_descriptions VARCHAR(255) NOT NULL,
-  maintenance_summary VARCHAR(255),
+  maintenance_summary VARCHAR(255) DEFAULT NULL,
   agency_seller VARCHAR(64) NOT NULL,
   model_id VARCHAR(64) NOT NULL,
   client_dni dom_dni NOT NULL,
