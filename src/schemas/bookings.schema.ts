@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const bookingsCreateSchema = z.object({
+export const createBookingsSchema = z.object({
   expirationDate: z
     .string()
     .nonempty('Debe especificar una fecha de expiración para la reserva')
@@ -35,7 +35,7 @@ export const bookingsCreateSchema = z.object({
     .nonempty('Es necesario indicar al menos un id de servicio')
 })
 
-export const bookingsUpdateSchema = z.object({
+export const updateBookingsSchema = z.object({
   expirationDate: z
     .string()
     .nonempty('Debe especificar una fecha de expiración para la reserva')
