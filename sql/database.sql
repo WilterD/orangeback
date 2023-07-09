@@ -304,6 +304,8 @@ CREATE TABLE orders (
     ON UPDATE CASCADE
 );
 
+
+
 -- 20
 
 CREATE TABLE order_details (

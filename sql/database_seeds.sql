@@ -318,6 +318,10 @@ INSERT INTO bookings_per_services (
 
 -- Orders
 
+INSERT INTO orders 
+  (responsible_dni, responsible_name, entry_time, estimated_departure, real_departure, booking_id, employee_dni, created_at)
+VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444555666',CURRENT_TIMESTAMP);
+
 -- Order_Details
 
 -- Bills

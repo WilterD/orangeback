@@ -6,16 +6,14 @@ import camelizeObject from '../../utils/camelizeObject'
 
 const getBillsCreateDataFromRequestBody = (req: Request): any[] => {
   const {
-    bill_date,
-    discount_value,
-    total_cost,
-    order_id
+    billDate,
+    discountValue,
+    orderId
   } = req.body
   const newBill = [
-    bill_date,
-    discount_value,
-    total_cost,
-    order_id
+    billDate,
+    discountValue,
+    orderId
   ]
   return newBill
 }
@@ -29,7 +27,7 @@ export const addBill = async (
     const newBill = getBillsCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO bills (bill_date,discount_value,total_cost,order_id) VALUES ($1,$2,$3,$4) RETURNING bill_id',
+      text: 'INSERT INTO bills (bill_date,discount_value,order_id) VALUES ($1,$2,$3) RETURNING bill_id',
       values: newBill
     })
     const insertedId: string = insertar.rows[0].bill_id

@@ -51,7 +51,9 @@ export const signIn = async (
 
     return res.status(STATUS.ACCEPTED).json({ ...userForToken, token })
   } catch (error: unknown) {
+    console.log(error)
     handleControllerError(error, res)
+
   }
   return undefined
 }

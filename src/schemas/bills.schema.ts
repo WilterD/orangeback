@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const createBillsSchema = z.object({
-    bill_date: z
+    billDate: z
     .string()
     .refine(
       (fecha) => {
@@ -13,16 +13,14 @@ export const createBillsSchema = z.object({
         'La fecha debe estar en formato DD-MM-AAAA y ser una fecha válida'
       }
     ),
-    discount_value: z
+    discountValue: z
     .number(),
-    total_cost: z
-    .number(),
-    order_id: z
+    orderId: z
     .number()
 })
 
 export const updateBillsSchema = z.object({
-  bill_date: z
+  billDate: z
     .string()
     .refine(
       (fecha) => {
@@ -34,10 +32,8 @@ export const updateBillsSchema = z.object({
         'La fecha debe estar en formato DD-MM-AAAA y ser una fecha válida'
       }
     ),
-    discount_value: z
+    discountValue: z
     .number(),
-    total_cost: z
-    .number(),
-    order_id: z
+    orderId: z
     .number()
 })
