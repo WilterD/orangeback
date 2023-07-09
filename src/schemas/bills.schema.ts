@@ -2,31 +2,42 @@ import { z } from 'zod'
 
 export const createBillsSchema = z.object({
     bill_date: z
-    .date(),
+    .string()
+    .refine(
+      (fecha) => {
+        const regex = /^(\d{4})-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/
+        return regex.test(fecha)
+      },
+      {
+        message:
+        'La fecha debe estar en formato DD-MM-AAAA y ser una fecha válida'
+      }
+    ),
     discount_value: z
-    .string()
-    .nonempty('Es necesario indicar un nombre de agencia')
-    .max(64, 'El nombre debe ser menor a 64 carácteres'),
+    .number(),
     total_cost: z
-    .string()
-    .nonempty('Es necesario indicar una cédula')
-    .max(16, 'la cédula debe ser menor a 16 carácteres')
-    .regex(/^\d+$/, 'La cédula debe contener solo números'),
+    .number(),
     order_id: z
     .number()
-    .min(1, 'El id de ciudad debe ser mayor o igual a 1')
 })
 
 export const updateBillsSchema = z.object({
-  businessName: z
+  bill_date: z
     .string()
-    .nonempty('Es necesario indicar un nombre de agencia')
-    .max(64, 'El nombre debe ser menor a 64 carácteres'),
-  managerDni: z
-    .string()
-    .nonempty('Es necesario indicar una cédula')
-    .max(16, 'la cédula debe ser menor a 16 carácteres')
-    .regex(/^\d+$/, 'La cédula debe contener solo números'),
-  cityId: z
+    .refine(
+      (fecha) => {
+        const regex = /^(\d{4})-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/
+        return regex.test(fecha)
+      },
+      {
+        message:
+        'La fecha debe estar en formato DD-MM-AAAA y ser una fecha válida'
+      }
+    ),
+    discount_value: z
+    .number(),
+    total_cost: z
+    .number(),
+    order_id: z
     .number()
 })

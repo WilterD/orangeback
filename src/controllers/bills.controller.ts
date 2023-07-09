@@ -27,7 +27,7 @@ export const getBills = async (
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM bills ORDER BY business_name LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM bills ORDER BY bill_id LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -47,7 +47,7 @@ export const getBillById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM bills WHERE bill_rif = $1',
+      text: 'SELECT * FROM bills WHERE bill_id = $1',
       values: [req.params.billId]
     })
     if (response.rowCount === 0) {
@@ -64,16 +64,16 @@ export const getBillById = async (
 
 const getBillsCreateDataFromRequestBody = (req: Request): any[] => {
   const {
-    billRif,
-    businessName,
-    managerDni,
-    cityId
+    bill_date,
+    discount_value,
+    total_cost,
+    order_id
   } = req.body
   const newBill = [
-    billRif,
-    businessName,
-    managerDni,
-    cityId
+    bill_date,
+    discount_value,
+    total_cost,
+    order_id
   ]
   return newBill
 }
@@ -86,12 +86,12 @@ export const addBill = async (
     const newBill = getBillsCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO bills (bill_rif,business_name,manager_dni,city_id) VALUES ($1,$2,$3,$4) RETURNING bill_rif',
+      text: 'INSERT INTO bills (bill_date,discount_value,total_cost,order_id) VALUES ($1,$2,$3,$4) RETURNING bill_id',
       values: newBill
     })
-    const insertedId: string = insertar.rows[0].bill_rif
+    const insertedId: string = insertar.rows[0].bill_id
     const response = await pool.query({
-      text: 'SELECT * FROM bills WHERE bill_rif = $1',
+      text: 'SELECT * FROM bills WHERE bill_id = $1',
       values: [insertedId]
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
@@ -102,15 +102,17 @@ export const addBill = async (
 
 const getBillsUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
-    businessName,
-    managerDni,
-    cityId
+    bill_date,
+    discount_value,
+    total_cost,
+    order_id
   } = req.body
 
   const updatedBill = [
-    businessName,
-    managerDni,
-    cityId
+    bill_date,
+    discount_value,
+    total_cost,
+    order_id
   ]
   return updatedBill
 }
@@ -123,7 +125,7 @@ export const updateBill = async (
     const updatedBill = getBillsUpdateDataFromRequestBody(req)
     updatedBill.push(req.params.billId)
     const response = await pool.query({
-      text: 'UPDATE bills SET business_name = $1, manager_dni = $2, city_id = $3 WHERE bill_rif = $4',
+      text: 'UPDATE bills SET bill_date = $1, discount_value = $2, total_cost = $3, order_id = $4 WHERE bill_id = $5',
       values: updatedBill
     })
     if (response.rowCount === 0) {
@@ -132,7 +134,7 @@ export const updateBill = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Agencia Modificada Exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Factura Modificada Exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -144,7 +146,7 @@ export const deleteBill = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM bills WHERE bill_rif = $1',
+      text: 'DELETE FROM bills WHERE bill_id = $1',
       values: [req.params.billId]
     })
     if (response.rowCount === 0) {
@@ -153,7 +155,7 @@ export const deleteBill = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Agencia eliminada' })
+    return res.status(STATUS.OK).json({ message: 'Factura eliminada Correctamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
