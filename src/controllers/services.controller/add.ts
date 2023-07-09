@@ -9,11 +9,11 @@ function getServicesCreateDataFromRequestBody (
   req: Request
 ): [ServiceCreatePayload, ActivityCreatePayload[]] {
   const { description, activities } = req.body as ServiceData
-  const newService = [description]
+  const newService = [description] as [string]
   const newActivities = activities.map((activity) => [
-    activity.description,
-    activity.costHour
-  ])
+    '' + activity.description,
+    +activity.costHour
+  ] as [string, number])
   return [newService, newActivities]
 }
 
@@ -22,12 +22,12 @@ export const addService = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const [dataCreateService, activitiesPayloads] = getServicesCreateDataFromRequestBody(req)
+    const [dataCreateService, newActivities] = getServicesCreateDataFromRequestBody(req)
 
     const insertedServiceId = await createNewService(dataCreateService)
 
-    for (let i = 0; i < activitiesPayloads.length; i++) {
-      await createActivityForService(activitiesPayloads[i], insertedServiceId)
+    for (let i = 0; i < newActivities.length; i++) {
+      await createActivityForService(newActivities[i], insertedServiceId)
     }
 
     const service = await getServiceById(+insertedServiceId)
@@ -42,7 +42,6 @@ async function createNewService (payload: ServiceCreatePayload): Promise<string>
     text: 'INSERT INTO services (description) VALUES ($1) RETURNING service_id',
     values: payload
   })
-
   return insertService.rows[0].service_id as string
 }
 
@@ -53,5 +52,5 @@ async function createActivityForService (payload: ActivityCreatePayload, inserte
   })
 }
 
-type ServiceCreatePayload = string[]
-type ActivityCreatePayload = string[]
+type ServiceCreatePayload = [string]
+type ActivityCreatePayload = [string, number]

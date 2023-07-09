@@ -16,6 +16,9 @@ export const updateService = async (
     const [payloadService, payloadActivities] = getServicesUpdateDataFromRequestBody(req)
     await updateServiceById(payloadService, serviceId)
 
+    // Elimina la actividad si encuentra un id de los actividades antiguas que no este en las nuevas actividades
+    await deleteActivitiesByServiceId(serviceId, payloadActivities)
+
     // Creacion de NUEVAS actividades
     for (let i = 0; i < payloadActivities.length; i++) {
       const activityPayload = payloadActivities[i]
@@ -31,8 +34,6 @@ export const updateService = async (
         }
       }
     }
-    // Elimina la actividad si encuentra un id de los actividades antiguas que no este en las nuevas actividades
-    await deleteActivitiesByServiceId(serviceId, payloadActivities)
 
     const service = await getServiceById(+req.params.serviceId)
     return res.status(STATUS.OK).json(service)
@@ -90,13 +91,13 @@ async function activityExistsByTuple (serviceId: number, activityId: number): Pr
     text: 'SELECT COUNT(*) FROM activities WHERE service_id = $1 AND activity_id = $2',
     values: [serviceId, activityId]
   })
-  return (Number(rows[0].count) === 0)
+  return (Number(rows[0].count) >= 1)
 }
 
 async function insertActivity (serviceId: number, activityPayload: ActivityUpdatePayload): Promise<void> {
   await pool.query({
     text: 'INSERT INTO activities (service_id, description, cost_hour) VALUES ($1, $2, $3)',
-    values: [serviceId, ...activityPayload]
+    values: [serviceId, activityPayload[0], activityPayload[1]]
   })
 }
 
