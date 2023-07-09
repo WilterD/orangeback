@@ -2,10 +2,7 @@ import { z } from 'zod'
 
 export const createBillsSchema = z.object({
     bill_date: z
-    .string()
-    .nonempty('Es necesario indicar un rif')
-    .max(32, 'El Rif debe ser menor a 32  carácteres')
-    .regex(/^\d+$/, 'El Rif debe contener solo números'),
+    .date(),
     discount_value: z
     .string()
     .nonempty('Es necesario indicar un nombre de agencia')
