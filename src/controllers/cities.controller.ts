@@ -16,14 +16,14 @@ export const getAllCities = async (
   let whereComplement = ''
   const whereValues = []
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-  if (req.query?.stateId) {
+  if (req.query?.stateId != null && req.query?.stateId !== '') {
     whereValues.push(req.query.stateId)
     whereComplement += 'WHERE state_id = $1'
   }
 
   try {
     const { rows } = await pool.query({
-      text: `SELECT * FROM cities ORDER BY name ${whereComplement}`,
+      text: `SELECT * FROM cities ${whereComplement} ORDER BY name`,
       values: whereValues
     })
     return res.status(STATUS.OK).json(camelizeObject(rows))
