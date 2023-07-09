@@ -5,9 +5,29 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import { ServiceData } from './interface'
 import getServiceById from './getServiceById.util'
 
-const getServicesCreateDataFromRequestBody = (
+export const addService = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const [dataCreateService, activitiesPayloads] = getServicesCreateDataFromRequestBody(req)
+
+    const insertedServiceId = await createNewService(dataCreateService)
+
+    for (let i = 0; i < activitiesPayloads.length; i++) {
+      await createActivityForService(activitiesPayloads[i], insertedServiceId)
+    }
+
+    const service = await getServiceById(+insertedServiceId)
+    return res.status(STATUS.CREATED).json(service)
+  } catch (error: unknown) {
+    return handleControllerError(error, res)
+  }
+}
+
+function getServicesCreateDataFromRequestBody (
   req: Request
-): [string[], string[][]] => {
+): [ServiceCreatePayload, ActivityCreatePayload[]] {
   const { description, activities } = req.body as ServiceData
   const newService = [description]
   const newActivities = activities.map((activity) => [
@@ -17,29 +37,21 @@ const getServicesCreateDataFromRequestBody = (
   return [newService, newActivities]
 }
 
-export const addService = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  try {
-    const newService = getServicesCreateDataFromRequestBody(req)
+async function createNewService (payload: ServiceCreatePayload): Promise<string> {
+  const insertService = await pool.query({
+    text: 'INSERT INTO services (description) VALUES ($1) RETURNING service_id',
+    values: payload
+  })
 
-    const insertService = await pool.query({
-      text: 'INSERT INTO services (description) VALUES ($1) RETURNING service_id',
-      values: newService[0]
-    })
-    const insertedServiceId: string = insertService.rows[0].service_id
-    for (let i = 0; i < newService[1].length; i++) {
-      newService[1][i].push(insertedServiceId)
-      await pool.query({
-        text: 'INSERT INTO activities (description, cost_hour, service_id) VALUES ($1, $2, $3)',
-        values: newService[1][i]
-      })
-    }
-
-    const service = await getServiceById(+insertedServiceId)
-    return res.status(STATUS.CREATED).json(service)
-  } catch (error: unknown) {
-    return handleControllerError(error, res)
-  }
+  return insertService.rows[0].service_id as string
 }
+
+async function createActivityForService (payload: ActivityCreatePayload, insertedServiceId: string): Promise<void> {
+  await pool.query({
+    text: 'INSERT INTO activities (description, cost_hour, service_id) VALUES ($1, $2, $3)',
+    values: [...payload, insertedServiceId]
+  })
+}
+
+type ServiceCreatePayload = string[]
+type ActivityCreatePayload = string[]
