@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
-import camelizeObject from '../../utils/camelizeObject'
 import { ServiceData } from './interface'
+import getServiceById from './getServiceById.util'
 
 const getServicesCreateDataFromRequestBody = (
   req: Request
@@ -36,18 +36,9 @@ export const addService = async (
         values: newService[1][i]
       })
     }
-    const responseService = await pool.query({
-      text: 'SELECT * FROM services WHERE service_id = $1',
-      values: [insertedServiceId]
-    })
-    const responseActivities = await pool.query({
-      text: 'SELECT * FROM activities WHERE service_id = $1',
-      values: [insertedServiceId]
-    })
-    return res.status(STATUS.CREATED).json({
-      ...camelizeObject(responseService.rows[0]),
-      activities: camelizeObject(responseActivities.rows)
-    })
+
+    const service = await getServiceById(+insertedServiceId)
+    return res.status(STATUS.CREATED).json(service)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

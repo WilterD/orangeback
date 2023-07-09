@@ -6,7 +6,7 @@ import { verifyToken } from '../../middlewares/auth'
 import { servicesSchema } from '../../schemas/services.schema'
 
 import { getServices } from '../../controllers/services.controller/get'
-import { getServiceById } from '../../controllers/services.controller/getById'
+import { getById } from '../../controllers/services.controller/getById'
 import { addService } from '../../controllers/services.controller/add'
 import { updateService } from '../../controllers/services.controller/update'
 import { deleteService } from '../../controllers/services.controller/delete'
@@ -15,7 +15,7 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getServices)
-router.get('/:serviceId', tokenGuard(), verifyToken(), getServiceById)
+router.get('/:serviceId', tokenGuard(), verifyToken(), getById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(servicesSchema), addService)
 router.put('/:serviceId', tokenGuard(), verifyToken(), schemaGuard(servicesSchema), updateService)
 router.delete('/:serviceId', tokenGuard(), verifyToken(), deleteService)
