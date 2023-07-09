@@ -9,6 +9,20 @@ import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 import camelizeObject from '../utils/camelizeObject'
 
+export const getAllClients = async (
+  _: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { rows } = await pool.query({
+      text: 'SELECT * FROM clients ORDER BY name'
+    })
+    return res.status(STATUS.OK).json(camelizeObject(rows))
+  } catch (error: unknown) {
+    return handleControllerError(error, res)
+  }
+}
+
 export const getClients = async (
   req: Request,
   res: Response

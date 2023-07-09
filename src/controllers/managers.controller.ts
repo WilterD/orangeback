@@ -9,6 +9,39 @@ import { StatusError } from '../utils/responses/status-error'
 import { handleControllerError } from '../utils/responses/handleControllerError'
 import camelizeObject from '../utils/camelizeObject'
 
+export const getAllManagers = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const whereValues = []
+
+  let text = 'SELECT * FROM managers ORDER BY name'
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  if (req.query?.onlyAvailable) {
+    let includeManagerComplement = ''
+    if (req.query?.includeManager != null && req.query?.includeManager !== '') {
+      whereValues.push(req.query.includeManager)
+      includeManagerComplement += 'OR manager_dni = $1'
+    }
+
+    text = `
+    SELECT * FROM managers
+    WHERE
+      manager_dni NOT IN(
+        SELECT DISTINCT manager_dni FROM agencies WHERE
+        manager_dni IS NOT NULL
+      ) ${includeManagerComplement} 
+    ORDER BY name`
+  }
+
+  try {
+    const { rows } = await pool.query({ text, values: whereValues })
+    return res.status(STATUS.OK).json(camelizeObject(rows))
+  } catch (error: unknown) {
+    return handleControllerError(error, res)
+  }
+}
+
 export const getManagers = async (
   req: Request,
   res: Response
