@@ -50,20 +50,16 @@ export const getEmployeeById = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const response = await pool.query({
+    const responseEmployee = await pool.query({
       text: 'SELECT * FROM employees WHERE employee_dni = $1',
       values: [req.params.employeeDni]
     })
-    if (response.rowCount === 0) {
+    if (responseEmployee.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    const responseEmployee = await pool.query({
-      text: 'SELECT * FROM employees WHERE employee_dni = $1',
-      values: [req.params.employeeDni]
-    })
     const responseServices = await pool.query({
       text: 'SELECT s.service_id, s.description FROM services AS s, employees_specialties AS es WHERE es.employee_dni = $1 AND es.service_id = s.service_id',
       values: [req.params.employeeDni]
@@ -111,8 +107,7 @@ const getEmployeesDataFromRequestBody = (req: Request): [any[], number[]] => {
     agencyRif,
     jobId
   ]
-  const employeeServices = servicesIds
-  return [newEmployee, employeeServices]
+  return [newEmployee, servicesIds]
 }
 
 export const addEmployee = async (
@@ -180,21 +175,27 @@ export const updateEmployee = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const updateEmployee = getEmployeesUpdateDataFromRequestBody(req)
-    updateEmployee[0].push(req.params.employeeDni)
+    const updatedEmployee = getEmployeesUpdateDataFromRequestBody(req)
+    updatedEmployee[0].push(req.params.employeeDni)
     const response = await pool.query({
       text: 'UPDATE employees SET name = $1, phone = $2, address = $3, salary = $4, agency_rif = $5, job_id = $6  WHERE employee_dni = $7',
-      values: updateEmployee[0]
+      values: updatedEmployee[0]
     })
-    for (let i = 0; i < updateEmployee[1].length; i++) {
+    if (response.rowCount === 0) {
+      throw new StatusError({
+        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
+        statusCode: STATUS.NOT_FOUND
+      })
+    }
+    for (let i = 0; i < updatedEmployee[1].length; i++) {
       const { rows } = await pool.query({
         text: 'SELECT COUNT(*) FROM employees_specialties WHERE service_id = $1 AND employee_dni = $2',
-        values: [updateEmployee[1][i], req.params.employeeDni]
+        values: [updatedEmployee[1][i], req.params.employeeDni]
       })
       if (Number(rows[0].count) === 0) {
         await pool.query({
           text: 'INSERT INTO employees_specialties (service_id, employee_dni) VALUES ($1, $2)',
-          values: [updateEmployee[1][i], req.params.employeeDni]
+          values: [updatedEmployee[1][i], req.params.employeeDni]
         })
       }
     }
@@ -205,7 +206,7 @@ export const updateEmployee = async (
     const actualServices = rows.map((servicio) => servicio.service_id)
     const deleteServices: number[] = []
     actualServices.forEach((elemento) => {
-      if (!updateEmployee[1].includes(elemento)) {
+      if (!updatedEmployee[1].includes(elemento)) {
         deleteServices.push(elemento)
       }
     })
@@ -217,17 +218,10 @@ export const updateEmployee = async (
         })
       }
     }
-    if (response.rowCount === 0) {
-      throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.employeeDni}`,
-        statusCode: STATUS.NOT_FOUND
-      })
-    }
     return res
       .status(STATUS.OK)
       .json({ message: 'Empleado modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

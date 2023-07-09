@@ -29,7 +29,10 @@ export const bookingsCreateSchema = z.object({
   licensePlate: z
     .string()
     .nonempty('Es necesario indicar una placa de vehículo')
-    .max(16, 'La placa del vehículo debe ser menor a 16 carácteres')
+    .max(16, 'La placa del vehículo debe ser menor a 16 carácteres'),
+  servicesIds: z
+    .array(z.number().min(1, 'El id de servicio debe ser mayor o igual a 1'))
+    .nonempty('Es necesario indicar al menos un id de servicio')
 })
 
 export const bookingsUpdateSchema = z.object({
@@ -52,5 +55,8 @@ export const bookingsUpdateSchema = z.object({
       {
         message: 'La fecha debe estar en formato DD-MM-AAAA HH:MM:SS y ser una fecha válida y dentro de los límites permitidos'
       }
-    )
+    ),
+  servicesIds: z
+    .array(z.number().min(1, 'El id de servicio debe ser mayor o igual a 1'))
+    .nonempty('Es necesario indicar al menos un id de servicio')
 })
