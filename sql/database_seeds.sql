@@ -326,7 +326,13 @@ VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444
 
 -- Bills
 
+INSERT INTO bills (bill_date, discount_value, total_cost, order_id) VALUES
+  (CURRENT_TIMESTAMP, 0.00, 100.00, 1);
+
 -- Payments
+
+INSERT INTO payments (bill_id, payment_id, cost, payment_date, payment_method , card_number) VALUES
+  (1,1, 100, CURRENT_TIMESTAMP, 'TC', '1234567890123456');
 
 -- Card_Banks
 
