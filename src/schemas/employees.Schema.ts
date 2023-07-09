@@ -29,7 +29,10 @@ export const createEmployeesSchema = z.object({
     .regex(/^\d+$/, 'La cédula debe contener solo números'),
   jobId: z
     .number()
-    .min(1, 'El id de cargo debe ser mayor o igual a 1')
+    .min(1, 'El id de cargo debe ser mayor o igual a 1'),
+  servicesIds: z
+    .array(z.number().min(1, 'El id de servicio debe ser mayor o igual a 1'))
+    .nonempty('Es necesario indicar al menos un id de servicio')
 })
 
 export const updateEmployeesSchema = z.object({
@@ -56,5 +59,8 @@ export const updateEmployeesSchema = z.object({
     .regex(/^\d+$/, 'La cédula debe contener solo números'),
   jobId: z
     .number()
-    .min(1, 'El id de cargo debe ser mayor o igual a 1')
+    .min(1, 'El id de cargo debe ser mayor o igual a 1'),
+  servicesIds: z
+    .array(z.number().min(1, 'El id de servicio debe ser mayor o igual a 1'))
+    .nonempty('Es necesario indicar al menos un id de servicio')
 })

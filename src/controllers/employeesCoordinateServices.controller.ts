@@ -98,7 +98,6 @@ export const addEmployeeCoordinateService = async (
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
@@ -136,7 +135,6 @@ export const updateEmployeeCoordinateService = async (
     }
     return res.status(STATUS.OK).json({ message: 'Servicio de coordinación de empleados modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

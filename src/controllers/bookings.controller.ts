@@ -46,34 +46,51 @@ export const getBookingById = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const response = await pool.query({
+    const responseBooking = await pool.query({
       text: 'SELECT * FROM bookings WHERE booking_id = $1',
       values: [req.params.bookingId]
     })
-    if (response.rowCount === 0) {
+    if (responseBooking.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de: ${req.params.bookingId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
+    const responseServices = await pool.query({
+      text: 'SELECT s.service_id, s.description FROM services AS s, bookings_per_services AS bps WHERE bps.booking_id = $1 AND bps.service_id = s.service_id',
+      values: [req.params.bookingId]
+    })
+    return res
+      .status(STATUS.CREATED)
+      .json({
+        ...camelizeObject(responseBooking.rows[0]),
+        services: camelizeObject(responseServices.rows)
+      })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
 }
 
-const getBookingsDataFromRequestBody = (req: Request): any[] => {
+interface BookingData {
+  expirationDate: string
+  clientDni: string
+  licensePlate: string
+  servicesIds: number[]
+}
+
+const getBookingsDataFromRequestBody = (req: Request): [any[], number[]] => {
   const {
     expirationDate,
     clientDni,
-    licensePlate
-  } = req.body
+    licensePlate,
+    servicesIds
+  } = req.body as BookingData
   const newBooking = [
     expirationDate,
     clientDni,
     licensePlate
   ]
-  return newBooking
+  return [newBooking, servicesIds]
 }
 
 export const addBooking = async (
@@ -85,27 +102,43 @@ export const addBooking = async (
 
     const insertar = await pool.query({
       text: 'INSERT INTO bookings (expiration_date, client_dni, license_plate) VALUES ($1, $2, $3) RETURNING booking_id',
-      values: newBooking
+      values: newBooking[0]
     })
-    const insertedId: string = insertar.rows[0].booking_id
-    const response = await pool.query({
+    const insertedBookingId: string = insertar.rows[0].booking_id
+    for (let i = 0; i < newBooking[1].length; i++) {
+      await pool.query({
+        text: 'INSERT INTO bookings_per_services (service_id, booking_id) VALUES ($1, $2)',
+        values: [newBooking[1][i], insertedBookingId]
+      })
+    }
+    const responseBooking = await pool.query({
       text: 'SELECT * FROM bookings WHERE booking_id = $1',
-      values: [insertedId]
+      values: [insertedBookingId]
     })
-    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
+    const responseServices = await pool.query({
+      text: 'SELECT s.service_id, s.description FROM services AS s, bookings_per_services AS bps WHERE bps.booking_id = $1 AND bps.service_id = s.service_id',
+      values: [insertedBookingId]
+    })
+    return res
+      .status(STATUS.CREATED)
+      .json({
+        ...camelizeObject(responseBooking.rows[0]),
+        services: camelizeObject(responseServices.rows)
+      })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
 }
 
-const getBookingsUpdateDataFromRequestBody = (req: Request): any[] => {
+const getBookingsUpdateDataFromRequestBody = (req: Request): [any[], number[]] => {
   const {
-    expirationDate
+    expirationDate,
+    servicesIds
   } = req.body
   const newBooking = [
     expirationDate
   ]
-  return newBooking
+  return [newBooking, servicesIds]
 }
 
 export const updateBooking = async (
@@ -116,7 +149,7 @@ export const updateBooking = async (
     const updatedBooking = getBookingsUpdateDataFromRequestBody(req)
     const response = await pool.query({
       text: 'UPDATE bookings SET expiration_date = $1 WHERE booking_id = $2',
-      values: [updatedBooking, req.params.bookingId]
+      values: [updatedBooking[0], req.params.bookingId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
@@ -124,8 +157,41 @@ export const updateBooking = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
+    for (let i = 0; i < updatedBooking[1].length; i++) {
+      const { rows } = await pool.query({
+        text: 'SELECT COUNT(*) FROM bookings_per_services WHERE service_id = $1 AND booking_id = $2',
+        values: [updatedBooking[1][i], req.params.bookingId]
+      })
+      if (Number(rows[0].count) === 0) {
+        await pool.query({
+          text: 'INSERT INTO bookings_per_services (service_id, booking_id) VALUES ($1, $2)',
+          values: [updatedBooking[1][i], req.params.bookingId]
+        })
+      }
+    }
+    const { rows } = await pool.query({
+      text: 'SELECT service_id FROM bookings_per_services WHERE booking_id = $1',
+      values: [req.params.bookingId]
+    })
+    const actualServices = rows.map((servicio) => servicio.service_id)
+    const deleteServices: number[] = []
+    actualServices.forEach((elemento) => {
+      if (!updatedBooking[1].includes(elemento)) {
+        deleteServices.push(elemento)
+      }
+    })
+    console.log(deleteServices)
+    if (deleteServices.length !== 0) {
+      for (let i = 0; i < deleteServices.length; i++) {
+        await pool.query({
+          text: 'DELETE FROM bookings_per_services WHERE booking_id = $1 AND service_id = $2',
+          values: [req.params.bookingId, deleteServices[i]]
+        })
+      }
+    }
     return res.status(STATUS.OK).json({ message: 'Reserva Modificada Exitosamente' })
   } catch (error: unknown) {
+    console.log(error)
     return handleControllerError(error, res)
   }
 }

@@ -62,11 +62,17 @@ export const getServiceById = async (
       text: 'SELECT activity_id, description, cost_hour, created_at FROM activities WHERE service_id = $1',
       values: [req.params.serviceId]
     })
+    const responseBookings = await pool.query({
+      text: 'SELECT b.booking_id, b.expedition_date, b.expiration_date, b.client_dni, b.license_plate, b.created_at FROM bookings_per_services as bps, bookings as b WHERE bps.service_id = $1 AND bps.booking_id = b.booking_id',
+      values: [req.params.serviceId]
+    })
     return res.status(STATUS.OK).json({
       ...camelizeObject(responseService.rows[0]),
-      activities: camelizeObject(responseActivities.rows)
+      activities: camelizeObject(responseActivities.rows),
+      bookings: camelizeObject(responseBookings.rows)
     })
   } catch (error: unknown) {
+    console.log(error)
     return handleControllerError(error, res)
   }
 }

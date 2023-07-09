@@ -11,14 +11,14 @@ GROUP BY
   s.description;
 
 SELECT
-  s.service_id,
-  s.description
+  b.booking_id,
+  b.
 FROM
-  services AS s,
-  employees_specialties AS es
+  bookings_per_service as bps,
+  booking as b
 WHERE
-  es.employee_dni = '1234251223' AND
-  es.service_id = s.service_id;
+  bps.employee_dni = '1234251223' AND
+  bps.service_id = s.service_id;
 
 INSERT INTO employees_specialties (employee_dni, service_id) SELECT '3234251223', 2 WHERE NOT EXISTS (SELECT * FROM employees_specialties WHERE employee_dni = '3234251223' AND service_id = 2);
 
