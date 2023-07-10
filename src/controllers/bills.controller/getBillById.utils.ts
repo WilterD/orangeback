@@ -30,17 +30,5 @@ export async function getPaymentsByBillId (billId: number): Promise<Payment[]> {
     values: [billId]
   })
 
-  return response.rows.map(row => {
-    const payment: Payment = {
-      billId: row.bill_id,
-      paymentId: row.payment_id,
-      cost: row.cost,
-      paymentDate: row.payment_date,
-      paymentMethod: row.payment_method,
-      cardNumber: row.card_number,
-      createdAt: row.created_at
-    }
-
-    return payment
-  })
+  return camelizeObject(response.rows) as Payment[]
 }
