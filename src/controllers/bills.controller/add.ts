@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
-import camelizeObject from '../../utils/camelizeObject'
+import getBillById from './getBillById.utils'
 
 const getBillsCreateDataFromRequestBody = (req: Request): any[] => {
   const {
@@ -29,12 +29,10 @@ export const addBill = async (
       text: 'INSERT INTO bills (bill_date,discount_value,order_id) VALUES ($1,$2,$3) RETURNING bill_id',
       values: newBill
     })
-    const insertedId: string = insertar.rows[0].bill_id
-    const response = await pool.query({
-      text: 'SELECT * FROM bills WHERE bill_id = $1',
-      values: [insertedId]
-    })
-    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
+    const insertedId: number = insertar.rows[0].bill_id
+
+    const bill = await getBillById(Number(insertedId))
+    return res.status(STATUS.CREATED).json(bill)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
