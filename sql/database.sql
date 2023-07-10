@@ -358,7 +358,7 @@ CREATE TABLE card_banks (
 CREATE TABLE payments (
   bill_id INTEGER,
   payment_id dom_payments_quantity,
-  cost FLOAT NOT NULL,
+  amount FLOAT NOT NULL,
   payment_date TIMESTAMP NOT NULL,
   payment_method type_payment_method NOT NULL,
   card_number VARCHAR(32) DEFAULT NULL,
