@@ -19,7 +19,6 @@ const getBillsCreateDataFromRequestBody = (req: Request): any[] => {
 }
 
 export const addBill = async (
-  
   req: Request,
   res: Response
 ): Promise<Response> => {

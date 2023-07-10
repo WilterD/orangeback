@@ -6,17 +6,17 @@ import { StatusError } from '../../utils/responses/status-error'
 
 const getBillsUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
-    bill_date,
-    discount_value,
-    total_cost,
-    order_id
+    billDate,
+    discountValue,
+    totalCost,
+    orderId
   } = req.body
 
   const updatedBill = [
-    bill_date,
-    discount_value,
-    total_cost,
-    order_id
+    billDate,
+    discountValue,
+    totalCost,
+    orderId
   ]
   return updatedBill
 }

@@ -1,5 +1,5 @@
 export interface BillData {
-  billDate: Date;
-  discountValue: number;
-  orderId: number[];
+  billDate: string
+  discountValue: number
+  orderId: number[]
 }

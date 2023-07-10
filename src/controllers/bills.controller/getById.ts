@@ -25,5 +25,3 @@ export const getBillById = async (
     return handleControllerError(error, res)
   }
 }
-
-
