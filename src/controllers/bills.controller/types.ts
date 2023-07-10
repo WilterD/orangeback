@@ -5,6 +5,7 @@ export interface Bill {
   totalCost: number
   orderId: number
   createdAt: string
+  payments: Payment[]
 }
 
 export interface BillPayload {
@@ -12,4 +13,14 @@ export interface BillPayload {
   discountValue: number
   totalCost: number
   orderId: number
+}
+
+export interface Payment {
+  billId: number
+  paymentId: number
+  cost: number
+  paymentDate: string
+  paymentMethod: string
+  cardNumber?: string
+  createdAt: string
 }

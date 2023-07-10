@@ -2,7 +2,7 @@ import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import camelizeObject from '../../utils/camelizeObject'
 import { StatusError } from '../../utils/responses/status-error'
-import { Bill } from './types'
+import { Bill, Payment } from './types'
 
 export default async function getBillById (billId: number): Promise<Bill> {
   const response = await pool.query({
@@ -18,5 +18,12 @@ export default async function getBillById (billId: number): Promise<Bill> {
   }
 
   const bill = camelizeObject(response.rows[0]) as unknown as Bill
+
+  bill.payments = await getPaymentsByBillId(bill.billId)
+
   return bill
+}
+
+async function getPaymentsByBillId (billId: number): Promise<Payment[]> {
+  return [] as Payment[]
 }
