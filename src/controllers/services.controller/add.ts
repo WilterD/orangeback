@@ -9,11 +9,11 @@ function getServicesCreateDataFromRequestBody (
   req: Request
 ): [ServiceCreatePayload, ActivityCreatePayload[]] {
   const { description, activities } = req.body as ServiceData
-  const newService = [description] as [string]
+  const newService = [description] as ServiceCreatePayload
   const newActivities = activities.map((activity) => [
     '' + activity.description,
     +activity.costHour
-  ] as [string, number])
+  ] as ActivityCreatePayload)
   return [newService, newActivities]
 }
 

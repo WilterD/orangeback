@@ -154,7 +154,6 @@ export const updateVehicle = async (
     }
     return res.status(STATUS.OK).json({ message: 'Vehículo Modificado Exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

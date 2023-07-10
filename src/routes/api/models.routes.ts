@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import {
   getModels,
-  getModelsById,
+  getModelById,
   addModel,
   updateModel,
   deleteModel
@@ -16,7 +16,7 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getModels)
-router.get('/:modelId', tokenGuard(), verifyToken(), getModelsById)
+router.get('/:modelId', tokenGuard(), verifyToken(), getModelById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createModelsSchema), addModel)
 router.put('/:modelId', tokenGuard(), verifyToken(), schemaGuard(updateModelsSchema), updateModel)
 router.delete('/:modelId', tokenGuard(), verifyToken(), deleteModel)
