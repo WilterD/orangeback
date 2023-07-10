@@ -4,7 +4,7 @@ import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import { StatusError } from '../../utils/responses/status-error'
 
-export const deleteCardBank= async (
+export const deleteCardBank = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
