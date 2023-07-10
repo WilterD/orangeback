@@ -27,3 +27,7 @@ INSERT INTO employees_specialties (employee_dni, service_id) SELECT '3234251223'
 [3,4,5] -- nuevo
 
 [1,2] -- lo que hay que eliminar
+
+SELECT
+p.product_id,
+p.description,
