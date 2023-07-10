@@ -9,6 +9,7 @@ import { getBillById } from '../../controllers/bills.controller/getById'
 import { addBill } from '../../controllers/bills.controller/add'
 import { updateBill } from '../../controllers/bills.controller/update'
 import { deleteBill } from '../../controllers/bills.controller/delete'
+import { getPaymentsByBillId } from '../../controllers/bills.controller/getBillById.utils'
 
 const router = Router()
 
@@ -18,5 +19,7 @@ router.get('/:billId',tokenGuard(), verifyToken(), getBillById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createBillsSchema), addBill)
 router.put('/:billId', tokenGuard(), verifyToken(), schemaGuard(updateBillsSchema), updateBill)
 router.delete('/:billId', tokenGuard(), verifyToken(), deleteBill)
+
+router.get('/:billId/payments', tokenGuard(), verifyToken(), getPaymentsByBillId)
 
 export default router
