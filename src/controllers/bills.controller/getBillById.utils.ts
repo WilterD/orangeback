@@ -17,7 +17,6 @@ export default async function getBillById (billId: number): Promise<Bill> {
     })
   }
 
-  const bill = camelizeObject(response.rows[0]);
-
-  return bill as unknown as Bill
+  const bill = camelizeObject(response.rows[0]) as unknown as Bill
+  return bill
 }
