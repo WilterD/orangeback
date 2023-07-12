@@ -326,6 +326,15 @@ VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444
 
 -- Bills
 
+bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
+  bill_date TIMESTAMP NOT NULL,
+  discount_value FLOAT NOT NULL,
+  total_cost FLOAT DEFAULT 0,
+  order_id INTEGER NOT NULL,
+  created_at dom_created_at,
+
+INSERT INTO bills (bill_date,discount_value,total_cost,order_id,created_at) VALUES ()
+
 -- Payments
 
 -- Card_Banks
