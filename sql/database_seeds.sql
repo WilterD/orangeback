@@ -347,11 +347,23 @@ INSERT INTO Products(
   price,
   supply_line_id  
 )VALUES
-  ('12345678','agua','un liquido','minerales atlantico', true, 200, 'agua para el motor')
-  ('1234567','aceite','un liquido que le da energia al vehiculo','minerales atlantico', true, 200, 'Aceite de motor')
-  ('123456','neumatico br12 mitsubishi','un complemento del vehiculo','minerales atlantico', false, 140, 'Neumatico')
-  ('12345','filtro','un complemento del vehiculo','minerales atlantico', true, 240, 'Filtros de aceite')
-  ('1234','motor','un complemento del vehiculo','minerales atlantico', false, 300, 'Motor')
+  ('12345678','agua','un liquido','minerales atlantico', true, 200, 1),
+  ('1234567','aceite', 'un liquido que le da energia al vehiculo', 'minerales atlantico', true, 200, 2),
+  ('123456','neumatico br12 mitsubishi','un complemento del vehiculo','minerales atlantico', false, 140, 3),
+  ('12345','filtro','un complemento del vehiculo','minerales atlantico', true, 240, 4),
+  ('1234','motor','un complemento del vehiculo','minerales atlantico', false, 300, 5);
 -- Products_Per_Agencies
 
+INSERT INTO products_per_agencies (
+  agency_rif,
+  product_id,
+  on_stock,
+  max_capacity,
+  min_capacity
+) VALUES 
+  ('1', '12345678', 100, 500, 50),
+  ('2', '1234567', 50, 200, 20),
+  ('3', '123456', 200, 800, 80),
+  ('4', '12345', 150, 600, 60),
+  ('5', '1234', 300, 1200, 120);
 -- Products_In_Order_Details

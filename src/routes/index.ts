@@ -16,6 +16,8 @@ import servicesRouter from './api/services.routes'
 import employeesCoordServicesRouter from './api/employeesCoordinateServices.routes'
 import bookingsRouter from './api/bookings.routes'
 import supplyLinesRouter from './api/supplyLines.routes'
+import productsRouter from './api/products.routes'
+import stocksRouter from './api/stocks.routes'
 
 const router = express.Router()
 
@@ -35,5 +37,7 @@ router.use('/services', servicesRouter)
 router.use('/employees-coordinate-services', employeesCoordServicesRouter)
 router.use('/bookings', bookingsRouter)
 router.use('/supply-lines', supplyLinesRouter)
+router.use('/products', productsRouter)
+router.use('/stocks', stocksRouter)
 
 export default router
