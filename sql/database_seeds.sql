@@ -326,6 +326,21 @@ INSERT INTO bookings_per_services (
 
 -- Card_Banks
 
+INSERT INTO card_banks (card_number, bank, created_at) 
+VALUES 
+  ('1234567890123456', 'Banco Mercantil', '2023-07-12 10:30:00'),
+  ('9876543210987654', 'Banco Banesco', '2023-07-12 11:00:00'),
+  ('4567890123456789', 'Banco Provincial', '2023-07-12 12:30:00'),
+  ('3210987654321098', 'Banca amiga', '2023-07-12 13:00:00'),
+  ('6543210987654321', 'Banco Nacional de Credito', '2023-07-12 14:30:00'),
+  ('2345678901234567', 'Banco de Venezuela', '2023-07-12 15:00:00'),
+  ('7654321098765432', 'Banco Fondo Comun', '2023-07-12 16:30:00'),
+  ('3456789012345678', 'Banco del Tesoro', '2023-07-12 17:00:00'),
+  ('8901234567890123', 'Banco Delsur', '2023-07-12 18:30:00'),
+  ('2109876543210987', 'Banco de Bicentenario', '2023-07-12 19:00:00');
+
+
+
 -- Supply Lines
 
 INSERT INTO supply_lines (
