@@ -131,7 +131,7 @@ INSERT INTO employees (
   agency_rif, 
   job_id
 ) VALUES
-  ('444555666', 'Alex Brown', '5554444', '789 Oak St', 5500.00, '1', 2),
+  ('444555666', 'Alex Brown', '5554444', '789 Oak St', 5500.00, '1', 1),
   ('555666777', 'Jessica Lee', '5555555', '123 Main St', 6000.00, '2', 3),
   ('666777888', 'Michael Johnson', '5556666', '456 Elm St', 7000.00, '3', 1),
   ('777888999', 'David Kim', '5557777', '123 Main St', 5500.00, '3', 2),
@@ -320,7 +320,7 @@ INSERT INTO bookings_per_services (
 
 INSERT INTO orders 
   (responsible_dni, responsible_name, entry_time, estimated_departure, real_departure, booking_id, employee_dni, created_at)
-VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444555666',CURRENT_TIMESTAMP);
+VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,4,'444555666',CURRENT_TIMESTAMP);
 
 -- Order_Details
 
