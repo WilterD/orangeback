@@ -1,12 +1,10 @@
 import { Router } from 'express'
-import {
-  getAllClients,
-  getClients,
-  getClientById,
-  addClient,
-  updateClient,
-  deleteClient
-} from '../../controllers/clients.controller'
+import { getClients} from '../../controllers/clients.controller/get'
+import { getAllClients} from '../../controllers/clients.controller/getAll'
+import { getClientById } from '../../controllers/clients.controller/getById'
+import { addClient } from '../../controllers/clients.controller/add'
+import { updateClient } from '../../controllers/clients.controller/update'
+import { deleteClient } from '../../controllers/clients.controller/delete'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { paginationGuard } from '../../middlewares/paginationGuard'
 import { tokenGuard } from '../../middlewares/tokenGuard'
