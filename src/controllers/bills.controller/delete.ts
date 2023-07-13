@@ -10,7 +10,9 @@ export const deleteBill = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM bills WHERE bill_id = $1',
+      text: `DELETE FROM 
+              bills 
+              WHERE bill_id = $1`,
       values: [req.params.billId]
     })
     if (response.rowCount === 0) {

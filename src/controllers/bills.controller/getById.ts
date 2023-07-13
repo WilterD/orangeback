@@ -11,7 +11,9 @@ export const getBillById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM bills WHERE bill_id = $1',
+      text: `SELECT * 
+              FROM bills 
+              WHERE bill_id = $1`,
       values: [req.params.billId]
     })
     if (response.rowCount === 0) {

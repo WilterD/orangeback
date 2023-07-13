@@ -324,6 +324,9 @@ VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,4,'444
 
 -- Order_Details
 
+INSERT INTO order_details (service_id,activity_id,order_id,cost_hour,hours_taken,employee_dni) 
+VALUES (1,1,1,25,2,'444555666');
+
 -- Bills
 
 bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
