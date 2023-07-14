@@ -355,15 +355,15 @@ INSERT INTO Products(
 -- Products_Per_Agencies
 
 INSERT INTO products_per_agencies (
-  agency_rif,
   product_id,
+  agency_rif,
   on_stock,
   max_capacity,
   min_capacity
 ) VALUES 
-  ('1', '12345678', 100, 500, 50),
-  ('2', '1234567', 50, 200, 20),
-  ('3', '123456', 200, 800, 80),
-  ('4', '12345', 150, 600, 60),
-  ('5', '1234', 300, 1200, 120);
+  ('12345678', '1', 100, 500, 50),
+  ( '1234567', '2', 50, 200, 20),
+  ('123456', '3', 200, 800, 80),
+  ('12345', '4', 150, 600, 60),
+  ('1234', '5', 300, 1200, 120);
 -- Products_In_Order_Details

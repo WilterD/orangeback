@@ -27,7 +27,7 @@ export const updatedProductPerAgencies = async (
     const updatedProductPerAgencies = getProductPerAgenciesUpdateDataFromRequestBody(req)
     updatedProductPerAgencies.push(req.params.productId, req.params.agencyId)
     const response = await pool.query({
-      text: 'UPDATE product_per_agencies SET on_stock = $1, max_capacity = $2, min_capacity = $3 WHERE product_id = $4 AND agency_rif = $5',
+      text: 'UPDATE products_per_agencies SET on_stock = $1, max_capacity = $2, min_capacity = $3 WHERE product_id = $4 AND agency_rif = $5',
       values: updatedProductPerAgencies
     })
     if (response.rowCount === 0) {
