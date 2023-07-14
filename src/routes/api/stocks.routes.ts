@@ -19,9 +19,9 @@ const router = Router()
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getProductsPerAgencies)
 router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllProductsPerAgencies)
-router.get('/agency/:agencyRif/product/:productId', tokenGuard(), verifyToken(), getProductPerAgencyById)
+router.get('/product/:productId/agency/:agencyRif', tokenGuard(), verifyToken(), getProductPerAgencyById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createStockSchema), addProductPerAgency)
-router.put('/agency/:agencyRif/product/:productId', tokenGuard(), verifyToken(), schemaGuard(updateStockSchema), updatedProductPerAgencies)
-router.delete('/agency/:agencyRif/product/:productId', tokenGuard(), verifyToken(), deleteProductPerAgency)
+router.put('/product/:productId/agency/:agencyRif', tokenGuard(), verifyToken(), schemaGuard(updateStockSchema), updatedProductPerAgencies)
+router.delete('/product/:productId/agency/:agencyRif', tokenGuard(), verifyToken(), deleteProductPerAgency)
 
 export default router

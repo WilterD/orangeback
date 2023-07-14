@@ -400,8 +400,8 @@ CREATE TABLE products (
 -- 26
 
 CREATE TABLE products_per_agencies (
-  agency_rif dom_agency_rif NOT NULL,
   product_id VARCHAR(32) NOT NULL,
+  agency_rif dom_agency_rif NOT NULL,
   on_stock INTEGER NOT NULL,
   max_capacity INTEGER NOT NULL,
   min_capacity INTEGER NOT NULL,
