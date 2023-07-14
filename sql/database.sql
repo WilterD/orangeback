@@ -208,7 +208,7 @@ CREATE TABLE services_per_models (
   mileage FLOAT NOT NULL,
   use_time INTEGER NOT NULL,
   created_at dom_created_at,
-  PRIMARY KEY (service_id, model_id),
+  PRIMARY KEY (service_id, model_id, mileage, use_time),
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
@@ -358,7 +358,7 @@ CREATE TABLE card_banks (
 CREATE TABLE payments (
   bill_id INTEGER,
   payment_id dom_payments_quantity,
-  cost FLOAT NOT NULL,
+  amount FLOAT NOT NULL,
   payment_date TIMESTAMP NOT NULL,
   payment_method type_payment_method NOT NULL,
   card_number VARCHAR(32) DEFAULT NULL,

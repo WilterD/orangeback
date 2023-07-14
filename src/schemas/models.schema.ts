@@ -63,6 +63,18 @@ export type ModelCreatePayload = [
   string,
   number
 ]
+export type ModelUpdate = Omit<ModelCreation, 'modelId'>
+export type ModelUpdatePayload = [
+  string,
+  string,
+  number,
+  string,
+  number,
+  string,
+  string,
+  string,
+  number
+]
 export type RecommendedServicesCreatePayload = [number, number, number]
 
 export const updateModelsSchema = z.object({

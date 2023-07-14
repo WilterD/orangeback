@@ -58,7 +58,12 @@ export default async function getServiceById (serviceId: number): Promise<Servic
   const responseModels = await pool.query({
     text: `
       SELECT
-        m.model_id, m.brand, m.description, m.model_year
+        m.model_id, 
+        m.brand, 
+        m.description, 
+        m.model_year,
+        spm.mileage,
+        spm.use_time
       FROM
         services_per_models as spm, models as m
       WHERE
