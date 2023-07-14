@@ -33,7 +33,7 @@ const activitiesTotal = rows2.reduce((total, { cost_hour, hours_taken }) => {
 }, 0);
 
 // Calcular el monto total de la orden
-const totalCost = (productsTotal + activitiesTotal) - discountValue;
+const totalCost = ((productsTotal + activitiesTotal) + (productsTotal + activitiesTotal) * (discountValue / 100));
 
 
 
