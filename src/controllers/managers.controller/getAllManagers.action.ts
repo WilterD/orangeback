@@ -10,7 +10,7 @@ const getAllManagers = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const managers = executeGetAllManagers({
+    const managers = await executeGetAllManagers({
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       onlyAvailable: !!req.query?.onlyAvailable,
       includeManager: req.query?.includeManager as string ?? null
