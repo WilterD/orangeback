@@ -1,3 +1,5 @@
+BEGIN;
+
 -- Domains and Types
 CREATE DOMAIN dom_name VARCHAR(64);
 CREATE DOMAIN dom_email VARCHAR(64);
@@ -161,7 +163,7 @@ CREATE TABLE vehicles (
   sale_date DATE NOT NULL,
   color VARCHAR(32) NOT NULL,
   extra_descriptions VARCHAR(255) NOT NULL,
-  maintenance_summary VARCHAR(255) DEFAULT NULL,
+  maintenance_summary VARCHAR(255),
   agency_seller VARCHAR(64) NOT NULL,
   model_id VARCHAR(64) NOT NULL,
   client_dni dom_dni NOT NULL,
@@ -344,10 +346,19 @@ CREATE TABLE bills (
 
 -- 22
 
+CREATE TABLE card_banks (
+  card_number VARCHAR(32),
+  bank VARCHAR(32) NOT NULL,
+  created_at dom_created_at,
+  PRIMARY KEY (card_number)
+);
+
+-- 23
+
 CREATE TABLE payments (
   bill_id INTEGER,
   payment_id dom_payments_quantity,
-  cost FLOAT NOT NULL,
+  amount FLOAT NOT NULL,
   payment_date TIMESTAMP NOT NULL,
   payment_method type_payment_method NOT NULL,
   card_number VARCHAR(32) DEFAULT NULL,
@@ -355,17 +366,8 @@ CREATE TABLE payments (
   PRIMARY KEY (bill_id, payment_id),
   CONSTRAINT fk_pays_factura FOREIGN KEY (bill_id) REFERENCES bills(bill_id) 
     ON DELETE RESTRICT
-    ON UPDATE CASCADE
-);
-
--- 23
-
-CREATE TABLE card_banks (
-  card_number VARCHAR(32),
-  bank VARCHAR(32) NOT NULL,
-  created_at dom_created_at,
-  PRIMARY KEY (card_number),
-  CONSTRAINT fk_card_number FOREIGN KEY (card_number) REFERENCES payments(card_number) 
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_card_number FOREIGN KEY (card_number) REFERENCES card_banks(card_number)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
@@ -433,3 +435,5 @@ CREATE TABLE products_in_order_details (
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
+
+COMMIT;

@@ -126,7 +126,6 @@ const getClientsUpdateDataFromRequestBody = (req: Request): any[] => {
 
   const updatedClient = [
     name,
-    name,
     email,
     mainPhone,
     secondaryPhone

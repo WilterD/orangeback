@@ -27,3 +27,17 @@ INSERT INTO employees_specialties (employee_dni, service_id) SELECT '3234251223'
 [3,4,5] -- nuevo
 
 [1,2] -- lo que hay que eliminar
+
+-- Codigo de ejemplo a modificar la condicion para calcular el monto total de una factura 
+
+SELECT SUM(pod.price * pod.quantity * od2.hours_taken * od2.cost_hour) as total_bills_cost
+FROM bills b
+JOIN orders od ON b.order_id = od.order_id
+JOIN order_details od2 ON od.order_id = od2.order_id
+LEFT JOIN products_in_order_details pod 
+ON od2.service_id = pod.service_id 
+  AND od2.activity_id = pod.activity_id 
+  AND od2.order_id = pod.order_id
+LEFT JOIN activities a ON od2.service_id = a.service_id 
+  AND od2.activity_id = a.activity_id
+LEFT JOIN services s ON a.service_id = s.service_id;
