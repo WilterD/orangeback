@@ -318,9 +318,16 @@ INSERT INTO bookings_per_services (
 
 -- Orders
 
+INSERT INTO orders 
+  (responsible_dni, responsible_name, entry_time, estimated_departure, real_departure, booking_id, employee_dni, created_at)
+VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444555666',CURRENT_TIMESTAMP);
+
 -- Order_Details
 
 -- Bills
+
+INSERT INTO bills (bill_date, discount_value, total_cost, order_id) VALUES
+  (CURRENT_TIMESTAMP, 0.00, 100.00, 1);
 
 -- Payments
 
@@ -335,8 +342,6 @@ INSERT INTO payments (bill_id, payment_id, cost, payment_date, payment_method , 
   (8,8, 100, CURRENT_TIMESTAMP, 'TC', '3456789012345678'),
   (1,9, 100, CURRENT_TIMESTAMP, 'TC', '8901234567890123'),
   (1,10, 100, CURRENT_TIMESTAMP, 'TC', '2109876543210987');
-
-  
 
 -- Card_Banks
 
