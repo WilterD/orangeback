@@ -318,13 +318,47 @@ INSERT INTO bookings_per_services (
 
 -- Orders
 
+INSERT INTO orders 
+  (responsible_dni, responsible_name, entry_time, estimated_departure, real_departure, booking_id, employee_dni, created_at)
+VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444555666',CURRENT_TIMESTAMP);
+
 -- Order_Details
 
 -- Bills
 
+INSERT INTO bills (bill_date, discount_value, total_cost, order_id) VALUES
+  (CURRENT_TIMESTAMP, 0.00, 100.00, 1);
+
 -- Payments
 
+INSERT INTO payments (bill_id, payment_id, cost, payment_date, payment_method , card_number) VALUES
+  (1,1, 100, CURRENT_TIMESTAMP, 'TC', '1234567890123456'),
+  (2,2, 100, CURRENT_TIMESTAMP, 'T', '9876543210987654'),
+  (3,3, 100, CURRENT_TIMESTAMP, 'E', '4567890123456789'),
+  (4,4, 100, CURRENT_TIMESTAMP, 'D', '3210987654321098'),
+  (5,5, 100, CURRENT_TIMESTAMP, 'TD', '6543210987654321'),
+  (6,6, 100, CURRENT_TIMESTAMP, 'TC', '2345678901234567'),
+  (7,7, 100, CURRENT_TIMESTAMP, 'TC', '7654321098765432'),
+  (8,8, 100, CURRENT_TIMESTAMP, 'TC', '3456789012345678'),
+  (1,9, 100, CURRENT_TIMESTAMP, 'TC', '8901234567890123'),
+  (1,10, 100, CURRENT_TIMESTAMP, 'TC', '2109876543210987');
+
 -- Card_Banks
+
+INSERT INTO card_banks (card_number, bank, created_at) 
+VALUES 
+  ('1234567890123456', 'Banco Mercantil', '2023-07-12 10:30:00'),
+  ('9876543210987654', 'Banco Banesco', '2023-07-12 11:00:00'),
+  ('4567890123456789', 'Banco Provincial', '2023-07-12 12:30:00'),
+  ('3210987654321098', 'Banca amiga', '2023-07-12 13:00:00'),
+  ('6543210987654321', 'Banco Nacional de Credito', '2023-07-12 14:30:00'),
+  ('2345678901234567', 'Banco de Venezuela', '2023-07-12 15:00:00'),
+  ('7654321098765432', 'Banco Fondo Comun', '2023-07-12 16:30:00'),
+  ('3456789012345678', 'Banco del Tesoro', '2023-07-12 17:00:00'),
+  ('8901234567890123', 'Banco Delsur', '2023-07-12 18:30:00'),
+  ('2109876543210987', 'Banco de Bicentenario', '2023-07-12 19:00:00');
+
+
 
 -- Supply Lines
 

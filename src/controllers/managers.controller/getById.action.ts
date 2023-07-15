@@ -3,10 +3,10 @@ import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import getManagerById from './getManagerById'
 
-export const getById = async (
+export default async function getById (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response> {
   try {
     const manager = await getManagerById(req.params.managerDni)
     return res.status(STATUS.OK).json(manager)

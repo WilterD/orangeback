@@ -21,12 +21,16 @@ export const addAdmin = async (
     const newAdmin = await getAdminsDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO admins (name, email, password) VALUES ($1, $2, $3) RETURNING admin_id',
+      text: `INSERT INTO admins 
+      (name, email, password) 
+      VALUES ($1, $2, $3) RETURNING admin_id`,
       values: newAdmin
     })
     const insertedId: string = insertar.rows[0].admin_id
     const response = await pool.query({
-      text: 'SELECT * FROM admins WHERE admin_id = $1',
+      text: `SELECT * 
+                FROM admins 
+                WHERE admin_id = $1`,
       values: [insertedId]
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
