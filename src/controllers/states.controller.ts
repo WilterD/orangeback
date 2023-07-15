@@ -48,6 +48,7 @@ export const getStates = async (
               ORDER BY name LIMIT $1 OFFSET $2`,
       values: [size, offset]
     })
+
     const pagination: PaginateSettings = {
       total: Number(rows[0].count),
       page: Number(page),

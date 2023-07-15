@@ -9,5 +9,3 @@ LC_CTYPE = 'es_ES.UTF-8'
 TEMPLATE = template0;
 
 \c orangeback
-
-
