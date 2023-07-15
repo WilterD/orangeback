@@ -12,10 +12,13 @@ export const getNoEcoProductsByAgency = async (
   try {
     const response = await pool.query({
       text: `SELECT 
-      100 * COUNT(CASE WHEN is_ecological = FALSE THEN 1 END) / COUNT(*) AS non_ecological_percentage 
-    FROM products_per_agencies 
-      INNER JOIN products ON products_per_agencies.product_id = products.product_id 
-      WHERE agency_rif = $1`,
+      100 * SUM(CASE WHEN is_ecological = FALSE THEN on_stock ELSE 0 END) / NULLIF(SUM(on_stock), 0) AS non_ecological_percentage
+    FROM 
+      products_per_agencies 
+      INNER JOIN products ON products_per_agencies.product_id = products.product_id
+    WHERE 
+      on_stock > 0 AND
+      agency_rif = $1;`, 
       values: [req.params.agencyRif]
     })
     if (response.rowCount === 0) {
