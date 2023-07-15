@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { getNoEcoProductsByAgency } from '../../controllers/stast.controller/getNoEcoProductsByAgency'
-import { getNoEcoProductsAll } from '../../controllers/stast.controller/getNoEcoProductsAll'
+import { getNoEcoProductsByAgency } from '../../controllers/stats.controller/getNoEcoProductsByAgency'
+import { getNoEcoProductsAll } from '../../controllers/stats.controller/getNoEcoProductsAll'
 
 const router = Router()
 

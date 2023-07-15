@@ -19,7 +19,7 @@ import supplyLinesRouter from './api/supplyLines.routes'
 import cardBanksRouter from './api/cardBanks.routes'
 import billsRouter from './api/bills.routes'
 import paymentsRouter from './api/payments.routes'
-import statsRouter from './api/stast.routes'
+import statsRouter from './api/stats.routes'
 
 const router = express.Router()
 
