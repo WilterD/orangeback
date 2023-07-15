@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import {
-  getJobs,
-  getJobById,
-  addJob,
-  updateJob,
-  deleteJob
-} from '../../controllers/jobs.controller'
+import { getJobs } from '../../controllers/jobs.controller/get'
+import { getJobById } from '../../controllers/jobs.controller/getById'
+import { addJob } from '../../controllers/jobs.controller/add'
+import { updateJob } from '../../controllers/jobs.controller/update'
+import { deleteJob } from '../../controllers/jobs.controller/delete'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { jobsSchema } from '../../schemas/jobs.schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'

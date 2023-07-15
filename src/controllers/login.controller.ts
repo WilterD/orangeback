@@ -37,7 +37,7 @@ export const signIn = async (
 
     if (rows.length === 0 || !isPasswordCorrect) {
       throw new StatusError({
-        message: `Email o Contraseña Incorrecta`,
+        message: 'Email o Contraseña Incorrecta',
         statusCode: STATUS.BAD_REQUEST
       })
     }
@@ -55,7 +55,6 @@ export const signIn = async (
   } catch (error: unknown) {
     console.log(error)
     handleControllerError(error, res)
-
   }
   return undefined
 }
