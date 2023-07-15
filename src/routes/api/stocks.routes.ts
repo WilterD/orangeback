@@ -11,7 +11,7 @@ import { getProductsPerAgencies } from '../../controllers/stocks.controller/get'
 import { getAllProductsPerAgencies } from '../../controllers/stocks.controller/getAll'
 import { getProductPerAgencyById } from '../../controllers/stocks.controller/getById'
 import { addProductPerAgency } from '../../controllers/stocks.controller/add'
-import { updatedProductPerAgencies } from '../../controllers/stocks.controller/update'
+import { updatedProductPerAgency } from '../../controllers/stocks.controller/update'
 import { deleteProductPerAgency } from '../../controllers/stocks.controller/delete'
 
 const router = Router()
@@ -21,7 +21,7 @@ router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getProductsPerAg
 router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllProductsPerAgencies)
 router.get('/products/:productId/agencies/:agencyRif', tokenGuard(), verifyToken(), getProductPerAgencyById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createStockSchema), addProductPerAgency)
-router.put('/products/:productId/agencies/:agencyRif', tokenGuard(), verifyToken(), schemaGuard(updateStockSchema), updatedProductPerAgencies)
+router.put('/products/:productId/agencies/:agencyRif', tokenGuard(), verifyToken(), schemaGuard(updateStockSchema), updatedProductPerAgency)
 router.delete('/products/:productId/agencies/:agencyRif', tokenGuard(), verifyToken(), deleteProductPerAgency)
 
 export default router

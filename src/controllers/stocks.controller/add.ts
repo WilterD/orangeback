@@ -4,7 +4,7 @@ import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import camelizeObject from '../../utils/camelizeObject'
 
-const getProductPerAgencysCreateDataFromRequestBody = (req: Request): any[] => {
+const getProductPerAgencyCreateDataFromRequestBody = (req: Request): any[] => {
   const {
     agencyRif,
     productId,
@@ -27,7 +27,7 @@ export const addProductPerAgency = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newProductPerAgency = getProductPerAgencysCreateDataFromRequestBody(req)
+    const newProductPerAgency = getProductPerAgencyCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
       text: 'INSERT INTO products_per_agencies (product_id, agency_rif, on_stock,max_capacity,min_capacity) VALUES ($1,$2,$3,$4,$5,) RETURNING product_id, agency_rif',

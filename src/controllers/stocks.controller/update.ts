@@ -4,31 +4,31 @@ import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import { StatusError } from '../../utils/responses/status-error'
 
-const getProductPerAgenciesUpdateDataFromRequestBody = (req: Request): any[] => {
+const getProductPerAgencyUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
     onStock,
     maxCapacity,
     minCapacity
   } = req.body
 
-  const updatedProductPerAgencies = [
+  const updatedProductPerAgency = [
     onStock,
     maxCapacity,
     minCapacity
   ]
-  return updatedProductPerAgencies
+  return updatedProductPerAgency
 }
 
-export const updatedProductPerAgencies = async (
+export const updatedProductPerAgency = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedProductPerAgencies = getProductPerAgenciesUpdateDataFromRequestBody(req)
-    updatedProductPerAgencies.push(req.params.productId, req.params.agencyId)
+    const updatedProductPerAgency = getProductPerAgencyUpdateDataFromRequestBody(req)
+    updatedProductPerAgency.push(req.params.productId, req.params.agencyId)
     const response = await pool.query({
       text: 'UPDATE products_per_agencies SET on_stock = $1, max_capacity = $2, min_capacity = $3 WHERE product_id = $4 AND agency_rif = $5',
-      values: updatedProductPerAgencies
+      values: updatedProductPerAgency
     })
     if (response.rowCount === 0) {
       throw new StatusError({
