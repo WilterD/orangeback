@@ -17,8 +17,8 @@ export const getNoEcoProductsByAgency = async (
       products_per_agencies 
       INNER JOIN products ON products_per_agencies.product_id = products.product_id
     WHERE 
-      on_stock > 0 AND
-      agency_rif = $1;`, 
+    agency_rif = $1 AND
+    on_stock > 0`, 
       values: [req.params.agencyRif]
     })
     if (response.rowCount === 0) {
