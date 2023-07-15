@@ -35,8 +35,6 @@ const activitiesTotal = rows2.reduce((total, { cost_hour, hours_taken }) => {
 // Calcular el monto total de la orden
 const totalCost = (productsTotal + activitiesTotal);
 
-
-
   // Agregar el monto total a la lista de valores de la factura
   newBill.push(totalCost);
 
