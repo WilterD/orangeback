@@ -19,11 +19,14 @@ export const getBills = async (
     }
 
     const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM bills'
+      text: `SELECT COUNT(*)
+                 FROM bills`
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM bills ORDER BY bill_id LIMIT $1 OFFSET $2',
+      text: `SELECT *
+               FROM bills 
+               ORDER BY bill_id LIMIT $1 OFFSET $2`,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
