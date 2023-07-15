@@ -1,50 +1,50 @@
-import { Request, Response } from "express";
-import { pool } from "../database";
-import { DEFAULT_PAGE, STATUS } from "../utils/constants";
-import { PaginateSettings, paginatedItemsResponse } from "../utils/responses";
-import { StatusError } from "../utils/responses/status-error";
-import { handleControllerError } from "../utils/responses/handleControllerError";
-import camelizeObject from "../utils/camelizeObject";
+import { Request, Response } from 'express'
+import { pool } from '../database'
+import { DEFAULT_PAGE, STATUS } from '../utils/constants'
+import { PaginateSettings, paginatedItemsResponse } from '../utils/responses'
+import { StatusError } from '../utils/responses/status-error'
+import { handleControllerError } from '../utils/responses/handleControllerError'
+import camelizeObject from '../utils/camelizeObject'
 
 export const getModels = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { page = DEFAULT_PAGE.page, size = DEFAULT_PAGE.size } = req.query;
+  const { page = DEFAULT_PAGE.page, size = DEFAULT_PAGE.size } = req.query
 
   try {
-    let offset = (Number(page) - 1) * Number(size);
+    let offset = (Number(page) - 1) * Number(size)
 
     if (Number(page) < 1) {
-      offset = 0;
+      offset = 0
     }
 
     const { rows } = await pool.query({
       text: `SELECT COUNT(*) 
-              FROM models`,
-    });
+              FROM models`
+    })
 
     const response = await pool.query({
       text: `SELECT * 
                 FROM models 
                 ORDER BY model_id LIMIT $1 OFFSET $2`,
-      values: [size, offset],
-    });
+      values: [size, offset]
+    })
     const pagination: PaginateSettings = {
       total: Number(rows[0].count),
       page: Number(page),
-      perPage: Number(size),
-    };
+      perPage: Number(size)
+    }
     return paginatedItemsResponse(
       res,
       STATUS.OK,
       camelizeObject(response.rows) as any,
       pagination
-    );
+    )
   } catch (error: unknown) {
-    return handleControllerError(error, res);
+    return handleControllerError(error, res)
   }
-};
+}
 
 export const getModelsById = async (
   req: Request,
@@ -55,19 +55,19 @@ export const getModelsById = async (
       text: `SELECT * 
               FROM models 
               WHERE model_id = $1`,
-      values: [req.params.modelId],
-    });
+      values: [req.params.modelId]
+    })
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.modelId}`,
-        statusCode: STATUS.NOT_FOUND,
-      });
+        statusCode: STATUS.NOT_FOUND
+      })
     }
-    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]));
+    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
-    return handleControllerError(error, res);
+    return handleControllerError(error, res)
   }
-};
+}
 
 const getModelsCreateDataFromRequestBody = (req: Request): any[] => {
   const {
@@ -80,8 +80,8 @@ const getModelsCreateDataFromRequestBody = (req: Request): any[] => {
     refrigerantType,
     engineOilType,
     oilBox,
-    octane,
-  } = req.body;
+    octane
+  } = req.body
   const newModel = [
     modelId,
     brand,
@@ -92,17 +92,17 @@ const getModelsCreateDataFromRequestBody = (req: Request): any[] => {
     refrigerantType,
     engineOilType,
     oilBox,
-    octane,
-  ];
-  return newModel;
-};
+    octane
+  ]
+  return newModel
+}
 
 export const addModel = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const newModel = getModelsCreateDataFromRequestBody(req);
+    const newModel = getModelsCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
       text: `INSERT INTO models (
@@ -111,20 +111,20 @@ export const addModel = async (
         engine_oil_type, oil_box, octane) 
       VALUES 
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING model_id`,
-      values: newModel,
-    });
-    const insertedId: string = insertar.rows[0].model_id;
+      values: newModel
+    })
+    const insertedId: string = insertar.rows[0].model_id
     const response = await pool.query({
       text: `SELECT * 
               FROM models 
               WHERE model_id = $1`,
-      values: [insertedId],
-    });
-    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]));
+      values: [insertedId]
+    })
+    return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
-    return handleControllerError(error, res);
+    return handleControllerError(error, res)
   }
-};
+}
 
 const getModelsUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
@@ -136,8 +136,8 @@ const getModelsUpdateDataFromRequestBody = (req: Request): any[] => {
     refrigerantType,
     engineOilType,
     oilBox,
-    octane,
-  } = req.body;
+    octane
+  } = req.body
 
   const updateModel = [
     brand,
@@ -148,18 +148,18 @@ const getModelsUpdateDataFromRequestBody = (req: Request): any[] => {
     refrigerantType,
     engineOilType,
     oilBox,
-    octane,
-  ];
-  return updateModel;
-};
+    octane
+  ]
+  return updateModel
+}
 
 export const updateModel = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const updateModel = getModelsUpdateDataFromRequestBody(req);
-    updateModel.push(req.params.modelId);
+    const updateModel = getModelsUpdateDataFromRequestBody(req)
+    updateModel.push(req.params.modelId)
     const response = await pool.query({
       text: `UPDATE 
           models 
@@ -175,21 +175,21 @@ export const updateModel = async (
               octane = $9 
             WHERE 
               model_id = $10`,
-      values: updateModel,
-    });
+      values: updateModel
+    })
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.modelId}`,
-        statusCode: STATUS.NOT_FOUND,
-      });
+        statusCode: STATUS.NOT_FOUND
+      })
     }
     return res
       .status(STATUS.OK)
-      .json({ message: `Modelo modificado exitosamente` });
+      .json({ message: 'Modelo modificado exitosamente' })
   } catch (error: unknown) {
-    return handleControllerError(error, res);
+    return handleControllerError(error, res)
   }
-};
+}
 
 export const deleteModel = async (
   req: Request,
@@ -199,18 +199,18 @@ export const deleteModel = async (
     const response = await pool.query({
       text: `DELETE FROM models 
               WHERE model_id = $1`,
-      values: [req.params.modelId],
-    });
+      values: [req.params.modelId]
+    })
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.modelId}`,
-        statusCode: STATUS.NOT_FOUND,
-      });
+        statusCode: STATUS.NOT_FOUND
+      })
     }
     return res
       .status(STATUS.OK)
-      .json({ message: `Modelo eliminado exitosamente` });
+      .json({ message: 'Modelo eliminado exitosamente' })
   } catch (error: unknown) {
-    return handleControllerError(error, res);
+    return handleControllerError(error, res)
   }
-};
+}
