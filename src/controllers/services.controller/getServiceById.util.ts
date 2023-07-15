@@ -17,7 +17,7 @@ export default async function getServiceById (serviceId: number): Promise<Servic
   }
 
   const responseActivities = await pool.query({
-    text: 'SELECT activity_id, description, cost_hour, created_at FROM activities WHERE service_id = $1',
+    text: 'SELECT a.activity_id, a.description, a.cost_hour, a.created_at, COUNT(od.order_id) as total_orders FROM activities a LEFT JOIN order_details od ON a.service_id = od.service_id AND a.activity_id = od.activity_id WHERE a.service_id = $1 GROUP BY a.activity_id, a.description, a.cost_hour, a.created_at',
     values: [serviceId]
   })
   const responseBookings = await pool.query({

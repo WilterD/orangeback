@@ -1,11 +1,11 @@
 import { Router } from 'express'
-import {
-  getEmployeesCoordinateServices,
-  getEmployeeCoordinateServiceById,
-  addEmployeeCoordinateService,
-  updateEmployeeCoordinateService,
-  deleteEmployeeCoordinateService
-} from '../../controllers/employeesCoordinateServices.controller'
+
+import { getEmployeesCoordinateServices} from '../../controllers/employeesCoordinateServices.controller.controller/get'
+import { getEmployeeCoordinateServiceById } from '../../controllers/employeesCoordinateServices.controller.controller/getById'
+import { addEmployeeCoordinateService } from '../../controllers/employeesCoordinateServices.controller.controller/add'
+import { updateEmployeeCoordinateService } from '../../controllers/employeesCoordinateServices.controller.controller/update'
+import { deleteEmployeeCoordinateService } from '../../controllers/employeesCoordinateServices.controller.controller/delete'
+
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import {
   createEmployeesCoordinateServicesSchema,

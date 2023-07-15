@@ -14,7 +14,10 @@ export const getAllStates = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { rows } = await pool.query({ text: 'SELECT * FROM states ORDER BY name' })
+    const { rows } = await pool.query({ text: `
+    SELECT * 
+    FROM states 
+    ORDER BY name` })
     return res.status(STATUS.OK).json(camelizeObject(rows))
   } catch (error: unknown) {
     return handleControllerError(error, res)
@@ -35,13 +38,17 @@ export const getStates = async (
     }
 
     const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM states'
+      text: `SELECT COUNT(*) 
+              FROM states`
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM states ORDER BY name LIMIT $1 OFFSET $2',
+      text: `SELECT * 
+              FROM states 
+              ORDER BY name LIMIT $1 OFFSET $2`,
       values: [size, offset]
     })
+
     const pagination: PaginateSettings = {
       total: Number(rows[0].count),
       page: Number(page),
@@ -59,7 +66,9 @@ export const getStateById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM states WHERE state_id = $1',
+      text: `SELECT *
+                   FROM states 
+                   WHERE state_id = $1`,
       values: [req.params.stateId]
     })
     if (response.rowCount === 0) {
@@ -88,12 +97,15 @@ export const addState = async (
     const newState = getStatesDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO states (name) VALUES ($1) RETURNING state_id',
+      text: `INSERT INTO states (name) 
+              VALUES ($1) RETURNING state_id`,
       values: newState
     })
     const insertedId: string = insertar.rows[0].state_id
     const response = await pool.query({
-      text: 'SELECT * FROM states WHERE state_id = $1',
+      text: `SELECT * 
+                FROM states 
+                WHERE state_id = $1`,
       values: [insertedId]
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
@@ -110,7 +122,9 @@ export const updateState = async (
     const updatedState = getStatesDataFromRequestBody(req)
     updatedState.push(req.params.stateId)
     const response = await pool.query({
-      text: 'UPDATE states SET name = $1 WHERE state_id = $2',
+      text: `UPDATE states 
+              SET name = $1 
+              WHERE state_id = $2`,
       values: updatedState
     })
     if (response.rowCount === 0) {
@@ -119,7 +133,7 @@ export const updateState = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Estado Modificado Exitosamente' })
+    return res.status(STATUS.OK).json({ message: `Estado Modificado Exitosamente` })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
@@ -131,7 +145,8 @@ export const deleteState = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM states WHERE state_id = $1',
+      text: `DELETE FROM states 
+              WHERE state_id = $1`,
       values: [req.params.stateId]
     })
     if (response.rowCount === 0) {
