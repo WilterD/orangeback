@@ -203,12 +203,12 @@ CREATE TABLE activities (
 -- 14
 
 CREATE TABLE services_per_models (
-  service_id INTEGER NOT NULL,
-  model_id VARCHAR(64) NOT NULL,
-  mileage FLOAT NOT NULL,
+  service_id INTEGER,
+  model_id VARCHAR(64),
+  mileage FLOAT,
   use_time INTEGER NOT NULL,
   created_at dom_created_at,
-  PRIMARY KEY (service_id, model_id, mileage, use_time),
+  PRIMARY KEY (service_id, model_id, mileage),
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,

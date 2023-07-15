@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const isRecommended = z.object({
+export const isRecommended = z.object({
   serviceId: z.number().min(1, 'El id de servicio debe ser mayor o igual a 1'),
   mileage: z.number().nonnegative('El kilometraje no puede ser negativo'),
   useTime: z.number().nonnegative('El tiempo de uso no puede ser negativo')
