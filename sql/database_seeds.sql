@@ -393,4 +393,17 @@ INSERT INTO supply_lines (
 
 -- Products_Per_Agencies
 
+INSERT INTO products_per_agencies (
+  product_id,
+  agency_rif,
+  on_stock,
+  max_capacity,
+  min_capacity
+) VALUES 
+  ('12345678', '1', 100, 500, 50),
+  ( '1234567', '2', 50, 200, 20),
+  ('123456', '3', 200, 800, 80),
+  ('12345', '4', 150, 600, 60),
+  ('1234', '5', 300, 1200, 120);
+
 -- Products_In_Order_Details
