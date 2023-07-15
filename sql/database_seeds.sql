@@ -404,8 +404,8 @@ INSERT INTO Products(
   ('123456','neumatico br12 mitsubishi','un complemento del vehiculo','minerales atlantico', false, 140, 3),
   ('12345','filtro','un complemento del vehiculo','minerales atlantico', true, 240, 4),
   ('1234','motor','un complemento del vehiculo','minerales atlantico', false, 300, 5);
--- Products_Per_Agencies
 
+-- Products_Per_Agencies
 INSERT INTO products_per_agencies (
   product_id,
   agency_rif,
@@ -418,4 +418,18 @@ INSERT INTO products_per_agencies (
   ('123456', '3', 200, 800, 80),
   ('12345', '4', 150, 600, 60),
   ('1234', '5', 300, 1200, 120);
--- Products_In_Order_Details
+
+-- Products_In_Order_Details  
+INSERT INTO products_in_order_details (
+    service_id,
+    activity_id,
+    order_id,
+    product_id,
+    price,
+    quantity
+) VALUES 
+  (1, 1, 1, '12345678', 50, 3);
+
+
+
+

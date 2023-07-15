@@ -1,54 +1,52 @@
-import { pool } from "../../database";
-import { STATUS } from "../../utils/constants";
-import camelizeObject from "../../utils/camelizeObject";
-import { StatusError } from "../../utils/responses/status-error";
-import { Bill, Payment, OrderDetails, OrderDetailsRaw } from "./types";
+import { pool } from '../../database'
+import { STATUS } from '../../utils/constants'
+import camelizeObject from '../../utils/camelizeObject'
+import { StatusError } from '../../utils/responses/status-error'
+import { Bill, Payment, OrderDetails, OrderDetailsRaw } from './types'
 
-export default async function getBillById(billId: number): Promise<Bill> {
+export default async function getBillById (billId: number): Promise<Bill> {
   const response = await pool.query({
-    text: "SELECT * FROM bills WHERE bill_id = $1",
-    values: [billId],
-  });
+    text: 'SELECT * FROM bills WHERE bill_id = $1',
+    values: [billId]
+  })
 
   if (response.rowCount === 0) {
     throw new StatusError({
       message: `No se pudo encontrar el registro de: ${billId}`,
-      statusCode: STATUS.NOT_FOUND,
-    });
+      statusCode: STATUS.NOT_FOUND
+    })
   }
 
-  const bill = camelizeObject(response.rows[0]) as unknown as Bill;
+  const bill = camelizeObject(response.rows[0]) as unknown as Bill
 
-  bill.payments = await getPaymentsByBillId(bill.billId);
-  bill.items = await getDetailsOrdersByBillId(bill.billId);
+  bill.payments = await getPaymentsByBillId(bill.billId)
+  bill.items = await getDetailsOrdersByBillId(bill.billId)
 
-  return bill;
+  return bill
 }
 
-export async function getPaymentsByBillId(billId: number): Promise<Payment[]> {
+export async function getPaymentsByBillId (billId: number): Promise<Payment[]> {
   const response = await pool.query({
-    text: "SELECT * FROM payments WHERE bill_id = $1",
-    values: [billId],
-  });
+    text: 'SELECT * FROM payments WHERE bill_id = $1',
+    values: [billId]
+  })
 
-  return camelizeObject(response.rows) as Payment[];
+  return camelizeObject(response.rows) as Payment[]
 }
 
-export async function getDetailsOrdersByBillId(billId: number): Promise<OrderDetails[]> {
-
-  const orderDetailsRowLines = await getOrderDetailsRawByBillId(billId);
-  
+export async function getDetailsOrdersByBillId (billId: number): Promise<OrderDetails[]> {
+  const orderDetailsRowLines = await getOrderDetailsRawByBillId(billId)
 
   return orderDetailsRowLines.map((item) => {
     return {
       description: `Horas de trabajo de ${item.employeeName} en ${item.activityDescription}`,
       price: item.costHour,
-      quantity: item.hoursTaken,
-    };
-  });
+      quantity: item.hoursTaken
+    }
+  })
 }
 
-async function  getOrderDetailsRawByBillId(
+async function getOrderDetailsRawByBillId (
   billId: number
 ): Promise<OrderDetailsRaw[]> {
   const response = await pool.query({
@@ -59,11 +57,11 @@ async function  getOrderDetailsRawByBillId(
            INNER JOIN activities a ON od.service_id = a.service_id AND od.activity_id = a.activity_id 
            INNER JOIN employees e ON od.employee_dni = e.employee_dni
            WHERE b.bill_id = $1`,
-    values: [billId],
-  });
+    values: [billId]
+  })
 
   const orderDetailsRowLines = camelizeObject(
     response.rows
-  ) as OrderDetailsRaw[];
-  return orderDetailsRowLines;
+  ) as OrderDetailsRaw[]
+  return orderDetailsRowLines
 }

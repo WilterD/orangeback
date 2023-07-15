@@ -38,7 +38,7 @@ export const updateProduct = async (
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.productId}`,
+        message: `No se pudo encontrar el producto de id: ${req.params.productId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
