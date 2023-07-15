@@ -6,15 +6,15 @@ import camelizeObject from '../../utils/camelizeObject'
 
 const getProductPerAgencyCreateDataFromRequestBody = (req: Request): any[] => {
   const {
-    agencyRif,
     productId,
+    agencyRif,
     onStock,
     maxCapacity,
     minCapacity
   } = req.body
   const newProductPerAgency = [
-    agencyRif,
     productId,
+    agencyRif,
     onStock,
     maxCapacity,
     minCapacity
@@ -30,7 +30,7 @@ export const addProductPerAgency = async (
     const newProductPerAgency = getProductPerAgencyCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO products_per_agencies (product_id, agency_rif, on_stock,max_capacity,min_capacity) VALUES ($1,$2,$3,$4,$5) RETURNING product_id, agency_rif',
+      text: 'INSERT INTO products_per_agencies (product_id, agency_rif, on_stock, max_capacity, min_capacity) VALUES ($1,$2,$3,$4,$5) RETURNING product_id, agency_rif',
       values: newProductPerAgency
     })
     console.log(insertar)
