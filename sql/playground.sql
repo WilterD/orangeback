@@ -28,6 +28,9 @@ INSERT INTO employees_specialties (employee_dni, service_id) SELECT '3234251223'
 
 [1,2] -- lo que hay que eliminar
 
+SELECT
+p.product_id,
+p.description,
 
 INSERT INTO order_details (service_id, activity_id, order_id, cost_hour, hours_taken, employee_dni, created_at)
 VALUES (1, 2, 6, 25, 3, '444555666', '2023-07-12 10:30:00');

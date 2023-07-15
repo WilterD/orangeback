@@ -390,7 +390,32 @@ INSERT INTO supply_lines (
   ('Aceite de motor');
 
 -- Products
-
+INSERT INTO Products(
+  product_id,
+  short_name_product,
+  description,
+  provider,
+  is_ecological,
+  price,
+  supply_line_id  
+)VALUES
+  ('12345678','agua','un liquido','minerales atlantico', true, 200, 1),
+  ('1234567','aceite', 'un liquido que le da energia al vehiculo', 'minerales atlantico', true, 200, 2),
+  ('123456','neumatico br12 mitsubishi','un complemento del vehiculo','minerales atlantico', false, 140, 3),
+  ('12345','filtro','un complemento del vehiculo','minerales atlantico', true, 240, 4),
+  ('1234','motor','un complemento del vehiculo','minerales atlantico', false, 300, 5);
 -- Products_Per_Agencies
 
+INSERT INTO products_per_agencies (
+  product_id,
+  agency_rif,
+  on_stock,
+  max_capacity,
+  min_capacity
+) VALUES 
+  ('12345678', '1', 100, 500, 50),
+  ( '1234567', '2', 50, 200, 20),
+  ('123456', '3', 200, 800, 80),
+  ('12345', '4', 150, 600, 60),
+  ('1234', '5', 300, 1200, 120);
 -- Products_In_Order_Details

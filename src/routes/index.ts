@@ -16,6 +16,8 @@ import servicesRouter from './api/services.routes'
 import employeesCoordServicesRouter from './api/employeesCoordinateServices.routes'
 import bookingsRouter from './api/bookings.routes'
 import supplyLinesRouter from './api/supplyLines.routes'
+import productsRouter from './api/products.routes'
+import stocksRouter from './api/stocks.routes'
 import cardBanksRouter from './api/cardBanks.routes'
 import billsRouter from './api/bills.routes'
 import paymentsRouter from './api/payments.routes'
@@ -38,6 +40,8 @@ router.use('/services', servicesRouter)
 router.use('/employees-coordinate-services', employeesCoordServicesRouter)
 router.use('/bookings', bookingsRouter)
 router.use('/supply-lines', supplyLinesRouter)
+router.use('/products', productsRouter)
+router.use('/stocks', stocksRouter)
 router.use('/cardbanks', cardBanksRouter)
 router.use('/bills', billsRouter)
 router.use('/payments', paymentsRouter)
