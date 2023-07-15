@@ -1,3 +1,5 @@
+BEGIN;
+
 -- Domains and Types
 CREATE DOMAIN dom_name VARCHAR(64);
 CREATE DOMAIN dom_email VARCHAR(64);
@@ -161,7 +163,7 @@ CREATE TABLE vehicles (
   sale_date DATE NOT NULL,
   color VARCHAR(32) NOT NULL,
   extra_descriptions VARCHAR(255) NOT NULL,
-  maintenance_summary VARCHAR(255) DEFAULT NULL,
+  maintenance_summary VARCHAR(255),
   agency_seller VARCHAR(64) NOT NULL,
   model_id VARCHAR(64) NOT NULL,
   client_dni dom_dni NOT NULL,
@@ -231,8 +233,6 @@ CREATE TABLE employees_specialties (
 );
 
 -- 16
-
-
 
 CREATE TABLE employees_coordinate_services (
   employee_dni dom_dni NOT NULL,
@@ -344,7 +344,6 @@ CREATE TABLE bills (
 
 -- 22
 
-
 CREATE TABLE card_banks (
   card_number VARCHAR(32),
   bank VARCHAR(32) NOT NULL,
@@ -357,7 +356,7 @@ CREATE TABLE card_banks (
 CREATE TABLE payments (
   bill_id INTEGER,
   payment_id dom_payments_quantity,
-  cost FLOAT NOT NULL,
+  amount FLOAT NOT NULL,
   payment_date TIMESTAMP NOT NULL,
   payment_method type_payment_method NOT NULL,
   card_number VARCHAR(32) DEFAULT NULL,
@@ -370,13 +369,6 @@ CREATE TABLE payments (
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
-
-
-
-
-
-
-
 
 -- 24
 
@@ -441,3 +433,5 @@ CREATE TABLE products_in_order_details (
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
+
+COMMIT;

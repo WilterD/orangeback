@@ -18,12 +18,16 @@ export const addCity = async (
     const newCity = getCitiesDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO cities (name, state_id) VALUES ($1, $2) RETURNING city_id',
+      text: `INSERT INTO 
+              cities (name, state_id)
+               VALUES ($1, $2) RETURNING city_id`,
       values: newCity
     })
     const insertedId: string = insertar.rows[0].city_id
     const response = await pool.query({
-      text: 'SELECT * FROM cities WHERE city_id = $1',
+      text: `SELECT * 
+              FROM cities 
+              WHERE city_id = $1`,
       values: [insertedId]
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))

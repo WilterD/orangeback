@@ -1,11 +1,14 @@
 import { Request, Response } from 'express'
 import { pool } from '../../database'
 import { DEFAULT_PAGE, STATUS } from '../../utils/constants'
-import { PaginateSettings, paginatedItemsResponse } from '../../utils/responses'
+import {
+  PaginateSettings,
+  paginatedItemsResponse
+} from '../../utils/responses'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import camelizeObject from '../../utils/camelizeObject'
 
-export const getAdmins = async (
+export const getManagers = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -19,14 +22,11 @@ export const getAdmins = async (
     }
 
     const { rows } = await pool.query({
-      text: `SELECT COUNT(*) 
-                  FROM admins`
+      text: 'SELECT COUNT(*) FROM managers'
     })
 
     const response = await pool.query({
-      text: `SELECT admin_id, name, email 
-              FROM admins 
-              ORDER BY name LIMIT $1 OFFSET $2`,
+      text: 'SELECT * FROM managers ORDER BY name LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
@@ -39,3 +39,5 @@ export const getAdmins = async (
     return handleControllerError(error, res)
   }
 }
+
+export default getManagers

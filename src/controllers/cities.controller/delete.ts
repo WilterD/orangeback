@@ -10,7 +10,8 @@ export const deleteCity = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM cities WHERE city_id = $1',
+      text: `DELETE FROM cities 
+                WHERE city_id = $1`,
       values: [req.params.cityId]
     })
     if (response.rowCount === 0) {
