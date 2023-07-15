@@ -15,12 +15,13 @@ import vehiclesRouter from './api/vehicles.routes'
 import servicesRouter from './api/services.routes'
 import employeesCoordServicesRouter from './api/employeesCoordinateServices.routes'
 import bookingsRouter from './api/bookings.routes'
+import ordersRouter from './api/orders.routes'
+import billsRouter from './api/bills.routes'
+import cardBanksRouter from './api/cardBanks.routes'
+import paymentsRouter from './api/payments.routes'
 import supplyLinesRouter from './api/supplyLines.routes'
 import productsRouter from './api/products.routes'
 import stocksRouter from './api/stocks.routes'
-import cardBanksRouter from './api/cardBanks.routes'
-import billsRouter from './api/bills.routes'
-import paymentsRouter from './api/payments.routes'
 
 const router = express.Router()
 
@@ -39,11 +40,12 @@ router.use('/vehicles', vehiclesRouter)
 router.use('/services', servicesRouter)
 router.use('/employees-coordinate-services', employeesCoordServicesRouter)
 router.use('/bookings', bookingsRouter)
+router.use('/orders', ordersRouter)
+router.use('/bills', billsRouter)
+router.use('/card-banks', cardBanksRouter)
+router.use('/payments', paymentsRouter)
 router.use('/supply-lines', supplyLinesRouter)
 router.use('/products', productsRouter)
 router.use('/stocks', stocksRouter)
-router.use('/cardbanks', cardBanksRouter)
-router.use('/bills', billsRouter)
-router.use('/payments', paymentsRouter)
 
 export default router
