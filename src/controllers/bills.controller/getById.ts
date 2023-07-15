@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
+import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
-import getBillByIdExecute from './getBillById.utils'
+import { StatusError } from '../../utils/responses/status-error'
+import camelizeObject from '../../utils/camelizeObject'
 
 export const getBillById = async (
   req: Request,
