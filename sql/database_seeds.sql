@@ -391,6 +391,21 @@ INSERT INTO supply_lines (
 
 -- Products
 
+INSERT INTO Products(
+  product_id,
+  short_name_product,
+  description,
+  provider,
+  is_ecological,
+  price,
+  supply_line_id  
+)VALUES
+  ('12345678','agua','un liquido','minerales atlantico', true, 200, 1),
+  ('1234567','aceite', 'un liquido que le da energia al vehiculo', 'minerales atlantico', true, 200, 2),
+  ('123456','neumatico br12 mitsubishi','un complemento del vehiculo','minerales atlantico', false, 140, 3),
+  ('12345','filtro','un complemento del vehiculo','minerales atlantico', true, 240, 4),
+  ('1234','motor','un complemento del vehiculo','minerales atlantico', false, 300, 5);
+
 -- Products_Per_Agencies
 
 INSERT INTO products_per_agencies (
