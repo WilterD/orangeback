@@ -11,7 +11,9 @@ export const getAdminById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT admin_id, name, email FROM admins WHERE admin_id = $1',
+      text: `SELECT admin_id, name, email 
+                FROM admins 
+                WHERE admin_id = $1`,
       values: [req.params.adminId]
     })
     if (response.rowCount === 0) {

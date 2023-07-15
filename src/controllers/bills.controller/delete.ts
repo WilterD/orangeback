@@ -9,20 +9,22 @@ export const deleteBill = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const response = await pool.query({
-      text: `DELETE FROM 
-              bills 
-              WHERE bill_id = $1`,
-      values: [req.params.billId]
-    })
-    if (response.rowCount === 0) {
-      throw new StatusError({
-        message: `No se pudo encontrar el registro de id: ${req.params.billId}`,
-        statusCode: STATUS.NOT_FOUND
-      })
-    }
+    await deleteBillById(Number(req.params.billId))
     return res.status(STATUS.OK).json({ message: 'Factura eliminada Correctamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
+  }
+}
+
+async function deleteBillById (billId: number): Promise<void> {
+  const response = await pool.query({
+    text: 'DELETE FROM bills WHERE bill_id = $1',
+    values: [billId]
+  })
+  if (response.rowCount === 0) {
+    throw new StatusError({
+      message: `No se pudo encontrar el registro de id: ${billId}`,
+      statusCode: STATUS.NOT_FOUND
+    })
   }
 }

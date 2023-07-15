@@ -13,8 +13,8 @@ import { deleteBill } from '../../controllers/bills.controller/delete'
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-router.get('/',tokenGuard(), verifyToken(), paginationGuard(), getBills)
-router.get('/:billId',tokenGuard(), verifyToken(), getBillById)
+router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getBills)
+router.get('/:billId', tokenGuard(), verifyToken(), getBillById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createBillsSchema), addBill)
 router.put('/:billId', tokenGuard(), verifyToken(), schemaGuard(updateBillsSchema), updateBill)
 router.delete('/:billId', tokenGuard(), verifyToken(), deleteBill)

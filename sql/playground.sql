@@ -32,6 +32,8 @@ INSERT INTO employees_specialties (employee_dni, service_id) SELECT '3234251223'
 INSERT INTO order_details (service_id, activity_id, order_id, cost_hour, hours_taken, employee_dni, created_at)
 VALUES (1, 2, 6, 25, 3, '444555666', '2023-07-12 10:30:00');
 
+-- Codigo de ejemplo a modificar la condicion para calcular el monto total de una factura 
+
 SELECT SUM(pod.price * pod.quantity * od2.hours_taken * od2.cost_hour) as total_bills_cost
 FROM bills b
 JOIN orders od ON b.order_id = od.order_id

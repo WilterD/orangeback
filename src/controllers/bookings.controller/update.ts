@@ -54,7 +54,6 @@ export const updateBooking = async (
         deleteServices.push(elemento)
       }
     })
-    console.log(deleteServices)
     if (deleteServices.length !== 0) {
       for (let i = 0; i < deleteServices.length; i++) {
         await pool.query({
