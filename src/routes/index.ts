@@ -19,6 +19,7 @@ import supplyLinesRouter from './api/supplyLines.routes'
 import cardBanksRouter from './api/cardBanks.routes'
 import billsRouter from './api/bills.routes'
 import paymentsRouter from './api/payments.routes'
+import statsRouter from './api/stast.routes'
 
 const router = express.Router()
 
@@ -41,5 +42,6 @@ router.use('/supply-lines', supplyLinesRouter)
 router.use('/cardbanks', cardBanksRouter)
 router.use('/bills', billsRouter)
 router.use('/payments', paymentsRouter)
+router.use('/stats', statsRouter)
 
 export default router
