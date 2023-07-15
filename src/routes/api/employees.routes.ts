@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { getEmployees} from '../../controllers/employees.controller/get'
+import { getEmployees } from '../../controllers/employees.controller/get'
 import { getEmployeeById } from '../../controllers/employees.controller/getById'
 import { addEmployee } from '../../controllers/employees.controller/add'
 import { updateEmployee } from '../../controllers/employees.controller/update'

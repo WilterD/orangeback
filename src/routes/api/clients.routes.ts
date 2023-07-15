@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { getAllClients} from '../../controllers/clients.controller/getAll'
-import { getClients} from '../../controllers/clients.controller/get'
+import { getAllClients } from '../../controllers/clients.controller/getAll'
+import { getClients } from '../../controllers/clients.controller/get'
 import { getClientById } from '../../controllers/clients.controller/getById'
 import { addClient } from '../../controllers/clients.controller/add'
 import { updateClient } from '../../controllers/clients.controller/update'

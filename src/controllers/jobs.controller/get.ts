@@ -5,7 +5,7 @@ import { PaginateSettings, paginatedItemsResponse } from '../../utils/responses'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import camelizeObject from '../../utils/camelizeObject'
 
-export const getVehicles = async (
+export const getJobs = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -20,13 +20,13 @@ export const getVehicles = async (
 
     const { rows } = await pool.query({
       text: `SELECT COUNT(*)
-               FROM vehicles`
+               FROM jobs`
     })
 
     const response = await pool.query({
       text: `SELECT * 
-                  FROM vehicles 
-                  ORDER BY license_plate 
+                  FROM jobs 
+                  ORDER BY job_id 
                   LIMIT $1 OFFSET $2`,
       values: [size, offset]
     })
