@@ -19,11 +19,14 @@ export const getCities = async (
     }
 
     const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM cities'
+      text: `SELECT COUNT(*)
+               FROM cities`
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM cities ORDER BY name LIMIT $1 OFFSET $2',
+      text: `SELECT * 
+                FROM cities 
+                ORDER BY name LIMIT $1 OFFSET $2`,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

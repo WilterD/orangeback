@@ -22,7 +22,9 @@ export const signIn = async (
   try {
     const loginData = getLoginDataFromRequestBody(req)
     const { rows } = await pool.query({
-      text: 'SELECT * FROM admins WHERE email = $1',
+      text: `SELECT * 
+              FROM admins 
+              WHERE email = $`,
       values: [loginData[0]]
     })
 
@@ -35,7 +37,7 @@ export const signIn = async (
 
     if (rows.length === 0 || !isPasswordCorrect) {
       throw new StatusError({
-        message: 'Email o Contraseña Incorrecta',
+        message: `Email o Contraseña Incorrecta`,
         statusCode: STATUS.BAD_REQUEST
       })
     }
@@ -51,7 +53,9 @@ export const signIn = async (
 
     return res.status(STATUS.ACCEPTED).json({ ...userForToken, token })
   } catch (error: unknown) {
+    console.log(error)
     handleControllerError(error, res)
+
   }
   return undefined
 }

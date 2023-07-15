@@ -5,17 +5,29 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import { ServiceData } from './interface'
 import getServiceById from './getServiceById.util'
 
+function getServicesCreateDataFromRequestBody (
+  req: Request
+): [ServiceCreatePayload, ActivityCreatePayload[]] {
+  const { description, activities } = req.body as ServiceData
+  const newService = [description] as [string]
+  const newActivities = activities.map((activity) => [
+    '' + activity.description,
+    +activity.costHour
+  ] as [string, number])
+  return [newService, newActivities]
+}
+
 export const addService = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const [dataCreateService, activitiesPayloads] = getServicesCreateDataFromRequestBody(req)
+    const [dataCreateService, newActivities] = getServicesCreateDataFromRequestBody(req)
 
     const insertedServiceId = await createNewService(dataCreateService)
 
-    for (let i = 0; i < activitiesPayloads.length; i++) {
-      await createActivityForService(activitiesPayloads[i], insertedServiceId)
+    for (let i = 0; i < newActivities.length; i++) {
+      await createActivityForService(newActivities[i], insertedServiceId)
     }
 
     const service = await getServiceById(+insertedServiceId)
@@ -25,24 +37,11 @@ export const addService = async (
   }
 }
 
-function getServicesCreateDataFromRequestBody (
-  req: Request
-): [ServiceCreatePayload, ActivityCreatePayload[]] {
-  const { description, activities } = req.body as ServiceData
-  const newService = [description]
-  const newActivities = activities.map((activity) => [
-    activity.description,
-    activity.costHour
-  ])
-  return [newService, newActivities]
-}
-
 async function createNewService (payload: ServiceCreatePayload): Promise<string> {
   const insertService = await pool.query({
     text: 'INSERT INTO services (description) VALUES ($1) RETURNING service_id',
     values: payload
   })
-
   return insertService.rows[0].service_id as string
 }
 
@@ -53,5 +52,5 @@ async function createActivityForService (payload: ActivityCreatePayload, inserte
   })
 }
 
-type ServiceCreatePayload = string[]
-type ActivityCreatePayload = string[]
+type ServiceCreatePayload = [string]
+type ActivityCreatePayload = [string, number]
