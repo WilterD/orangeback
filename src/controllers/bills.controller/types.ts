@@ -3,7 +3,7 @@ export interface Bill {
   billDate: string
   discountValue: number
   totalCost: number
-  orderId: number
+  items: OrderDetails[]
   createdAt: string
   payments: Payment[]
 }
@@ -24,3 +24,18 @@ export interface Payment {
   cardNumber?: string
   createdAt: string
 }
+
+export interface OrderDetails {
+  description: string;
+  quantity: number;
+  price: number;
+  
+}
+
+export interface OrderDetailsRaw {
+  costHour: number
+  hoursTaken: number
+  activityDescription: string
+  employeeName: string
+}
+

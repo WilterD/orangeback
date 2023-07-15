@@ -1,12 +1,10 @@
 import { Router } from 'express'
-import {
-  getAllStates,
-  getStates,
-  getStateById,
-  addState,
-  updateState,
-  deleteState
-} from '../../controllers/states.controller'
+import { getStates } from '../../controllers/states.controller/get'
+import { getAllStates } from '../../controllers/states.controller/getAll'
+import { getStateById } from '../../controllers/states.controller/getById'
+import { addState } from '../../controllers/states.controller/add'
+import { updateState } from '../../controllers/states.controller/update'
+import { deleteState } from '../../controllers/states.controller/delete'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { statesSchema } from '../../schemas/states.schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'

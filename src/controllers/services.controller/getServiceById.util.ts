@@ -2,6 +2,7 @@ import { pool } from '../../database'
 import camelizeObject from '../../utils/camelizeObject'
 import { STATUS } from '../../utils/constants'
 import { StatusError } from '../../utils/responses/status-error'
+import { Activity, Booking, Model, Service } from './types'
 
 export default async function getServiceById (serviceId: number): Promise<Service> {
   const responseService = await pool.query({
@@ -79,37 +80,4 @@ export default async function getServiceById (serviceId: number): Promise<Servic
     bookings: camelizeObject(responseBookings.rows) as Booking[],
     models: camelizeObject(responseModels.rows) as Model[]
   }
-}
-
-export interface Service {
-  serviceId: number
-  description: string
-  totalCost: number
-  createdAt: string
-  activities: Activity[]
-  bookings: Booking[]
-  models: Model[]
-}
-
-interface Activity {
-  activityId: number
-  description: string
-  costHour: number
-  createdAt: string
-}
-
-interface Booking {
-  bookingId: number
-  expeditionDate: string
-  expirationDate: string
-  clientDni: string
-  licensePlate: string
-  createdAt: string
-}
-
-interface Model {
-  modelId: number
-  brand: string
-  description: string
-  modelYear: string
 }

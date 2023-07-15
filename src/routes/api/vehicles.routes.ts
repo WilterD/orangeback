@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import {
-  getVehicles,
-  getVehicleById,
-  addVehicle,
-  updateVehicle,
-  deleteVehicle
-} from '../../controllers/vehicles.controller'
+import { getVehicles } from '../../controllers/vehicles.controller/get'
+import { getVehicleById } from '../../controllers/vehicles.controller/getById'
+import { addVehicle } from '../../controllers/vehicles.controller/add'
+import { updateVehicle } from '../../controllers/vehicles.controller/update'
+import { deleteVehicle } from '../../controllers/vehicles.controller/delete'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { createVehiclesSchema, updateVehiclesSchema } from '../../schemas/vehicles.schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'

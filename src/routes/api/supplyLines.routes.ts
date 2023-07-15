@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import {
-  getSupplyLines,
-  getSupplyLineById,
-  addSupplyLine,
-  updateSupplyLine,
-  deleteSupplyLine
-} from '../../controllers/supplyLines.controller'
+import { getSupplyLines } from '../../controllers/supplyLines.controller/get'
+import { getSupplyLineById } from '../../controllers/supplyLines.controller/getById'
+import { addSupplyLine } from '../../controllers/supplyLines.controller/add'
+import { updateSupplyLine } from '../../controllers/supplyLines.controller/update'
+import { deleteSupplyLine } from '../../controllers/supplyLines.controller/delete'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import { supplyLinesSchema } from '../../schemas/supplyLines.schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'

@@ -131,7 +131,7 @@ INSERT INTO employees (
   agency_rif, 
   job_id
 ) VALUES
-  ('444555666', 'Alex Brown', '5554444', '789 Oak St', 5500.00, '1', 2),
+  ('444555666', 'Alex Brown', '5554444', '789 Oak St', 5500.00, '1', 1),
   ('555666777', 'Jessica Lee', '5555555', '123 Main St', 6000.00, '2', 3),
   ('666777888', 'Michael Johnson', '5556666', '456 Elm St', 7000.00, '3', 1),
   ('777888999', 'David Kim', '5557777', '123 Main St', 5500.00, '3', 2),
@@ -320,14 +320,32 @@ INSERT INTO bookings_per_services (
 
 INSERT INTO orders 
   (responsible_dni, responsible_name, entry_time, estimated_departure, real_departure, booking_id, employee_dni, created_at)
-VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444555666',CURRENT_TIMESTAMP);
+VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,4,'444555666',CURRENT_TIMESTAMP);
 
 -- Order_Details
 
+INSERT INTO order_details (service_id,activity_id,order_id,cost_hour,hours_taken,employee_dni) 
+VALUES (1,1,1,25,2,'444555666');
+
 -- Bills
 
-INSERT INTO bills (bill_date, discount_value, total_cost, order_id) VALUES
-  (CURRENT_TIMESTAMP, 0.00, 100.00, 1);
+INSERT INTO bills (
+  bill_date, 
+  discount_value, 
+  total_cost, 
+  order_id,
+  created_at
+) VALUES 
+  ('2023-07-15', 10.00, 100.00, 1, '2023-07-15 12:00:00'),
+  ('2023-07-14', 5.00, 50.00, 2, '2023-07-14 10:30:00'),
+  ('2023-07-13', 0.00, 20.00, 3, '2023-07-13 08:15:00'),
+  ('2023-07-12', 8.50, 80.00, 4, '2023-07-12 14:45:00'),
+  ('2023-07-11', 2.25, 30.00, 5, '2023-07-11 16:20:00'),
+  ('2023-07-10', 3.50, 40.00, 6, '2023-07-10 18:05:00'),
+  ('2023-07-09', 0.00, 15.00, 7, '2023-07-09 09:40:00'),
+  ('2023-07-08', 6.75, 60.00, 8, '2023-07-08 11:25:00'),
+  ('2023-07-07', 1.80, 25.00, 9, '2023-07-07 13:15:00'),
+  ('2023-07-06', 0.00, 10.00, 10, '2023-07-06 15:00:00');
 
 -- Payments
 
@@ -372,7 +390,32 @@ INSERT INTO supply_lines (
   ('Aceite de motor');
 
 -- Products
-
+INSERT INTO Products(
+  product_id,
+  short_name_product,
+  description,
+  provider,
+  is_ecological,
+  price,
+  supply_line_id  
+)VALUES
+  ('12345678','agua','un liquido','minerales atlantico', true, 200, 1),
+  ('1234567','aceite', 'un liquido que le da energia al vehiculo', 'minerales atlantico', true, 200, 2),
+  ('123456','neumatico br12 mitsubishi','un complemento del vehiculo','minerales atlantico', false, 140, 3),
+  ('12345','filtro','un complemento del vehiculo','minerales atlantico', true, 240, 4),
+  ('1234','motor','un complemento del vehiculo','minerales atlantico', false, 300, 5);
 -- Products_Per_Agencies
 
+INSERT INTO products_per_agencies (
+  product_id,
+  agency_rif,
+  on_stock,
+  max_capacity,
+  min_capacity
+) VALUES 
+  ('12345678', '1', 100, 500, 50),
+  ( '1234567', '2', 50, 200, 20),
+  ('123456', '3', 200, 800, 80),
+  ('12345', '4', 150, 600, 60),
+  ('1234', '5', 300, 1200, 120);
 -- Products_In_Order_Details

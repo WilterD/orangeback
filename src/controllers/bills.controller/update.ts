@@ -29,7 +29,12 @@ export const updateBill = async (
     const updatedBill = getBillsUpdateDataFromRequestBody(req)
     updatedBill.push(req.params.billId)
     const response = await pool.query({
-      text: 'UPDATE bills SET bill_date = $1, discount_value = $2, total_cost = $3, order_id = $4 WHERE bill_id = $5',
+      text: `UPDATE bills 
+            SET bill_date = $1, 
+            discount_value = $2, 
+            total_cost = $3, 
+            order_id = $4 
+            WHERE bill_id = $5`,
       values: updatedBill
     })
     if (response.rowCount === 0) {
