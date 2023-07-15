@@ -329,14 +329,18 @@ VALUES (1,1,1,25,2,'444555666');
 
 -- Bills
 
-bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
-  bill_date TIMESTAMP NOT NULL,
-  discount_value FLOAT NOT NULL,
-  total_cost FLOAT DEFAULT 0,
-  order_id INTEGER NOT NULL,
-  created_at dom_created_at,
-
-INSERT INTO bills (bill_date,discount_value,total_cost,order_id,created_at) VALUES ()
+INSERT INTO bills (bill_date, discount_value, total_cost, order_id, created_at) 
+VALUES 
+('2023-07-15', 10.00, 100.00, 1, '2023-07-15 12:00:00'),
+('2023-07-14', 5.00, 50.00, 2, '2023-07-14 10:30:00'),
+('2023-07-13', 0.00, 20.00, 3, '2023-07-13 08:15:00'),
+('2023-07-12', 8.50, 80.00, 4, '2023-07-12 14:45:00'),
+('2023-07-11', 2.25, 30.00, 5, '2023-07-11 16:20:00'),
+('2023-07-10', 3.50, 40.00, 6, '2023-07-10 18:05:00'),
+('2023-07-09', 0.00, 15.00, 7, '2023-07-09 09:40:00'),
+('2023-07-08', 6.75, 60.00, 8, '2023-07-08 11:25:00'),
+('2023-07-07', 1.80, 25.00, 9, '2023-07-07 13:15:00'),
+('2023-07-06', 0.00, 10.00, 10, '2023-07-06 15:00:00');
 
 -- Payments
 
