@@ -5,18 +5,18 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import camelizeObject from '../../utils/camelizeObject'
 import { StatusError } from '../../utils/responses/status-error'
 
-export const getAgencyById = async (
+export const getPaymentById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM agencies WHERE agency_rif = $1',
-      values: [req.params.agencyId]
+      text: 'SELECT * FROM payments WHERE bill_id = $1 AND payment_id = $2',
+      values: [req.params.billId, req.params.paymentId]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el registro de: ${req.params.agencyId}`,
+        message: `No se pudo encontrar el registro de: ${req.params.paymentId} y ${req.params.billId}` ,
         statusCode: STATUS.NOT_FOUND
       })
     }
@@ -25,5 +25,3 @@ export const getAgencyById = async (
     return handleControllerError(error, res)
   }
 }
-
-
