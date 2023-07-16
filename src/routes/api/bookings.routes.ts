@@ -10,11 +10,13 @@ import { getBookingById } from '../../controllers/bookings.controller/getById'
 import { addBooking } from '../../controllers/bookings.controller/add'
 import { updateBooking } from '../../controllers/bookings.controller/update'
 import { deleteBooking } from '../../controllers/bookings.controller/delete'
+import getAllBookings from '../../controllers/bookings.controller/getAllBookings'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getBookings)
+router.get('/all', tokenGuard(), verifyToken(), getAllBookings)
 router.get('/:bookingId', tokenGuard(), verifyToken(), getBookingById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createBookingsSchema), addBooking)
 router.put('/:bookingId', tokenGuard(), verifyToken(), schemaGuard(updateBookingsSchema), updateBooking)
