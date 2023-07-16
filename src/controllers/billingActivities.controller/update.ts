@@ -5,9 +5,9 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import { StatusError } from '../../utils/responses/status-error'
 
 const getBillingActivityUpdateDataFromRequestBody = (req: Request): any[] => {
-  const { costHour, hoursTaken, employeeDni } = req.body
+  const { hoursTaken, employeeDni } = req.body
 
-  const updatedBillingActivity = [costHour, hoursTaken, employeeDni]
+  const updatedBillingActivity = [hoursTaken, employeeDni]
   return updatedBillingActivity
 }
 
@@ -20,13 +20,12 @@ export const updatedBillingActivity = async (
     const response = await pool.query({
       text: `
         UPDATE order_details SET 
-          cost_hour = $1, 
-          hours_taken = $2, 
-          employee_dni = $3 
+          hours_taken = $1, 
+          employee_dni = $2 
         WHERE 
-          service_id = $4 AND 
-          activity_id = $5 AND 
-          order_id = $6
+          service_id = $3 AND 
+          activity_id = $4 AND 
+          order_id = $5
       `,
       values: [
         ...updatedBillingActivity,

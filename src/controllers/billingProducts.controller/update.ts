@@ -5,9 +5,9 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import { StatusError } from '../../utils/responses/status-error'
 
 const getBillingProductUpdateDataFromRequestBody = (req: Request): any[] => {
-  const { price, quantity } = req.body
+  const { quantity } = req.body
 
-  const updatedbillingProduct = [price, quantity]
+  const updatedbillingProduct = [quantity]
   return updatedbillingProduct
 }
 
@@ -20,12 +20,12 @@ export const updateBillingProduct = async (
     const response = await pool.query({
       text: `
         UPDATE products_in_order_details 
-        SET price = $1, quantity = $2
+        SET quantity = $1
         WHERE 
-          service_id = $3 AND
-          activity_id = $4 AND
-          order_id = $5 AND
-          product_id = $6
+          service_id = $2 AND
+          activity_id = $3 AND
+          order_id = $4 AND
+          product_id = $5
       `,
       values: [
         ...updatedbillingProduct,
