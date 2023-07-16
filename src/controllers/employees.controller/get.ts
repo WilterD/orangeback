@@ -21,11 +21,30 @@ export const getEmployees = async (
       offset = 0
     }
 
+    let onlyForAgencyRifCountComplement = ''
+    let onlyForAgencyRifComplement = ''
+    const countValues = []
+    const values = [size, offset]
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    const onlyForAgencyRif = (!!req.query?.onlyForAgencyRif && req.query?.onlyForAgencyRif !== null && req.query?.onlyForAgencyRif !== 'null' && req.query?.onlyForAgencyRif !== '') ? req.query?.onlyForAgencyRif : null
+
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (onlyForAgencyRif) {
+      countValues.push(onlyForAgencyRif)
+      values.push(onlyForAgencyRif)
+      onlyForAgencyRifCountComplement = 'WHERE agency_rif = $1'
+      onlyForAgencyRifComplement = 'WHERE agency_rif = $3'
+    }
+
     const isEmpty = await pool.query({
-      text: `SELECT 
+      text: `
+              SELECT 
                 *
-                FROM 
-                employees`
+              FROM 
+                employees
+              ${onlyForAgencyRifCountComplement}
+            `,
+      values: countValues
     })
     if (isEmpty.rowCount === 0) {
       return res.status(STATUS.OK).json([])
@@ -34,12 +53,13 @@ export const getEmployees = async (
       text: `SELECT 
               * 
             FROM 
-              employees 
+              employees
+            ${onlyForAgencyRifComplement}
             ORDER BY 
               name 
             LIMIT 
               $1 OFFSET $2`,
-      values: [size, offset]
+      values
     })
     const pagination: PaginateSettings = {
       total: response.rowCount,
