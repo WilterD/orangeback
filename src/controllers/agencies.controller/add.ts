@@ -28,7 +28,14 @@ export const addAgency = async (
     const newAgency = getAgenciesCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO agencies (agency_rif,business_name,manager_dni,city_id) VALUES ($1,$2,$3,$4) RETURNING agency_rif',
+      text: `
+            INSERT INTO 
+              agencies
+              (agency_rif, business_name, manager_dni, city_id)
+            VALUES
+              ($1, $2, $3, $4)
+            RETURNING agency_rif
+            `,
       values: newAgency
     })
     const insertedId: string = insertar.rows[0].agency_rif
