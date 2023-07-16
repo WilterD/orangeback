@@ -36,19 +36,17 @@ export const getEmployees = async (
       onlyForAgencyRifComplement = 'WHERE agency_rif = $3'
     }
 
-    const isEmpty = await pool.query({
+    const { rows } = await pool.query({
       text: `
               SELECT 
-                *
+                count(*)
               FROM 
                 employees
               ${onlyForAgencyRifCountComplement}
             `,
       values: countValues
     })
-    if (isEmpty.rowCount === 0) {
-      return res.status(STATUS.OK).json([])
-    }
+
     const response = await pool.query({
       text: `SELECT 
               * 
@@ -62,7 +60,7 @@ export const getEmployees = async (
       values
     })
     const pagination: PaginateSettings = {
-      total: response.rowCount,
+      total: Number(rows[0].count),
       page: Number(page),
       perPage: Number(size)
     }
