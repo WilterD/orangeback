@@ -27,6 +27,7 @@ import cardBanksRouter from './api/cardBanks.routes'
 import billsRouter from './api/bills.routes'
 import paymentsRouter from './api/payments.routes'
 import billingProductsRouter from './api/billingProducts.routes'
+import billingActivitiesRouter from './api/billingActivities.routes'
 
 const router = express.Router()
 
@@ -57,5 +58,6 @@ router.use('/cardbanks', cardBanksRouter)
 router.use('/bills', billsRouter)
 router.use('/payments', paymentsRouter)
 router.use('/billing-products', billingProductsRouter)
+router.use('/billing-activities', billingActivitiesRouter)
 
 export default router

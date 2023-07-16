@@ -348,7 +348,8 @@ INSERT INTO order_details (
   hours_taken,
   employee_dni
 ) VALUES 
-  (1, 1, 1, 25, 2, '444555666');
+  (1, 1, 1, 25, 2, '444555666'),
+  (1, 1, 2, 50, 4, '2');
 
 -- Bills
 
