@@ -4,7 +4,7 @@ import camelizeObject from '../../utils/camelizeObject'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import { STATUS } from '../../utils/constants'
 
-export const GetEmployeeWorkList = async (
+export const getEmployeeWorkList = async (
   _: Request,
   res: Response
 ): Promise<Response> => {

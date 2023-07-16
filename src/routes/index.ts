@@ -20,12 +20,12 @@ import ordersRouter from './api/orders.routes'
 import billsRouter from './api/bills.routes'
 import cardBanksRouter from './api/cardBanks.routes'
 import paymentsRouter from './api/payments.routes'
-import statsRouter from './api/stats.routes'
 import supplyLinesRouter from './api/supplyLines.routes'
 import productsRouter from './api/products.routes'
 import stocksRouter from './api/stocks.routes'
 import billingProductsRouter from './api/billingProducts.routes'
 import billingActivitiesRouter from './api/billingActivities.routes'
+import statsRouter from './api/stats.routes'
 
 const router = express.Router()
 
