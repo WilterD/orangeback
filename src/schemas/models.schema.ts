@@ -51,7 +51,7 @@ export const createModelsSchema = z.object({
     .nonempty('Es necesario indicar un modelo de caja de aceite')
     .max(32, 'El modelo de caja de aceite debe ser menor a 32 carácteres'),
   octane: z.number().min(1, 'El octanaje debe ser mayor o igual a 1'),
-  recommendedServices: z.array(isRecommended).optional()
+  services: z.array(isRecommended).optional()
 })
 
 export type ModelCreation = z.infer<typeof createModelsSchema>

@@ -23,7 +23,7 @@ const getModelsUpdateDataFromRequestBody = (
     engineOilType,
     oilBox,
     octane,
-    recommendedServices
+    services
   } = req.body as ModelUpdate
   const newModel = [
     brand,
@@ -36,12 +36,12 @@ const getModelsUpdateDataFromRequestBody = (
     oilBox,
     octane
   ] as ModelUpdatePayload
-  const newRecommendedServices = recommendedServices?.map(
-    (recommendedServices) =>
+  const newRecommendedServices = services?.map(
+    (service) =>
       [
-        +recommendedServices.serviceId,
-        +recommendedServices.mileage,
-        +recommendedServices.useTime
+        +service.serviceId,
+        +service.mileage,
+        +service.useTime
       ] as RecommendedServicesCreatePayload
   )
   return [newModel, newRecommendedServices]
