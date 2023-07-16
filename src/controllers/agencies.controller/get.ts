@@ -23,7 +23,26 @@ export const getAgencies = async (
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM agencies ORDER BY business_name LIMIT $1 OFFSET $2',
+      text: `
+              SELECT
+                a.agency_rif,
+                a.business_name,
+                a.manager_dni,
+                a.city_id,
+                a.created_at,
+                to_char(a.created_at, 'DD/MM/YYYY') AS created_at_formatted,
+                c.name as city_name,
+                s.name as state_name,
+                m.name as manager_name
+              FROM
+                agencies a, cities c, states s, managers m
+              WHERE
+                a.city_id = c.city_id AND
+                c.state_id = s.state_id AND
+                a.manager_dni = m.manager_dni
+              ORDER BY business_name
+              LIMIT $1 OFFSET $2
+            `,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
