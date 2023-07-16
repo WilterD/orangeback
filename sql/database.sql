@@ -324,6 +324,9 @@ CREATE TABLE order_details (
     ON UPDATE CASCADE,
   CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id)
     ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni)
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -332,7 +335,7 @@ CREATE TABLE order_details (
 CREATE TABLE bills (
   bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
   bill_date TIMESTAMP NOT NULL,
-  discount_value FLOAT NOT NULL,
+  discount_value FLOAT DEFAULT 0,
   total_cost FLOAT DEFAULT 0,
   order_id INTEGER NOT NULL,
   created_at dom_created_at,
