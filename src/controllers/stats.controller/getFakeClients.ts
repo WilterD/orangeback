@@ -4,18 +4,17 @@ import camelizeObject from '../../utils/camelizeObject'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import { STATUS } from '../../utils/constants'
 
-export const getNoEcoProductsAll = async (
+export const getFakeClients = async (
   _: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const { rows } = await pool.query({
-      text: `SELECT 100 * SUM(CASE WHEN is_ecological = FALSE THEN on_stock ELSE 0 END) / NULLIF(SUM(on_stock), 0) AS non_ecological_percentage
-    FROM 
-      products_per_agencies 
-      INNER JOIN products ON products_per_agencies.product_id = products.product_id
-    WHERE 
-      on_stock > 0;`
+      text: `SELECT c.*
+      FROM clients c
+      INNER JOIN bookings b ON c.client_dni = b.client_dni
+      LEFT JOIN orders o ON b.booking_id = o.booking_id
+      WHERE o.order_id IS NULL AND b.expiration_date < NOW()`
     })
     return res.status(STATUS.OK).json(camelizeObject(rows))
   } catch (error: unknown) {
