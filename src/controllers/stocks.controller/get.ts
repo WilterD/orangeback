@@ -40,7 +40,8 @@ export const getProductsPerAgencies = async (
 
     let response
 
-    if (req.query?.onlyForAgencyRif != null && req.query?.onlyForAgencyRif !== '') {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (req.query?.onlyForAgencyRif && req.query?.onlyForAgencyRif !== null && req.query?.onlyForAgencyRif !== 'null' && req.query?.onlyForAgencyRif !== '') {
       const { rows } = await pool.query({
         text: `
           SELECT 

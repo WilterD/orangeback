@@ -21,28 +21,46 @@ export const getEmployees = async (
       offset = 0
     }
 
-    const isEmpty = await pool.query({
-      text: `SELECT 
-                *
-                FROM 
-                employees`
-    })
-    if (isEmpty.rowCount === 0) {
-      return res.status(STATUS.OK).json([])
+    let onlyForAgencyRifCountComplement = ''
+    let onlyForAgencyRifComplement = ''
+    const countValues = []
+    const values = [size, offset]
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    const onlyForAgencyRif = (!!req.query?.onlyForAgencyRif && req.query?.onlyForAgencyRif !== null && req.query?.onlyForAgencyRif !== 'null' && req.query?.onlyForAgencyRif !== '') ? req.query?.onlyForAgencyRif : null
+
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (onlyForAgencyRif) {
+      countValues.push(onlyForAgencyRif)
+      values.push(onlyForAgencyRif)
+      onlyForAgencyRifCountComplement = 'WHERE agency_rif = $1'
+      onlyForAgencyRifComplement = 'WHERE agency_rif = $3'
     }
+
+    const { rows } = await pool.query({
+      text: `
+              SELECT 
+                count(*)
+              FROM 
+                employees
+              ${onlyForAgencyRifCountComplement}
+            `,
+      values: countValues
+    })
+
     const response = await pool.query({
       text: `SELECT 
               * 
             FROM 
-              employees 
+              employees
+            ${onlyForAgencyRifComplement}
             ORDER BY 
               name 
             LIMIT 
               $1 OFFSET $2`,
-      values: [size, offset]
+      values
     })
     const pagination: PaginateSettings = {
-      total: response.rowCount,
+      total: Number(rows[0].count),
       page: Number(page),
       perPage: Number(size)
     }
