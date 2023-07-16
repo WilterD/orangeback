@@ -25,6 +25,8 @@ export const getEmployeesCoordinateServices = async (
 
     let text = `
       SELECT 
+        a.agency_rif,
+        a.business_name,
         ecs.employee_dni,
         e.name AS employee_name,
         ecs.service_id,
@@ -35,10 +37,12 @@ export const getEmployeesCoordinateServices = async (
       FROM 
         employees_coordinate_services AS ecs,
         employees AS e,
-        services AS s
+        services AS s,
+        agencies AS a
       WHERE
         ecs.employee_dni = e.employee_dni AND
-        ecs.service_id = s.service_id
+        ecs.service_id = s.service_id AND
+        e.agency_rif = a.agency_rif
       ORDER BY 
         employee_dni, 
         service_id 
@@ -66,6 +70,8 @@ export const getEmployeesCoordinateServices = async (
 
       text = `
         SELECT 
+          a.agency_rif,
+          a.business_name,
           ecs.employee_dni,
           e.name AS employee_name,
           ecs.service_id,
