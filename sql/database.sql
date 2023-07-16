@@ -296,15 +296,16 @@ CREATE TABLE orders (
   employee_dni dom_dni NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (order_id),
-  FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
+  CONSTRAINT fk_booking_id FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
+  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
     ON DELETE RESTRICT
-    ON UPDATE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT chk_entry_time CHECK (entry_time >= CURRENT_TIMESTAMP),
+  CONSTRAINT chk_estimated_departure CHECK (estimated_departure > entry_time),
+  CONSTRAINT chk_real_departure CHECK (real_departure > entry_time)
 );
-
-
 
 -- 20
 
@@ -322,9 +323,6 @@ CREATE TABLE order_details (
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
