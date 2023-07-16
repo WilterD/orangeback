@@ -21,13 +21,7 @@ export const getEmployeesCoordinateServices = async (
       offset = 0
     }
 
-    const { rows } = await pool.query({
-      text: `
-        SELECT 
-          COUNT(*) 
-        FROM 
-          employees_coordinate_services`
-    })
+    let registros
 
     let text = `
       SELECT 
@@ -39,9 +33,9 @@ export const getEmployeesCoordinateServices = async (
         ecs.capacity,
         ecs.created_at
       FROM 
-        employees_coordinate_services as ecs,
-        employees as e,
-        services as s
+        employees_coordinate_services AS ecs,
+        employees AS e,
+        services AS s
       WHERE
         ecs.employee_dni = e.employee_dni AND
         ecs.service_id = s.service_id
@@ -54,6 +48,22 @@ export const getEmployeesCoordinateServices = async (
     let response
 
     if (req.query?.onlyForAgencyRif != null && req.query?.onlyForAgencyRif !== '') {
+      const { rows } = await pool.query({
+        text: `
+          SELECT 
+            COUNT(*) 
+          FROM 
+            employees_coordinate_services AS ecs,
+            employees AS e
+          WHERE
+            ecs.employee_dni = e.employee_dni AND
+            e.agency_rif = $1
+        `,
+        values: [req.query.onlyForAgencyRif]
+      })
+
+      registros = rows[0].count
+
       text = `
         SELECT 
           ecs.employee_dni,
@@ -84,6 +94,16 @@ export const getEmployeesCoordinateServices = async (
         values: [size, offset, req.query.onlyForAgencyRif]
       })
     } else {
+      const { rows } = await pool.query({
+        text: `
+          SELECT 
+            COUNT(*) 
+          FROM 
+            employees_coordinate_services`
+      })
+
+      registros = rows[0].count
+
       response = await pool.query({
         text,
         values: [size, offset]
@@ -91,7 +111,7 @@ export const getEmployeesCoordinateServices = async (
     }
 
     const pagination: PaginateSettings = {
-      total: Number(rows[0].count),
+      total: Number(registros),
       page: Number(page),
       perPage: Number(size)
     }

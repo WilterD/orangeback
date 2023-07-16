@@ -406,8 +406,8 @@ CREATE TABLE products_per_agencies (
   product_id VARCHAR(32) NOT NULL,
   agency_rif dom_agency_rif NOT NULL,
   on_stock INTEGER NOT NULL,
-  max_capacity INTEGER NOT NULL,
   min_capacity INTEGER NOT NULL,
+  max_capacity INTEGER NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (agency_rif, product_id),
   CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies(agency_rif)
