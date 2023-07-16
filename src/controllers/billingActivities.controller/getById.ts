@@ -11,7 +11,14 @@ export const getBillingActivityById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM order_details WHERE service_id = $1, activity_id = $2, order_id = $3',
+      text: `
+        SELECT * 
+        FROM order_details 
+        WHERE 
+          service_id = $1 AND 
+          activity_id = $2 AND 
+          order_id = $3
+      `,
       values: [req.params.serviceId, req.params.activityId, req.params.orderId]
     })
     if (response.rowCount === 0) {

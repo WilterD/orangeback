@@ -5,15 +5,9 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import { StatusError } from '../../utils/responses/status-error'
 
 const getBillingProductUpdateDataFromRequestBody = (req: Request): any[] => {
-  const {
-    price,
-    quantity
-  } = req.body
+  const { price, quantity } = req.body
 
-  const updatedbillingProduct = [
-    price,
-    quantity
-  ]
+  const updatedbillingProduct = [price, quantity]
   return updatedbillingProduct
 }
 
@@ -23,10 +17,23 @@ export const updateBillingProduct = async (
 ): Promise<Response> => {
   try {
     const updatedbillingProduct = getBillingProductUpdateDataFromRequestBody(req)
-    updatedbillingProduct.push(req.params.serviceId, req.params.activityId, req.params.orderId, req.params.productId)
     const response = await pool.query({
-      text: 'UPDATE products_in_order_details SET price = $1, quantity = $2',
-      values: updatedbillingProduct
+      text: `
+        UPDATE products_in_order_details 
+        SET price = $1, quantity = $2
+        WHERE 
+          service_id = $3 AND
+          activity_id = $4 AND
+          order_id = $5 AND
+          product_id = $6
+      `,
+      values: [
+        ...updatedbillingProduct,
+        req.params.serviceId,
+        req.params.activityId,
+        req.params.orderId,
+        req.params.productId
+      ]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
@@ -34,7 +41,9 @@ export const updateBillingProduct = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Producto Modificado Exitosamente' })
+    return res
+      .status(STATUS.OK)
+      .json({ message: 'Producto Modificado Exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

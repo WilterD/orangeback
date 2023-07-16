@@ -5,17 +5,9 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import { StatusError } from '../../utils/responses/status-error'
 
 const getBillingActivityUpdateDataFromRequestBody = (req: Request): any[] => {
-  const {
-    costHour,
-    hoursTaken,
-    employeeDni
-  } = req.body
+  const { costHour, hoursTaken, employeeDni } = req.body
 
-  const updatedBillingActivity = [
-    costHour,
-    hoursTaken,
-    employeeDni
-  ]
+  const updatedBillingActivity = [costHour, hoursTaken, employeeDni]
   return updatedBillingActivity
 }
 
@@ -25,10 +17,23 @@ export const updatedBillingActivity = async (
 ): Promise<Response> => {
   try {
     const updatedBillingActivity = getBillingActivityUpdateDataFromRequestBody(req)
-    updatedBillingActivity.push(req.params.serviceId, req.params.activityId, req.params.orderId)
     const response = await pool.query({
-      text: 'UPDATE order_details SET cost_hour = $1, hours_taken = $2, employee_dni = $3 WHERE service_id = $4, activity_id = $5, order_id = $6',
-      values: updatedBillingActivity
+      text: `
+        UPDATE order_details SET 
+          cost_hour = $1, 
+          hours_taken = $2, 
+          employee_dni = $3 
+        WHERE 
+          service_id = $4 AND 
+          activity_id = $5 AND 
+          order_id = $6
+      `,
+      values: [
+        ...updatedBillingActivity,
+        req.params.serviceId,
+        req.params.activityId,
+        req.params.orderId
+      ]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
@@ -36,7 +41,9 @@ export const updatedBillingActivity = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Orden Modificada Exitosamente' })
+    return res
+      .status(STATUS.OK)
+      .json({ message: 'Item de Orden Modificado Exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
