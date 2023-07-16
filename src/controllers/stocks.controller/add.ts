@@ -9,15 +9,15 @@ const getProductPerAgencyCreateDataFromRequestBody = (req: Request): any[] => {
     productId,
     agencyRif,
     onStock,
-    maxCapacity,
-    minCapacity
+    minCapacity,
+    maxCapacity
   } = req.body
   const newProductPerAgency = [
     productId,
     agencyRif,
     onStock,
-    maxCapacity,
-    minCapacity
+    minCapacity,
+    maxCapacity
   ]
   return newProductPerAgency
 }
@@ -30,14 +30,30 @@ export const addProductPerAgency = async (
     const newProductPerAgency = getProductPerAgencyCreateDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO products_per_agencies (product_id, agency_rif, on_stock, max_capacity, min_capacity) VALUES ($1,$2,$3,$4,$5) RETURNING product_id, agency_rif',
+      text: `
+        INSERT INTO products_per_agencies (
+          product_id, 
+          agency_rif, 
+          on_stock, 
+          min_capacity,
+          max_capacity 
+        ) VALUES ($1, $2, $3, $4, $5) 
+        RETURNING product_id, agency_rif
+      `,
       values: newProductPerAgency
     })
     console.log(insertar)
     const insertedProductId: string = insertar.rows[0].product_id
-    const insertedAgencyRif: string = insertar.rows[1].agency_rif
+    const insertedAgencyRif: string = insertar.rows[0].agency_rif
     const response = await pool.query({
-      text: 'SELECT * FROM products_per_agencies WHERE product_id = $1 AND agency_rif = 2',
+      text: `
+        SELECT * 
+        FROM 
+          products_per_agencies 
+        WHERE 
+          product_id = $1 AND 
+          agency_rif = $2
+      `,
       values: [insertedProductId, insertedAgencyRif]
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
