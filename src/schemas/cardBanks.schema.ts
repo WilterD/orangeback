@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const createCardBanksSchema = z.object({
-    cardNumber: z
+  cardNumber: z
     .string()
     .nonempty('Es necesario indicar un rif')
     .max(32, 'La tarjeta debe ser menor a 32  carácteres'),
@@ -12,7 +12,7 @@ export const createCardBanksSchema = z.object({
 })
 
 export const updateCardBanksSchema = z.object({
-    bank: z
+  bank: z
     .string()
     .nonempty('Es necesario indicar un rif')
     .max(32, 'La tarjeta debe ser menor a 32  carácteres')

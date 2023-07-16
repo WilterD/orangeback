@@ -11,7 +11,6 @@ export const getById = async (
     const service = await getServiceById(+req.params.serviceId)
     return res.status(STATUS.OK).json(service)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
