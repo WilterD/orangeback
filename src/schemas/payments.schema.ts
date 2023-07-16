@@ -1,0 +1,73 @@
+import { z } from 'zod'
+
+export const createPaymentsSchema = z.object({
+  billId: z
+    .number(),
+  paymentId: z
+    .number(),
+  cost: z
+    .number(),
+  paymentDate: z
+    .string()
+    .nonempty('Debe especificar una fecha y tiempo para el pago')
+    .refine(
+      (fecha) => {
+        const regex = /^(\d{2})-(\d{2})-(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/
+        if (!regex.test(fecha)) {
+          return false
+        }
+        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+          return false
+        }
+        return true
+      },
+      {
+        message: 'La fecha debe estar en formato DD-MM-AAAA HH:MM:SS y ser una fecha válida y dentro de los límites permitidos'
+      }
+    ),
+  paymentMethod: z
+    .string()
+    .nonempty('Es necesario indicar un metodo de pago')
+    .max(2, 'El metodo de pago debe ser menor a 3 carácteres'),
+  cardNumber: z
+    .string()
+    .nonempty('Es necesario indicar un numero de tarjeta')
+    .max(32, 'La tarjeta debe ser menor a 32  carácteres')
+    .regex(/^\d+$/, 'La tarjeta debe contener solo números')
+})
+
+export const updatePaymentsSchema = z.object({
+  cost: z
+    .number(),
+  paymentDate: z
+    .string()
+    .nonempty('Debe especificar una fecha y tiempo para el pago')
+    .refine(
+      (fecha) => {
+        const regex = /^(\d{2})-(\d{2})-(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/
+        if (!regex.test(fecha)) {
+          return false
+        }
+        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+          return false
+        }
+        return true
+      },
+      {
+        message: 'La fecha debe estar en formato DD-MM-AAAA HH:MM:SS y ser una fecha válida y dentro de los límites permitidos'
+      }
+    ),
+  paymentMethod: z
+    .string()
+    .nonempty('Es necesario indicar un metodo de pago')
+    .max(2, 'El metodo de pago debe ser menor a 3 carácteres'),
+  cardNumber: z
+    .string()
+    .nonempty('Es necesario indicar un numero de tarjeta')
+    .max(32, 'La tarjeta debe ser menor a 32  carácteres')
+    .regex(/^\d+$/, 'La tarjeta debe contener solo números')
+})

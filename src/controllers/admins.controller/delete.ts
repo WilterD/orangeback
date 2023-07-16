@@ -10,7 +10,8 @@ export const deleteAdmin = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM admins WHERE admin_id = $1',
+      text: `DELETE FROM admins 
+                WHERE admin_id = $1`,
       values: [req.params.adminId]
     })
     if (response.rowCount === 0) {

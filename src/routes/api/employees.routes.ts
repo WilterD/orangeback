@@ -1,16 +1,16 @@
 import { Router } from 'express'
-import {
-  getEmployees,
-  getEmployeeById,
-  addEmployee,
-  updateEmployee,
-  deleteEmployee
-} from '../../controllers/employees.controller'
+
+import { getEmployees } from '../../controllers/employees.controller/get'
+import { getEmployeeById } from '../../controllers/employees.controller/getById'
+import { addEmployee } from '../../controllers/employees.controller/add'
+import { updateEmployee } from '../../controllers/employees.controller/update'
+import { deleteEmployee } from '../../controllers/employees.controller/delete'
+
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import {
   createEmployeesSchema,
   updateEmployeesSchema
-} from '../../schemas/employees.schema'
+} from '../../schemas/employees.Schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'
 import { tokenGuard } from '../../middlewares/tokenGuard'
 import { verifyToken } from '../../middlewares/auth'

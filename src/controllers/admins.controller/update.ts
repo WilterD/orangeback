@@ -13,7 +13,11 @@ export const updateAdmin = async (
     const updatedAdmin = await getAdminsDataFromRequestBody(req)
     updatedAdmin.push(req.params.adminId)
     const response = await pool.query({
-      text: 'UPDATE admins SET name = $1, email = $2, password = $3 WHERE admin_id = $4',
+      text: `UPDATE admins 
+              SET name = $1, 
+              email = $2, 
+              password = $3 
+              WHERE admin_id = $4`,
       values: updatedAdmin
     })
     if (response.rowCount === 0) {

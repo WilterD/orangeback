@@ -234,8 +234,6 @@ CREATE TABLE employees_specialties (
 
 -- 16
 
-
-
 CREATE TABLE employees_coordinate_services (
   employee_dni dom_dni NOT NULL,
   service_id INTEGER NOT NULL,
@@ -298,12 +296,15 @@ CREATE TABLE orders (
   employee_dni dom_dni NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (order_id),
-  FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
+  CONSTRAINT fk_booking_id FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
+  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
     ON DELETE RESTRICT
-    ON UPDATE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT chk_entry_time CHECK (entry_time >= CURRENT_TIMESTAMP),
+  CONSTRAINT chk_estimated_departure CHECK (estimated_departure > entry_time),
+  CONSTRAINT chk_real_departure CHECK (real_departure > entry_time)
 );
 
 -- 20
@@ -335,7 +336,7 @@ CREATE TABLE bills (
   bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
   bill_date TIMESTAMP NOT NULL,
   discount_value FLOAT NOT NULL,
-  total_cost FLOAT NOT NULL,
+  total_cost FLOAT DEFAULT 0,
   order_id INTEGER NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (bill_id),
@@ -367,10 +368,11 @@ CREATE TABLE payments (
   CONSTRAINT fk_pays_factura FOREIGN KEY (bill_id) REFERENCES bills(bill_id) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  CONSTRAINT fk_card_number FOREIGN KEY (card_number) REFERENCES card_banks(card_number)
+  CONSTRAINT fk_card_number FOREIGN KEY (card_number) REFERENCES card_banks (card_number) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
+
 
 -- 24
 
@@ -401,8 +403,8 @@ CREATE TABLE products (
 -- 26
 
 CREATE TABLE products_per_agencies (
-  agency_rif dom_agency_rif NOT NULL,
   product_id VARCHAR(32) NOT NULL,
+  agency_rif dom_agency_rif NOT NULL,
   on_stock INTEGER NOT NULL,
   max_capacity INTEGER NOT NULL,
   min_capacity INTEGER NOT NULL,
