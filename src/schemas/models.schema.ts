@@ -6,6 +6,10 @@ export const isRecommended = z.object({
   useTime: z.number().nonnegative('El tiempo de uso no puede ser negativo')
 })
 
+export const isRecommendedUpdate = z.object({
+  useTime: z.number().nonnegative('El tiempo de uso no puede ser negativo')
+})
+
 export const createModelsSchema = z.object({
   modelId: z
     .string()
