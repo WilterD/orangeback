@@ -21,16 +21,12 @@ export const getEmployeesCoordinateServices = async (
       offset = 0
     }
 
-    const { rows } = await pool.query({
-      text: `
-        SELECT 
-          COUNT(*) 
-        FROM 
-          employees_coordinate_services`
-    })
+    let registros
 
     let text = `
       SELECT 
+        a.agency_rif,
+        a.business_name,
         ecs.employee_dni,
         e.name AS employee_name,
         ecs.service_id,
@@ -39,12 +35,14 @@ export const getEmployeesCoordinateServices = async (
         ecs.capacity,
         ecs.created_at
       FROM 
-        employees_coordinate_services as ecs,
-        employees as e,
-        services as s
+        employees_coordinate_services AS ecs,
+        employees AS e,
+        services AS s,
+        agencies AS a
       WHERE
         ecs.employee_dni = e.employee_dni AND
-        ecs.service_id = s.service_id
+        ecs.service_id = s.service_id AND
+        e.agency_rif = a.agency_rif
       ORDER BY 
         employee_dni, 
         service_id 
@@ -54,8 +52,26 @@ export const getEmployeesCoordinateServices = async (
     let response
 
     if (req.query?.onlyForAgencyRif != null && req.query?.onlyForAgencyRif !== '') {
+      const { rows } = await pool.query({
+        text: `
+          SELECT 
+            COUNT(*) 
+          FROM 
+            employees_coordinate_services AS ecs,
+            employees AS e
+          WHERE
+            ecs.employee_dni = e.employee_dni AND
+            e.agency_rif = $1
+        `,
+        values: [req.query.onlyForAgencyRif]
+      })
+
+      registros = rows[0].count
+
       text = `
         SELECT 
+          a.agency_rif,
+          a.business_name,
           ecs.employee_dni,
           e.name AS employee_name,
           ecs.service_id,
@@ -84,6 +100,16 @@ export const getEmployeesCoordinateServices = async (
         values: [size, offset, req.query.onlyForAgencyRif]
       })
     } else {
+      const { rows } = await pool.query({
+        text: `
+          SELECT 
+            COUNT(*) 
+          FROM 
+            employees_coordinate_services`
+      })
+
+      registros = rows[0].count
+
       response = await pool.query({
         text,
         values: [size, offset]
@@ -91,7 +117,7 @@ export const getEmployeesCoordinateServices = async (
     }
 
     const pagination: PaginateSettings = {
-      total: Number(rows[0].count),
+      total: Number(registros),
       page: Number(page),
       perPage: Number(size)
     }

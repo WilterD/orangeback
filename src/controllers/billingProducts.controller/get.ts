@@ -22,11 +22,19 @@ export const getBillingProducts = async (
     }
 
     const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM products_in_order_details'
+      text: `
+        SELECT COUNT(*) 
+        FROM products_in_order_details
+      `
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM products_in_order_details ORDER BY product_id LIMIT $1 OFFSET $2',
+      text: `
+        SELECT * 
+        FROM products_in_order_details 
+        ORDER BY product_id 
+        LIMIT $1 OFFSET $2
+      `,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

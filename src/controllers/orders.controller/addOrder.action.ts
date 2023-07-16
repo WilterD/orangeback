@@ -13,7 +13,8 @@ export const getOrdersDataFromRequestBody = (req: Request): any[] => {
     employeeDni,
     realDeparture,
     responsibleDni,
-    responsibleName
+    responsibleName,
+    activities
   } = req.body as OrderCreate
   const newOrder = [
     entryTime,
@@ -24,7 +25,12 @@ export const getOrdersDataFromRequestBody = (req: Request): any[] => {
     (responsibleDni === undefined) ? null : responsibleDni,
     (responsibleName === undefined) ? null : responsibleName
   ]
-  return newOrder
+  const newActivities = activities.map((activity) => [
+    +activity.serviceId,
+    +activity.activityId,
+    '' + activity.employeeDni
+  ])
+  return [newOrder, newActivities]
 }
 
 export const addOrder = async (
@@ -32,7 +38,7 @@ export const addOrder = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newOrder = getOrdersDataFromRequestBody(req)
+    const [newOrder, newActivities] = getOrdersDataFromRequestBody(req)
 
     const insertar = await pool.query({
       text: `
@@ -44,6 +50,28 @@ export const addOrder = async (
       values: newOrder
     })
     const insertedOrderId: string = insertar.rows[0].order_id
+    for (let i = 0; i < newActivities.length; i++) {
+      const temp = await pool.query({
+        text: `
+          SELECT
+            cost_hour
+          FROM
+            activities
+          WHERE
+            service_id = $1 AND
+            activity_id = $2
+      `,
+        values: [newActivities[i][0], newActivities[i][1]]
+      })
+      await pool.query({
+        text: `
+          INSERT INTO order_details (
+            order_id, service_id, activity_id, employee_dni, cost_hour
+          ) VALUES ($1, $2, $3, $4, $5)
+        `,
+        values: [insertedOrderId, ...newActivities[i], temp]
+      })
+    }
     const response = await pool.query({
       text: `
         SELECT 

@@ -18,16 +18,85 @@ export const getProductsPerAgencies = async (
       offset = 0
     }
 
-    const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM products_per_agencies'
-    })
+    let registros
 
-    const response = await pool.query({
-      text: 'SELECT * FROM products_per_agencies ORDER BY product_id LIMIT $1 OFFSET $2',
-      values: [size, offset]
-    })
+    let text = `
+      SELECT
+        p.product_id,
+        p.short_name,
+        ppa.agency_rif,
+        ppa.on_stock,
+        ppa.min_capacity,
+        ppa.max_capacity,
+        ppa.created_at
+      FROM 
+        products_per_agencies AS ppa,
+        products AS p
+      WHERE
+        ppa.product_id = p.product_id
+      ORDER BY product_id 
+      LIMIT $1 OFFSET $2
+    `
+
+    let response
+
+    if (req.query?.onlyForAgencyRif != null && req.query?.onlyForAgencyRif !== '') {
+      const { rows } = await pool.query({
+        text: `
+          SELECT 
+            COUNT(*) 
+          FROM 
+            products_per_agencies AS
+          WHERE
+            agency_rif = $1
+        `,
+        values: [req.query.onlyForAgencyRif]
+      })
+
+      registros = rows[0].count
+
+      text = `
+        SELECT 
+          p.product_id,
+          p.short_name,
+          ppa.agency_rif,
+          ppa.on_stock,
+          ppa.min_capacity,
+          ppa.max_capacity,
+          ppa.created_at
+        FROM 
+          products_per_agencies AS ppa,
+          products AS p
+        WHERE
+          ppa.product_id = p.product_id AND
+          ppa.agency_rif = $3
+        ORDER BY product_id 
+        LIMIT $1 OFFSET $2
+      `
+
+      response = await pool.query({
+        text,
+        values: [size, offset, req.query.onlyForAgencyRif]
+      })
+    } else {
+      const { rows } = await pool.query({
+        text: `
+          SELECT 
+            COUNT(*) 
+          FROM products_per_agencies
+        `
+      })
+
+      registros = rows[0].count
+
+      response = await pool.query({
+        text,
+        values: [size, offset]
+      })
+    }
+
     const pagination: PaginateSettings = {
-      total: Number(rows[0].count),
+      total: Number(registros),
       page: Number(page),
       perPage: Number(size)
     }

@@ -1,5 +1,17 @@
 import { z } from 'zod'
 
+const billingActivitySchema = z.object({
+  serviceId: z
+    .number()
+    .min(1, 'el id debe ser mayor o igual a 1'),
+  activityId: z
+    .number()
+    .min(1, 'el id debe ser mayor o igual a 1'),
+  employeeDni: z
+    .string()
+    .nonempty('el id de empleado debe existir')
+})
+
 export const ordersSchema = z.object({
   responsibleDni: z
     .string()
@@ -82,7 +94,10 @@ export const ordersSchema = z.object({
     .string()
     .nonempty('Es necesario indicar una cédula')
     .max(16, 'La cédula debe ser menor a 16 caracteres')
-    .regex(/^\d+$/, 'La cédula debe contener solo números')
+    .regex(/^\d+$/, 'La cédula debe contener solo números'),
+  activities: z
+    .array(billingActivitySchema)
+    .min(1, 'Es necesario que la orden tenga al menos una actividad')
 })
 
 export type OrderCreate = z.infer<typeof ordersSchema>
