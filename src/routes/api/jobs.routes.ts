@@ -9,10 +9,12 @@ import { jobsSchema } from '../../schemas/jobs.schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'
 import { tokenGuard } from '../../middlewares/tokenGuard'
 import { verifyToken } from '../../middlewares/auth'
+import { getAllJobs } from '../../controllers/jobs.controller/getAll'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllJobs)
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getJobs)
 router.get('/:jobId', tokenGuard(), verifyToken(), getJobById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(jobsSchema), addJob)
