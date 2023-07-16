@@ -15,7 +15,7 @@ export const getEmployeeWorkList = async (
       FROM employees e
       LEFT JOIN orders o ON e.employee_dni = o.employee_dni
       LEFT JOIN order_details od ON o.order_id = od.order_id
-      WHERE DATE_TRUNC(month, o.entry_time) = DATE_TRUNC(month, CAST(:month AS DATE))
+      WHERE DATE_TRUNC(month, o.entry_time) = DATE_TRUNC(month, CAST($1 AS DATE))
       GROUP BY e.name
       ORDER BY order_count DESC`,
       values: [req.params.month]
