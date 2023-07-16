@@ -4,14 +4,29 @@ import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import { StatusError } from '../../utils/responses/status-error'
 
-export const deleteProduct = async (
+const getBillingProductUpdateDataFromRequestBody = (req: Request): any[] => {
+  const {
+    price,
+    quantity
+  } = req.body
+
+  const updatedbillingProduct = [
+    price,
+    quantity
+  ]
+  return updatedbillingProduct
+}
+
+export const updateBillingProduct = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
+    const updatedbillingProduct = getBillingProductUpdateDataFromRequestBody(req)
+    updatedbillingProduct.push(req.params.serviceId, req.params.activityId, req.params.orderId, req.params.productId)
     const response = await pool.query({
-      text: 'DELETE FROM products WHERE product_id = $1',
-      values: [req.params.productId]
+      text: 'UPDATE products_in_order_details SET price = $1, quantity = $2',
+      values: updatedbillingProduct
     })
     if (response.rowCount === 0) {
       throw new StatusError({
@@ -19,7 +34,7 @@ export const deleteProduct = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json({ message: 'Agencia Eliminada Exitosamente' })
+    return res.status(STATUS.OK).json({ message: 'Producto Modificado Exitosamente' })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }

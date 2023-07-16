@@ -6,6 +6,7 @@ import { verifyToken } from '../../middlewares/auth'
 import { servicesSchema } from '../../schemas/services.schema'
 
 import { getServices } from '../../controllers/services.controller/get'
+import getAllServices from '../../controllers/services.controller/getAllServices.action'
 import { getById } from '../../controllers/services.controller/getById'
 import { addService } from '../../controllers/services.controller/add'
 import { updateService } from '../../controllers/services.controller/update'
@@ -15,6 +16,7 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getServices)
+router.get('/all', tokenGuard(), verifyToken(), getAllServices)
 router.get('/:serviceId', tokenGuard(), verifyToken(), getById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(servicesSchema), addService)
 router.put('/:serviceId', tokenGuard(), verifyToken(), schemaGuard(servicesSchema), updateService)
