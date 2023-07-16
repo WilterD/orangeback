@@ -203,12 +203,12 @@ CREATE TABLE activities (
 -- 14
 
 CREATE TABLE services_per_models (
-  service_id INTEGER NOT NULL,
-  model_id VARCHAR(64) NOT NULL,
-  mileage FLOAT NOT NULL,
+  service_id INTEGER,
+  model_id VARCHAR(64),
+  mileage FLOAT,
   use_time INTEGER NOT NULL,
   created_at dom_created_at,
-  PRIMARY KEY (service_id, model_id),
+  PRIMARY KEY (service_id, model_id, mileage),
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
@@ -296,15 +296,16 @@ CREATE TABLE orders (
   employee_dni dom_dni NOT NULL,
   created_at dom_created_at,
   PRIMARY KEY (order_id),
-  FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
+  CONSTRAINT fk_booking_id FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
+  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
     ON DELETE RESTRICT
-    ON UPDATE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT chk_entry_time CHECK (entry_time >= CURRENT_TIMESTAMP),
+  CONSTRAINT chk_estimated_departure CHECK (estimated_departure > entry_time),
+  CONSTRAINT chk_real_departure CHECK (real_departure > entry_time)
 );
-
-
 
 -- 20
 

@@ -64,7 +64,6 @@ export const updateBooking = async (
     }
     return res.status(STATUS.OK).json({ message: 'Reserva Modificada Exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
