@@ -21,15 +21,17 @@ export const getOrdersDataFromRequestBody = (req: Request): any[] => {
     estimatedDeparture,
     bookingId,
     employeeDni,
-    (realDeparture === undefined) ? null : realDeparture,
     (responsibleDni === undefined) ? null : responsibleDni,
-    (responsibleName === undefined) ? null : responsibleName
+    (responsibleName === undefined) ? null : responsibleName,
+    (realDeparture === undefined) ? null : realDeparture
   ]
+
   const newActivities = activities.map((activity) => [
     +activity.serviceId,
     +activity.activityId,
     '' + activity.employeeDni
   ])
+
   return [newOrder, newActivities]
 }
 
@@ -40,15 +42,28 @@ export const addOrder = async (
   try {
     const [newOrder, newActivities] = getOrdersDataFromRequestBody(req)
 
+    /*
+      TO-DO:
+      1. Validar que si la reserva ya tiene
+      orden no se puede volver a crear
+    */
+
     const insertar = await pool.query({
       text: `
         INSERT INTO orders (
-          entry_time, estimated_departure, booking_id, employee_dni, real_departure, responsible_dni, responsible_name
+          entry_time,
+          estimated_departure,
+          booking_id,
+          employee_dni,
+          responsible_dni,
+          responsible_name,
+          real_departure
         ) VALUES ($1, $2, $3, $4, $5, $6, $7) 
         RETURNING order_id
       `,
       values: newOrder
     })
+
     const insertedOrderId: string = insertar.rows[0].order_id
     for (let i = 0; i < newActivities.length; i++) {
       const temp = await pool.query({
@@ -69,9 +84,10 @@ export const addOrder = async (
             order_id, service_id, activity_id, employee_dni, cost_hour
           ) VALUES ($1, $2, $3, $4, $5)
         `,
-        values: [insertedOrderId, ...newActivities[i], temp]
+        values: [insertedOrderId, ...newActivities[i], temp.rows[0].cost_hour]
       })
     }
+
     const response = await pool.query({
       text: `
         SELECT 
