@@ -6,5 +6,7 @@ export const servicesSchema = z.object({
     .string()
     .nonempty('Es necesario indicar una descripción del servicio')
     .max(255, 'La descripción del servicio es muy larga'),
-  activities: z.array(activitiesSchema).min(1, 'Debe haber al menos una actividad')
+  activities: z
+    .array(activitiesSchema)
+    .min(1, 'Debe haber al menos una actividad')
 })

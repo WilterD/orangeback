@@ -10,7 +10,7 @@ import addOrder from '../../controllers/orders.controller/addOrder.action'
 import updateOrder from '../../controllers/orders.controller/updateOrder.action'
 import deleteOrder from '../../controllers/orders.controller/deleteOrder.action'
 
-const router = Router()
+// const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getOrders)
@@ -19,4 +19,4 @@ router.post('/', tokenGuard(), verifyToken(), schemaGuard(ordersSchema), addOrde
 router.put('/:orderId', tokenGuard(), verifyToken(), schemaGuard(ordersSchema), updateOrder)
 router.delete('/:orderId', tokenGuard(), verifyToken(), deleteOrder)
 
-export default router
+// export default router

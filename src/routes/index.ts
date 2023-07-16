@@ -13,6 +13,7 @@ import clientsRouter from './api/clients.routes'
 import modelsRouter from './api/models.routes'
 import vehiclesRouter from './api/vehicles.routes'
 import servicesRouter from './api/services.routes'
+import isRecommendedRouter from './api/isRecommended.routes'
 import employeesCoordServicesRouter from './api/employeesCoordinateServices.routes'
 import bookingsRouter from './api/bookings.routes'
 import ordersRouter from './api/orders.routes'
@@ -38,6 +39,7 @@ router.use('/clients', clientsRouter)
 router.use('/models', modelsRouter)
 router.use('/vehicles', vehiclesRouter)
 router.use('/services', servicesRouter)
+router.use('/is-recommended', isRecommendedRouter)
 router.use('/employees-coordinate-services', employeesCoordServicesRouter)
 router.use('/bookings', bookingsRouter)
 router.use('/orders', ordersRouter)
