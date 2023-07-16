@@ -415,7 +415,9 @@ CREATE TABLE products_per_agencies (
     ON UPDATE CASCADE,
   CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES products(product_id)
     ON DELETE RESTRICT
-    ON UPDATE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT chk_capacity CHECK (min_capacity < max_capacity),
+  CONSTRAINT chk_on_stock CHECK (on_stock < max_capacity)
 );
 
 -- 27

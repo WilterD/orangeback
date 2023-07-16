@@ -10,12 +10,15 @@ export const deleteProductPerAgency = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM products_per_agencies WHERE product_id = $1 AND agency_rif = $2',
-      values: [req.params.productId, req.params.agencyId]
+      text: `
+        DELETE FROM products_per_agencies 
+        WHERE product_id = $1 AND agency_rif = $2
+      `,
+      values: [req.params.productId, req.params.agencyRif]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el producto ${req.params.productId} $ en la agencia:  ${req.params.agencyId}`,
+        message: `No se pudo encontrar el producto ${req.params.productId} $ en la agencia:  ${req.params.agencyRif}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
