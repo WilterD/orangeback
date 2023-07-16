@@ -23,7 +23,7 @@ const getModelsCreateDataFromRequestBody = (
     engineOilType,
     oilBox,
     octane,
-    recommendedServices
+    services
   } = req.body as ModelCreation
   const newModel = [
     modelId,
@@ -37,12 +37,12 @@ const getModelsCreateDataFromRequestBody = (
     oilBox,
     octane
   ] as ModelCreatePayload
-  const newRecommendedServices = recommendedServices?.map(
-    (recommendedServices) =>
+  const newRecommendedServices = services?.map(
+    (service) =>
       [
-        +recommendedServices.serviceId,
-        +recommendedServices.mileage,
-        +recommendedServices.useTime
+        +service.serviceId,
+        +service.mileage,
+        +service.useTime
       ] as RecommendedServicesCreatePayload
   )
   return [newModel, newRecommendedServices]
@@ -110,7 +110,7 @@ export const addModel = async (
       .status(STATUS.CREATED)
       .json({
         ...camelizeObject(responseModel.rows[0]),
-        recommendedServices: camelizeObject(responseServices.rows)
+        services: camelizeObject(responseServices.rows)
       })
   } catch (error: unknown) {
     return handleControllerError(error, res)
