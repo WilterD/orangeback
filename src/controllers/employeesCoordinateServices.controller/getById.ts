@@ -11,13 +11,28 @@ export const getEmployeeCoordinateServiceById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: `SELECT 
-                  * 
-                FROM 
-                  employees_coordinate_services 
-                WHERE 
-                  employee_dni = $1 
-                  AND service_id = $2`,
+      text: `
+      SELECT 
+        ecs.employee_dni,
+        e.name AS employee_name,
+        ecs.service_id,
+        s.description AS service_name,
+        ecs.reservation_time,
+        ecs.capacity,
+        ecs.created_at
+      FROM 
+        employees_coordinate_services as ecs,
+        employees as e,
+        services as s
+      WHERE
+        ecs.employee_dni = e.employee_dni AND
+        ecs.service_id = s.service_id AND
+        e.employee_dni = $1 AND
+        s.service_id = $2
+      ORDER BY 
+        employee_dni, 
+        service_id 
+    `,
       values: [req.params.employeeDni, req.params.serviceId]
     })
     if (response.rowCount === 0) {

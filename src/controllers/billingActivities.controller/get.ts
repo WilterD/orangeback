@@ -22,11 +22,19 @@ export const getBillingActivities = async (
     }
 
     const { rows } = await pool.query({
-      text: 'SELECT COUNT(*) FROM order_details'
+      text: `
+        SELECT COUNT(*) 
+        FROM order_details
+      `
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM order_details ORDER BY order_id LIMIT $1 OFFSET $2',
+      text: `
+        SELECT * 
+        FROM order_details 
+        ORDER BY order_id 
+        LIMIT $1 OFFSET $2
+      `,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

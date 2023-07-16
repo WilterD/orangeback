@@ -10,7 +10,14 @@ export const deleteBillingProduct = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'DELETE FROM products_in_order_details WHERE service_id = $1, activity_id = $2, order_id = $3, product_id = $4',
+      text: `
+        DELETE FROM products_in_order_details 
+        WHERE 
+          service_id = $1 AND 
+          activity_id = $2 AND 
+          order_id = $3 AND 
+          product_id = $4
+      `,
       values: [req.params.serviceId, req.params.activityId, req.params.orderId, req.params.productId]
     })
     if (response.rowCount === 0) {

@@ -5,22 +5,8 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import camelizeObject from '../../utils/camelizeObject'
 
 const getBillingProductCreateDataFromRequestBody = (req: Request): any[] => {
-  const {
-    serviceId,
-    activityId,
-    orderId,
-    productId,
-    price,
-    quantity
-  } = req.body
-  const newbillingProduct = [
-    serviceId,
-    activityId,
-    orderId,
-    productId,
-    price,
-    quantity
-  ]
+  const { serviceId, activityId, orderId, productId } = req.body
+  const newbillingProduct = [serviceId, activityId, orderId, productId]
   return newbillingProduct
 }
 
@@ -31,17 +17,53 @@ export const addBillingProduct = async (
   try {
     const newbillingProduct = getBillingProductCreateDataFromRequestBody(req)
 
+    const price = await pool.query({
+      text: `
+        SELECT
+          price
+        FROM
+          products
+        WHERE
+          product_id = $1
+      `,
+      values: [req.params.productId]
+    })
+
     const insertar = await pool.query({
-      text: 'INSERT INTO products_in_order_details (service_id, activity_id, order_id, product_id, price, quantity) VALUES ($1,$2,$3,$4,$5,$6) RETURNING service_id, activity_id, order_id, product_id',
-      values: newbillingProduct
+      text: `
+        INSERT INTO products_in_order_details (
+          service_id, 
+          activity_id, 
+          order_id, 
+          product_id,
+          price
+        ) VALUES ($1, $2, $3, $4, $5, $6) 
+        RETURNING service_id, activity_id, order_id, product_id
+      `,
+      values: [...newbillingProduct, price]
     })
     const insertedServiceId: string = insertar.rows[0].service_id
-    const insertedActivityId: string = insertar.rows[1].activity_id
-    const insertedOrderId: string = insertar.rows[2].order_id
-    const insertedProductId: string = insertar.rows[3].product_id
+    const insertedActivityId: string = insertar.rows[0].activity_id
+    const insertedOrderId: string = insertar.rows[0].order_id
+    const insertedProductId: string = insertar.rows[0].product_id
     const response = await pool.query({
-      text: 'SELECT * FROM products_in_order_details WHERE service_id = $1, activity_id = $2, order_id = $3, product_id = $4',
-      values: [insertedServiceId, insertedActivityId, insertedOrderId, insertedProductId]
+      text: `
+        SELECT 
+          * 
+        FROM 
+          products_in_order_details 
+        WHERE 
+          service_id = $1 AND 
+          activity_id = $2 AND 
+          order_id = $3 AND 
+          product_id = $4
+      `,
+      values: [
+        insertedServiceId,
+        insertedActivityId,
+        insertedOrderId,
+        insertedProductId
+      ]
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {

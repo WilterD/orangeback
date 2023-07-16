@@ -13,19 +13,10 @@ export const createbillingProductsSchema = z.object({
   productId: z
     .string()
     .nonempty('Es necesario indicar una descripción del producto')
-    .max(32, 'La descripción del producto es muy larga'),
-  price: z
-    .number()
-    .min(1, 'el precio debe ser mayor o igual a 1'),
-  quantity: z
-    .number()
-    .min(1, 'La cantidad debe ser mayor o igual a 1')
+    .max(32, 'La descripción del producto es muy larga')
 })
 
 export const updatebillingProductsSchema = z.object({
-  price: z
-    .number()
-    .min(1, 'el precio debe ser mayor o igual a 1'),
   quantity: z
     .number()
     .min(1, 'La cantidad debe ser mayor o igual a 1')
