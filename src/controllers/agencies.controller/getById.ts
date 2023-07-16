@@ -25,5 +25,3 @@ export const getAgencyById = async (
     return handleControllerError(error, res)
   }
 }
-
-
