@@ -318,14 +318,37 @@ INSERT INTO bookings_per_services (
 
 -- Orders
 
-INSERT INTO orders 
-  (responsible_dni, responsible_name, entry_time, estimated_departure, real_departure, booking_id, employee_dni, created_at)
-VALUES('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,4,'444555666',CURRENT_TIMESTAMP);
+INSERT INTO orders (
+  responsible_dni,
+  responsible_name,
+  entry_time,
+  estimated_departure,
+  real_departure,
+  booking_id,
+  employee_dni,
+  created_at
+) VALUES
+  ('123','Juan',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,4,'444555666',CURRENT_TIMESTAMP),
+  ('124','Victor',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,5,'444555667',CURRENT_TIMESTAMP),
+  ('125','Jose',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'444555668',CURRENT_TIMESTAMP),
+  ('126','Maria',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,2,'444555669',CURRENT_TIMESTAMP),
+  ('127','Alberto',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,8,'444555670',CURRENT_TIMESTAMP);
 
 -- Order_Details
 
-INSERT INTO order_details (service_id,activity_id,order_id,cost_hour,hours_taken,employee_dni) 
-VALUES (1,1,1,25,2,'444555666');
+INSERT INTO order_details(
+  service_id,
+  activity_id,
+  order_id,
+  cost_hour,
+  hours_taken,
+  employee_dni
+) VALUES
+  (1,1,1,25,2,'444555666'),
+  (1,1,2,3,10,'444555666'),
+  (1,1,3,5,15,'444555666'),
+  (1,2,1,40,1,'444555670'),
+  (1,2,2,10,6,'444555670');
 
 -- Bills
 
@@ -400,11 +423,11 @@ INSERT INTO Products(
   price,
   supply_line_id  
 )VALUES
-  ('12345678','agua','un liquido','minerales atlantico', true, 200, 1),
-  ('1234567','aceite', 'un liquido que le da energia al vehiculo', 'minerales atlantico', true, 200, 2),
-  ('123456','neumatico br12 mitsubishi','un complemento del vehiculo','minerales atlantico', false, 140, 3),
-  ('12345','filtro','un complemento del vehiculo','minerales atlantico', true, 240, 4),
-  ('1234','motor','un complemento del vehiculo','minerales atlantico', false, 300, 5);
+  ('12345678','Mobil Super 10w-30','aceite de motor','Premium Motor Oil', true, 200, 1),
+  ('12345679','Filtro de combustible Diesel L 200', 'Filtro de combustible', 'BLUE PRINT', true, 124, 2),
+  ('12345680','neumatico Mirage At172 mitsubishi','Neumatico','Mirage', false, 300, 3),
+  ('12345681','Kubota v1505 turbo diesel','Motor','Kubota', true, 1000, 4),
+  ('12345682','Tubo de escape intermedio chevrolet aveo','tubo de escape','Celerid', false, 90, 5);
 
 -- Products_Per_Agencies
 
@@ -416,9 +439,9 @@ INSERT INTO products_per_agencies (
   min_capacity
 ) VALUES 
   ('12345678', '1', 100, 500, 50),
-  ( '1234567', '2', 50, 200, 20),
-  ('123456', '3', 200, 800, 80),
-  ('12345', '4', 150, 600, 60),
-  ('1234', '5', 300, 1200, 120);
+  ( '12345679', '1', 50, 200, 20),
+  ('12345680', '2', 200, 800, 80),
+  ('12345681', '2', 150, 600, 60),
+  ('12345682', '3', 300, 1200, 120);
 
 -- Products_In_Order_Details
