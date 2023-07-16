@@ -51,7 +51,7 @@ export const getEmployeesCoordinateServices = async (
 
     let response
 
-    if (req.query?.onlyForAgencyRif != null && req.query?.onlyForAgencyRif !== '') {
+    if (req.query?.onlyForAgencyRif && req.query?.onlyForAgencyRif !== null && req.query?.onlyForAgencyRif !== 'null' && req.query?.onlyForAgencyRif !== '') {
       const { rows } = await pool.query({
         text: `
           SELECT 
