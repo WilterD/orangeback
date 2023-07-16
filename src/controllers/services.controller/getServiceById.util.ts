@@ -76,7 +76,7 @@ export default async function getServiceById (serviceId: number): Promise<Servic
 
   return {
     ...camelizeObject(responseService.rows[0]) as unknown as Service,
-    activities: camelizeObject(responseActivities.rows) as unknown[] as Activity[],
+    activities: camelizeObject(responseActivities.rows) as Activity[],
     bookings: camelizeObject(responseBookings.rows) as Booking[],
     models: camelizeObject(responseModels.rows) as Model[]
   }

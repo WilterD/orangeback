@@ -27,7 +27,16 @@ export const updateAgency = async (
     const updatedAgency = getAgenciesUpdateDataFromRequestBody(req)
     updatedAgency.push(req.params.agencyId)
     const response = await pool.query({
-      text: 'UPDATE agencies SET business_name = $1, manager_dni = $2, city_id = $3 WHERE agency_rif = $4',
+      text: `
+            UPDATE
+              agencies
+            SET
+              business_name = $1,
+              manager_dni = $2,
+              city_id = $3
+            WHERE
+              agency_rif = $4
+            `,
       values: updatedAgency
     })
     if (response.rowCount === 0) {

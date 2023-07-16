@@ -11,12 +11,20 @@ export const getProductPerAgencyById = async (
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: 'SELECT * FROM products_per_agencies WHERE product_id = $1 AND agency_rif = $2',
-      values: [req.params.productId, req.params.agencyId]
+      text: `
+        SELECT 
+          * 
+        FROM 
+          products_per_agencies 
+        WHERE 
+          product_id = $1 AND 
+          agency_rif = $2
+      `,
+      values: [req.params.productId, req.params.agencyRif]
     })
     if (response.rowCount === 0) {
       throw new StatusError({
-        message: `No se pudo encontrar el producto ${req.params.productId} $ en la agencia:  ${req.params.agencyId} o la agencia/producto es inexistente`,
+        message: `No se pudo encontrar el producto ${req.params.productId} en la agencia:  ${req.params.agencyRif} o la agencia/producto es inexistente`,
         statusCode: STATUS.NOT_FOUND
       })
     }
