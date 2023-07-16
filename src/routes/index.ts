@@ -48,6 +48,6 @@ router.use('/payments', paymentsRouter)
 router.use('/supply-lines', supplyLinesRouter)
 router.use('/products', productsRouter)
 router.use('/stocks', stocksRouter)
-router.use('order-details', billingActivitiesRouter)
+router.use('billing-activities', billingActivitiesRouter)
 
 export default router
