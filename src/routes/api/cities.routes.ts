@@ -16,9 +16,9 @@ const router = Router()
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getCities)
 router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllCities)
-router.get('/:cityId', tokenGuard(), verifyToken(), getCityById)
+router.get('/:modelId', tokenGuard(), verifyToken(), getCityById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(citiesSchema), addCity)
-router.put('/:cityId', tokenGuard(), verifyToken(), schemaGuard(citiesSchema), updateCity)
-router.delete('/:cityId', tokenGuard(), verifyToken(), deleteCity)
+router.put('/:modelId', tokenGuard(), verifyToken(), schemaGuard(citiesSchema), updateCity)
+router.delete('/:modelId', tokenGuard(), verifyToken(), deleteCity)
 
 export default router

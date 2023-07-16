@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
-import getServiceById from './getServiceById.util'
+import getDetailedOrder from './getDetailedOrder'
 
-export const getById = async (
+export default async function getOrderById (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response> {
   try {
-    const service = await getServiceById(+req.params.serviceId)
-    return res.status(STATUS.OK).json(service)
+    const order = await getDetailedOrder(req.params.orderId)
+    return res.status(STATUS.OK).json(order)
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
