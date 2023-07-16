@@ -23,7 +23,7 @@ export const getProductsPerAgencies = async (
     let text = `
       SELECT
         p.product_id,
-        p.short_name,
+        p.short_name_product,
         ppa.agency_rif,
         ppa.on_stock,
         ppa.min_capacity,
@@ -46,7 +46,7 @@ export const getProductsPerAgencies = async (
           SELECT 
             COUNT(*) 
           FROM 
-            products_per_agencies AS
+            products_per_agencies
           WHERE
             agency_rif = $1
         `,
@@ -58,7 +58,7 @@ export const getProductsPerAgencies = async (
       text = `
         SELECT 
           p.product_id,
-          p.short_name,
+          p.short_name_product,
           ppa.agency_rif,
           ppa.on_stock,
           ppa.min_capacity,
