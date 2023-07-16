@@ -17,17 +17,30 @@ export const addBillingProduct = async (
   try {
     const newbillingProduct = getBillingProductCreateDataFromRequestBody(req)
 
+    const price = await pool.query({
+      text: `
+        SELECT
+          price
+        FROM
+          products
+        WHERE
+          product_id = $1
+      `,
+      values: [req.params.productId]
+    })
+
     const insertar = await pool.query({
       text: `
         INSERT INTO products_in_order_details (
           service_id, 
           activity_id, 
           order_id, 
-          product_id
-        ) VALUES ($1,$2,$3,$4,$5,$6) 
+          product_id,
+          price
+        ) VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING service_id, activity_id, order_id, product_id
       `,
-      values: newbillingProduct
+      values: [...newbillingProduct, price]
     })
     const insertedServiceId: string = insertar.rows[0].service_id
     const insertedActivityId: string = insertar.rows[0].activity_id
