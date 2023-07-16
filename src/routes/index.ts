@@ -23,6 +23,10 @@ import paymentsRouter from './api/payments.routes'
 import supplyLinesRouter from './api/supplyLines.routes'
 import productsRouter from './api/products.routes'
 import stocksRouter from './api/stocks.routes'
+import cardBanksRouter from './api/cardBanks.routes'
+import billsRouter from './api/bills.routes'
+import paymentsRouter from './api/payments.routes'
+import billingProductsRouter from './api/billingProducts.routes'
 
 const router = express.Router()
 
@@ -49,5 +53,9 @@ router.use('/payments', paymentsRouter)
 router.use('/supply-lines', supplyLinesRouter)
 router.use('/products', productsRouter)
 router.use('/stocks', stocksRouter)
+router.use('/cardbanks', cardBanksRouter)
+router.use('/bills', billsRouter)
+router.use('/payments', paymentsRouter)
+router.use('/billing-products', billingProductsRouter)
 
 export default router

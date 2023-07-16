@@ -451,4 +451,14 @@ INSERT INTO products_per_agencies (
   ('12345', '4', 150, 600, 60),
   ('1234', '5', 300, 1200, 120);
 
--- Products_In_Order_Details
+-- Products_In_Order_Details  
+
+INSERT INTO products_in_order_details (
+    service_id,
+    activity_id,
+    order_id,
+    product_id,
+    price,
+    quantity
+) VALUES 
+  (1, 1, 1, '12345678', 50, 3);
