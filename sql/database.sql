@@ -324,9 +324,6 @@ CREATE TABLE order_details (
     ON UPDATE CASCADE,
   CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id)
     ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni)
-    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 

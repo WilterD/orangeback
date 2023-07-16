@@ -22,6 +22,7 @@ import paymentsRouter from './api/payments.routes'
 import supplyLinesRouter from './api/supplyLines.routes'
 import productsRouter from './api/products.routes'
 import stocksRouter from './api/stocks.routes'
+import billingActivitiesRouter from './api/billingActivities.routes'
 
 const router = express.Router()
 
@@ -47,5 +48,6 @@ router.use('/payments', paymentsRouter)
 router.use('/supply-lines', supplyLinesRouter)
 router.use('/products', productsRouter)
 router.use('/stocks', stocksRouter)
+router.use('order-details', billingActivitiesRouter)
 
 export default router

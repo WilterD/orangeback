@@ -348,7 +348,8 @@ INSERT INTO order_details (
   hours_taken,
   employee_dni
 ) VALUES 
-  (1, 1, 1, 25, 2, '444555666');
+  (1, 1, 1, 25, 2, '444555666'),
+  (1, 1, 2, 50, 4, '2');
 
 -- Bills
 
@@ -451,4 +452,4 @@ INSERT INTO products_per_agencies (
   ('12345', '4', 150, 600, 60),
   ('1234', '5', 300, 1200, 120);
 
--- Products_In_Order_Details
+
