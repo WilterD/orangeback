@@ -24,7 +24,7 @@ export const signIn = async (
     const { rows } = await pool.query({
       text: `SELECT * 
               FROM admins 
-              WHERE email = $`,
+              WHERE email = $1`,
       values: [loginData[0]]
     })
 
