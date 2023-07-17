@@ -9,10 +9,12 @@ import { getModelById } from '../../controllers/models.controller/getById'
 import { addModel } from '../../controllers/models.controller/add'
 import { updateModel } from '../../controllers/models.controller/update'
 import { deleteModel } from '../../controllers/models.controller/delete'
+import { getAllModels } from '../../controllers/models.controller/getAll'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllModels)
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getModels)
 router.get('/:modelId', tokenGuard(), verifyToken(), getModelById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createModelsSchema), addModel)
