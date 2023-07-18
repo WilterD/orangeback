@@ -9,7 +9,23 @@ export const getAllBills = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { rows } = await pool.query({ text: 'SELECT * FROM bills' })
+    const { rows } = await pool.query({
+      text: `
+        SELECT
+          c.client_dni,
+          c.name,
+          b.*
+        FROM 
+          bills AS b,
+          orders AS o,
+          bookings AS bk,
+          clients AS c
+        WHERE
+          b.order_id = o.order_id AND
+          o.booking_id = bk.booking_id AND
+          bk.client_dni = c.client_dni
+      `
+    })
     return res.status(STATUS.OK).json(camelizeObject(rows))
   } catch (error: unknown) {
     return handleControllerError(error, res)
