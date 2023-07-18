@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Request, Response } from 'express'
 import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'

@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Request, Response } from 'express'
 import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import camelizeObject from '../../utils/camelizeObject'
+import { StatusError } from '../../utils/responses/status-error'
 
 const getAgenciesCreateDataFromRequestBody = (req: Request): any[] => {
   const {
@@ -26,6 +28,22 @@ export const addAgency = async (
 ): Promise<Response> => {
   try {
     const newAgency = getAgenciesCreateDataFromRequestBody(req)
+
+    const { rows: alreadyHasAnAgency } = await pool.query({
+      text: `
+        SELECT COUNT(*)
+        FROM agencies
+        WHERE manager_dni = $1
+      `,
+      values: [req.body.managerDni]
+    })
+
+    if (alreadyHasAnAgency[0].count > 0) {
+      throw new StatusError({
+        message: `Ya el encargado de DNI: ${req.body.managerDni} se está encargando de una agencia`,
+        statusCode: STATUS.NOT_FOUND
+      })
+    }
 
     const insertar = await pool.query({
       text: `
