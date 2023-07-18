@@ -443,6 +443,8 @@ CREATE TABLE products_in_order_details (
 
 COMMIT;
 
+-- Triggers de Costo en Facturas
+
 BEGIN;
 
 CREATE OR REPLACE FUNCTION update_bill_total_cost() RETURNS TRIGGER AS $$
@@ -489,5 +491,49 @@ CREATE TRIGGER update_new_bill_total_cost_trigger
 AFTER INSERT ON bills
 FOR EACH ROW
 EXECUTE FUNCTION update_bill_total_cost(NEW);
+
+COMMIT;
+
+-- Trigger de Asignación de Descuento
+
+BEGIN;
+
+CREATE OR REPLACE FUNCTION update_discount_value()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE bills SET discount_value = (
+    SELECT COALESCE(MAX(d.percentage), 0) AS percentage
+    FROM orders AS o
+    JOIN bookings AS b ON o.booking_id = b.booking_id
+    JOIN discounts AS d ON b.agency_rif = d.agency_rif
+    WHERE
+      o.order_id = NEW.order_id AND
+      d.services_min <= (
+        SELECT COALESCE(COUNT(o1.order_id), 0) AS order_count
+        FROM clients AS c
+        JOIN bookings AS b1 ON c.client_dni = b1.client_dni
+        JOIN orders AS o1 ON b1.booking_id = o1.booking_id
+        WHERE 
+          c.client_dni = b.client_dni AND 
+          o1.real_departure >= DATE_TRUNC('month', NOW() - INTERVAL '6 months')
+      ) AND
+      d.services_max >= (
+        SELECT COALESCE(COUNT(o1.order_id), 0) AS order_count
+        FROM clients AS c
+        JOIN bookings AS b1 ON c.client_dni = b1.client_dni
+        JOIN orders AS o1 ON b1.booking_id = o1.booking_id
+        WHERE 
+          c.client_dni = b.client_dni AND 
+          o1.real_departure >= DATE_TRUNC('month', NOW() - INTERVAL '6 months')
+      )
+  ) WHERE bill_id = NEW.bill_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_discount_value_trigger
+AFTER INSERT ON bills
+FOR EACH ROW
+EXECUTE FUNCTION update_discount_value();
 
 COMMIT;
