@@ -13,18 +13,16 @@ export const createVehiclesSchema = z.object({
     .string()
     .nonempty('Es necesario indicar una numero de motor del vehiculo')
     .max(64, 'El numero de motor debe ser menor a 64 carácteres'),
-  saleDate: z
-    .string()
-    .refine(
-      (fecha) => {
-        const regex = /^(\d{4})-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/
-        return regex.test(fecha)
-      },
-      {
-        message:
-        'La fecha debe estar en formato DD-MM-AAAA y ser una fecha válida'
-      }
-    ),
+  saleDate: z.string().refine(
+    (fecha) => {
+      const regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-(\d{4})$/
+      return regex.test(fecha)
+    },
+    {
+      message:
+          'La fecha debe estar en formato DD-MM-AAAA y ser una fecha válida'
+    }
+  ),
   color: z
     .string()
     .nonempty('Es necesario indicar un color del vehiculo')
@@ -53,18 +51,16 @@ export const createVehiclesSchema = z.object({
 })
 
 export const updateVehiclesSchema = z.object({
-  saleDate: z
-    .string()
-    .refine(
-      (fecha) => {
-        const regex = /^(\d{4})-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/
-        return regex.test(fecha)
-      },
-      {
-        message:
+  saleDate: z.string().refine(
+    (fecha) => {
+      const regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-(\d{4})$/
+      return regex.test(fecha)
+    },
+    {
+      message:
         'La fecha debe estar en formato DD-MM-AAAA y ser una fecha válida'
-      }
-    ),
+    }
+  ),
   color: z
     .string()
     .nonempty('Es necesario indicar un color del vehiculo')

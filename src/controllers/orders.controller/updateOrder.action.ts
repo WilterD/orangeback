@@ -10,7 +10,7 @@ export default async function updateOrder (
   res: Response
 ): Promise<Response> {
   try {
-    const updatedOrder = getOrdersDataFromRequestBody(req)
+    const [updatedOrder] = getOrdersDataFromRequestBody(req)
     const response = await pool.query({
       text: `
         UPDATE orders SET 
