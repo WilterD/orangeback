@@ -9,10 +9,12 @@ import { getCardBankById } from '../../controllers/cardBanks.controller/getById'
 import { addCardBank } from '../../controllers/cardBanks.controller/add'
 import { updateCardBank } from '../../controllers/cardBanks.controller/update'
 import { deleteCardBank } from '../../controllers/cardBanks.controller/delete'
+import { getAllCardBanks } from '../../controllers/cardBanks.controller/getAll'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllCardBanks)
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getCardBanks)
 router.get('/:cardbankId', tokenGuard(), verifyToken(), getCardBankById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createCardBanksSchema), addCardBank)
