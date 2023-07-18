@@ -79,7 +79,7 @@ async function executeGetAllServices (
       ORDER BY description
     `
 
-    response = await pool.query({ text, values: [req.query.onlyForAgencyRif] })
+    response = await pool.query({ text, values: whereArgs })
   } else {
     response = await pool.query({ text })
   }
