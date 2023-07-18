@@ -54,7 +54,19 @@ export const updateModel = async (
   try {
     const updateModel = getModelsUpdateDataFromRequestBody(req)
     const response = await pool.query({
-      text: 'UPDATE models SET brand = $1, description = $2, model_kg = $3,model_year = $4, seats_quantity = $5, refrigerant_type = $6, engine_oil_type = $7, oil_box = $8, octane = $9 WHERE model_id = $10',
+      text: `
+        UPDATE models SET 
+          brand = $1, 
+          description = $2, 
+          model_kg = $3,
+          model_year = $4, 
+          seats_quantity = $5, 
+          refrigerant_type = $6, 
+          engine_oil_type = $7, 
+          oil_box = $8, 
+          octane = $9 
+        WHERE model_id = $10
+      `,
       values: [...updateModel, req.params.modelId]
     })
     if (response.rowCount === 0) {
