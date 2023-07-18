@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { getSupplyLines } from '../../controllers/supplyLines.controller/get'
+import { getAllSupplyLines } from '../../controllers/supplyLines.controller/getAll'
 import { getSupplyLineById } from '../../controllers/supplyLines.controller/getById'
 import { addSupplyLine } from '../../controllers/supplyLines.controller/add'
 import { updateSupplyLine } from '../../controllers/supplyLines.controller/update'
@@ -14,6 +15,7 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getSupplyLines)
+router.get('/all', tokenGuard(), verifyToken(), paginationGuard(), getAllSupplyLines)
 router.get('/:supplyLineId', tokenGuard(), verifyToken(), getSupplyLineById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(supplyLinesSchema), addSupplyLine)
 router.put('/:supplyLineId', tokenGuard(), verifyToken(), schemaGuard(supplyLinesSchema), updateSupplyLine)
