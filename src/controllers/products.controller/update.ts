@@ -33,7 +33,7 @@ export const updateProduct = async (
     const updatedProduct = getProductsUpdateDataFromRequestBody(req)
     updatedProduct.push(req.params.productId)
     const response = await pool.query({
-      text: 'UPDATE products SET business_name = $1, manager_dni = $2, city_id = $3 WHERE agency_rif = $4',
+      text: 'UPDATE products SET short_name_product = $1, description = $2, provider = $3, is_ecological = $4, price = $5, supply_line_id = $6 WHERE product_id = $7',
       values: updatedProduct
     })
     if (response.rowCount === 0) {

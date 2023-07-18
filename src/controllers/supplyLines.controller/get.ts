@@ -23,7 +23,7 @@ export const getSupplyLines = async (
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM supply_lines ORDER BY name LIMIT $1 OFFSET $2',
+      text: 'SELECT * FROM supply_lines ORDER BY supply_line_id LIMIT $1 OFFSET $2',
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
