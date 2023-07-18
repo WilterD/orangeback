@@ -9,14 +9,14 @@ import { StatusError } from '../../utils/responses/status-error'
 const getPaymentsCreateDataFromRequestBody = (req: Request): any[] => {
   const {
     billId,
-    cost,
+    amount,
     paymentDate,
     paymentMethod,
     cardNumber
   } = req.body
   const newPayment = [
     billId,
-    cost,
+    amount,
     paymentDate,
     paymentMethod,
     cardNumber
@@ -49,7 +49,7 @@ export const addPayment = async (
       text: `
         INSERT INTO payments (
           bill_id,
-          cost,
+          amount,
           payment_date,
           payment_method,
           card_number,
