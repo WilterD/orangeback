@@ -23,7 +23,8 @@ async function executeGetAllEmployees (body: GetAllEmployeesOptions): Promise<Em
   const whereValues = []
   let onlyForAgencyRifComplement = ''
 
-  if (body.onlyForAgencyRif != null && body.onlyForAgencyRif !== '') {
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  if (!!body.onlyForAgencyRif && body.onlyForAgencyRif !== null && body.onlyForAgencyRif !== '') {
     whereValues.push(body.onlyForAgencyRif)
     onlyForAgencyRifComplement += `
       WHERE
