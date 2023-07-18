@@ -337,7 +337,7 @@ CREATE TABLE order_details (
 CREATE TABLE bills (
   bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
   bill_date dom_created_at,
-  discount_value FLOAT DEFAULT 0,
+  discount_value dom_discount_percentage DEFAULT 0,
   total_cost FLOAT DEFAULT 0,
   order_id INTEGER NOT NULL,
   PRIMARY KEY (bill_id),
