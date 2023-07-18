@@ -7,12 +7,13 @@ import camelizeObject from '../../utils/camelizeObject'
 import { BookingData } from './interface'
 import { StatusError } from '../../utils/responses/status-error'
 import { dateParser } from '../../utils/dateParser'
+import { uniq } from 'lodash'
 
 const getBookingsDataFromRequestBody = (req: Request): [any[], number[]] => {
   const { expirationDate, clientDni, licensePlate, agencyRif, servicesIds } =
     req.body as BookingData
   const newBooking = [expirationDate, clientDni, licensePlate, agencyRif]
-  return [newBooking, servicesIds]
+  return [newBooking, uniq(servicesIds)]
 }
 
 export const addBooking = async (
