@@ -15,10 +15,10 @@ export const getAllClients = async (
               FROM 
                 clients 
               ORDER BY 
-                name`,
-    });
-    return res.status(STATUS.OK).json(camelizeObject(rows));
+                name`
+    })
+    return res.status(STATUS.OK).json(camelizeObject(rows))
   } catch (error: unknown) {
-    return handleControllerError(error, res);
+    return handleControllerError(error, res)
   }
 };
