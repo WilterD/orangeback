@@ -30,6 +30,10 @@ export const createBookingsSchema = z.object({
     .string()
     .nonempty('Es necesario indicar una placa de vehículo')
     .max(16, 'La placa del vehículo debe ser menor a 16 carácteres'),
+  agencyRif: z
+    .string()
+    .nonempty('Es necesario indicar un rif')
+    .max(32, 'El Rif debe ser menor a 32  carácteres'),
   servicesIds: z
     .array(z.number().min(1, 'El id de servicio debe ser mayor o igual a 1'))
     .nonempty('Es necesario indicar al menos un id de servicio')

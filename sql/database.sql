@@ -225,7 +225,7 @@ CREATE TABLE employees_specialties (
   created_at dom_created_at,
   PRIMARY KEY (employee_dni, service_id),
   CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
     ON DELETE RESTRICT
@@ -257,12 +257,15 @@ CREATE TABLE bookings (
   expiration_date TIMESTAMP NOT NULL,
   client_dni dom_dni NOT NULL,
   license_plate VARCHAR(16) NOT NULL,
-  created_at dom_created_at,
+  agency_rif dom_agency_rif NOT NULL,
   PRIMARY KEY (booking_id),
   CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients (client_dni) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_license_plate FOREIGN KEY (license_plate) REFERENCES vehicles (license_plate) 
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies (agency_rif)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT chk_exp_date CHECK (expiration_date > expedition_date)

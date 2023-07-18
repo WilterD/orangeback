@@ -10,12 +10,14 @@ const getBookingsDataFromRequestBody = (req: Request): [any[], number[]] => {
     expirationDate,
     clientDni,
     licensePlate,
+    agencyRif,
     servicesIds
   } = req.body as BookingData
   const newBooking = [
     expirationDate,
     clientDni,
-    licensePlate
+    licensePlate,
+    agencyRif
   ]
   return [newBooking, servicesIds]
 }
@@ -28,7 +30,15 @@ export const addBooking = async (
     const newBooking = getBookingsDataFromRequestBody(req)
 
     const insertar = await pool.query({
-      text: 'INSERT INTO bookings (expiration_date, client_dni, license_plate) VALUES ($1, $2, $3) RETURNING booking_id',
+      text: `
+        INSERT INTO bookings (
+          expiration_date, 
+          client_dni, 
+          license_plate,
+          agency_rif
+        ) VALUES ($1, $2, $3, $4) 
+        RETURNING booking_id
+      `,
       values: newBooking[0]
     })
     const insertedBookingId: string = insertar.rows[0].booking_id
