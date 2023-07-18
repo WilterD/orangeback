@@ -23,7 +23,12 @@ export const getModels = async (
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM models ORDER BY model_id LIMIT $1 OFFSET $2',
+      text: `
+        SELECT * 
+        FROM models 
+        ORDER BY model_id 
+        LIMIT $1 OFFSET $2
+      `,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
