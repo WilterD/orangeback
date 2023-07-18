@@ -40,8 +40,13 @@ export const getProductsPerAgencies = async (
 
     let response
 
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (req.query?.onlyForAgencyRif && req.query?.onlyForAgencyRif !== null && req.query?.onlyForAgencyRif !== 'null' && req.query?.onlyForAgencyRif !== '') {
+    if (
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      req.query?.onlyForAgencyRif &&
+      req.query?.onlyForAgencyRif !== null &&
+      req.query?.onlyForAgencyRif !== 'null' &&
+      req.query?.onlyForAgencyRif !== ''
+    ) {
       const { rows } = await pool.query({
         text: `
           SELECT 
@@ -101,7 +106,12 @@ export const getProductsPerAgencies = async (
       page: Number(page),
       perPage: Number(size)
     }
-    return paginatedItemsResponse(res, STATUS.OK, camelizeObject(response.rows) as any, pagination)
+    return paginatedItemsResponse(
+      res,
+      STATUS.OK,
+      camelizeObject(response.rows) as any,
+      pagination
+    )
   } catch (error: unknown) {
     console.log(error)
     return handleControllerError(error, res)
