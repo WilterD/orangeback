@@ -225,7 +225,7 @@ CREATE TABLE employees_specialties (
   created_at dom_created_at,
   PRIMARY KEY (employee_dni, service_id),
   CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT fk_service_id FOREIGN KEY (service_id) REFERENCES services(service_id) 
     ON DELETE RESTRICT
@@ -257,12 +257,15 @@ CREATE TABLE bookings (
   expiration_date TIMESTAMP NOT NULL,
   client_dni dom_dni NOT NULL,
   license_plate VARCHAR(16) NOT NULL,
-  created_at dom_created_at,
+  agency_rif dom_agency_rif NOT NULL,
   PRIMARY KEY (booking_id),
   CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients (client_dni) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_license_plate FOREIGN KEY (license_plate) REFERENCES vehicles (license_plate) 
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies (agency_rif)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT chk_exp_date CHECK (expiration_date > expedition_date)
@@ -302,7 +305,6 @@ CREATE TABLE orders (
   CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  CONSTRAINT chk_entry_time CHECK (entry_time >= CURRENT_TIMESTAMP),
   CONSTRAINT chk_estimated_departure CHECK (estimated_departure > entry_time),
   CONSTRAINT chk_real_departure CHECK (real_departure > entry_time)
 );
@@ -334,11 +336,10 @@ CREATE TABLE order_details (
 
 CREATE TABLE bills (
   bill_id INTEGER GENERATED ALWAYS AS IDENTITY,
-  bill_date TIMESTAMP NOT NULL,
+  bill_date dom_created_at,
   discount_value FLOAT DEFAULT 0,
   total_cost FLOAT DEFAULT 0,
   order_id INTEGER NOT NULL,
-  created_at dom_created_at,
   PRIMARY KEY (bill_id),
   CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(order_id) 
     ON DELETE RESTRICT
@@ -439,5 +440,100 @@ CREATE TABLE products_in_order_details (
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
+
+COMMIT;
+
+-- Triggers de Costo en Facturas
+
+BEGIN;
+
+CREATE OR REPLACE FUNCTION update_bill_total_cost() RETURNS TRIGGER AS $$
+DECLARE
+  new_total_cost_activities FLOAT;
+  new_total_cost_products FLOAT;
+  new_total_cost FLOAT;
+BEGIN
+  -- Obtener la suma de los costos por hora multiplicados por las horas tomadas en la orden
+  SELECT SUM(cost_hour * hours_taken)
+  INTO new_total_cost_activities
+  FROM order_details
+  WHERE order_id = NEW.order_id;
+
+  -- Obtener la suma de los precios de los productos en la orden
+  SELECT COALESCE(SUM(price * quantity), 0)
+  INTO new_total_cost_products
+  FROM products_in_order_details
+  WHERE order_id = NEW.order_id;
+
+  -- Sumar la suma de los costos y la suma de los precios de los productos y restar el valor del descuento
+  new_total_cost = new_total_cost_activities + COALESCE(new_total_cost_products, 0);
+
+  -- Actualizar el valor de total_cost en la tabla bills
+  UPDATE bills
+  SET total_cost = new_total_cost
+  WHERE order_id = NEW.order_id;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_bill_total_cost_trigger
+AFTER INSERT OR UPDATE OR DELETE ON order_details
+FOR EACH ROW
+EXECUTE FUNCTION update_bill_total_cost();
+
+CREATE TRIGGER update_bill_total_cost_products_trigger
+AFTER INSERT OR UPDATE OR DELETE ON products_in_order_details
+FOR EACH ROW
+EXECUTE FUNCTION update_bill_total_cost(NEW);
+
+CREATE TRIGGER update_new_bill_total_cost_trigger
+AFTER INSERT ON bills
+FOR EACH ROW
+EXECUTE FUNCTION update_bill_total_cost(NEW);
+
+COMMIT;
+
+-- Trigger de Asignación de Descuento
+
+BEGIN;
+
+CREATE OR REPLACE FUNCTION update_discount_value()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE bills SET discount_value = (
+    SELECT COALESCE(MAX(d.percentage), 0) AS percentage
+    FROM orders AS o
+    JOIN bookings AS b ON o.booking_id = b.booking_id
+    JOIN discounts AS d ON b.agency_rif = d.agency_rif
+    WHERE
+      o.order_id = NEW.order_id AND
+      d.services_min <= (
+        SELECT COALESCE(COUNT(o1.order_id), 0) AS order_count
+        FROM clients AS c
+        JOIN bookings AS b1 ON c.client_dni = b1.client_dni
+        JOIN orders AS o1 ON b1.booking_id = o1.booking_id
+        WHERE 
+          c.client_dni = b.client_dni AND 
+          o1.real_departure >= DATE_TRUNC('month', NOW() - INTERVAL '6 months')
+      ) AND
+      d.services_max >= (
+        SELECT COALESCE(COUNT(o1.order_id), 0) AS order_count
+        FROM clients AS c
+        JOIN bookings AS b1 ON c.client_dni = b1.client_dni
+        JOIN orders AS o1 ON b1.booking_id = o1.booking_id
+        WHERE 
+          c.client_dni = b.client_dni AND 
+          o1.real_departure >= DATE_TRUNC('month', NOW() - INTERVAL '6 months')
+      )
+  ) WHERE bill_id = NEW.bill_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_discount_value_trigger
+AFTER INSERT ON bills
+FOR EACH ROW
+EXECUTE FUNCTION update_discount_value();
 
 COMMIT;

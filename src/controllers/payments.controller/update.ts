@@ -6,14 +6,14 @@ import { StatusError } from '../../utils/responses/status-error'
 
 const getPaymentsUpdateDataFromRequestBody = (req: Request): any[] => {
   const {
-    cost,
+    amount,
     paymentDate,
     paymentMethod,
     cardNumber
   } = req.body
 
   const updatedPayment = [
-    cost,
+    amount,
     paymentDate,
     paymentMethod,
     cardNumber
@@ -27,10 +27,10 @@ export const updatePayment = async (
 ): Promise<Response> => {
   try {
     const updatedPayment = getPaymentsUpdateDataFromRequestBody(req)
-    const billId = req.params.billId;
-    const paymentId = req.params.paymentId;
+    const billId = req.params.billId
+    const paymentId = req.params.paymentId
     const response = await pool.query({
-      text: 'UPDATE payments SET cost = $1, payment_date = $2, payment_method = $3, card_number = $4 WHERE bill_id = $5 AND payment_id = $6',
+      text: 'UPDATE payments SET amount = $1, payment_date = $2, payment_method = $3, card_number = $4 WHERE bill_id = $5 AND payment_id = $6',
       values: [...updatedPayment, billId, paymentId]
     })
     if (response.rowCount === 0) {

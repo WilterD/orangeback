@@ -1,3 +1,20 @@
+-- Carácteres de español que dan problemas 
+-- al hacer inserción directa
+
+-- Carácter || Correspondiente en Postgres
+-- á || ß 
+-- é || Ú
+-- í || Ý
+-- ó || ¾
+-- ú || ·
+-- Á || ┴
+-- É || ╔
+-- Í || ═
+-- Ó || Ë
+-- Ú || ┌
+-- ñ || ±
+-- ¿ || ┐
+
 -- admins
 
 INSERT INTO admins (
@@ -5,10 +22,10 @@ INSERT INTO admins (
   email,
   password
 ) VALUES
-  ('Wilter Díaz', 'wddiaz.20@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
-  ('Héctor Ferrer', 'heferrer.19@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Wilter DÝaz', 'wddiaz.20@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('HÚctor Ferrer', 'heferrer.19@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
   ('Victor Freitas', 'vmfreitas.21@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
-  ('Aurimart García', 'algarcia.21@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
+  ('Aurimart GarcÝa', 'algarcia.21@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
   ('Alejandro Rosas', 'ajrosas.19@est.ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi'),
   ('Franklin Bello', 'fbelloca@ucab.edu.ve', '$2b$10$uCAyTLRklMt/MbuGmrwRq.xE.8Wjlwio5K7H8CwIh00rYsf36UuSi');
 
@@ -17,11 +34,11 @@ INSERT INTO admins (
 INSERT INTO states (
   name
 ) VALUES
-  ('Bolívar'),
+  ('BolÝvar'),
   ('Distrito Capital'),
-  ('Falcón'),
+  ('Falc¾n'),
   ('Monagas'),
-  ('Mérida'),
+  ('MÚrida'),
   ('Miranda');
 
 -- cities
@@ -30,15 +47,15 @@ INSERT INTO cities (
   name,
   state_id
 ) VALUES
-  ('Ciudad Bolívar', 1),
+  ('Ciudad BolÝvar', 1),
   ('Ciudad Guayana', 1),
   ('Upata', 1),
   ('Caracas', 2),
   ('Coro', 3),
   ('Punto Fijo', 3),
-  ('Maturín', 4),
+  ('MaturÝn', 4),
   ('Caripe', 4),
-  ('Mérida', 5),
+  ('MÚrida', 5),
   ('Tovar', 5),
   ('Los Teques', 6),
   ('Los Altos', 6),
@@ -55,16 +72,16 @@ INSERT INTO managers (
   address, 
   email
 ) VALUES 
-  ('12345678', 'Juan Pérez', '912345678', '654321987', 'Calle Mayor 1', 'juan.perez@email.com'),
-  ('23456789', 'Ana García', '912345679', '654321986', 'Calle Mayor 2', 'ana.garcia@email.com'),
-  ('34567890', 'Pedro Sánchez', '912345680', '654321985', 'Calle Mayor 3', 'pedro.sanchez@email.com'),
-  ('45678901', 'María Rodríguez', '912345681', '654321984', 'Calle Mayor 4', 'maria.rodriguez@email.com'),
-  ('56789012', 'Luis Martínez', '912345682', '654321983', 'Calle Mayor 5', 'luis.martinez@email.com'),
-  ('67890123', 'Marta Ramírez', '912345683', '654321982', 'Calle Mayor 6', 'marta.ramirez@email.com'),
-  ('78901234', 'Antonio Fernández', '912345684', '654321981', 'Calle Mayor 7', 'antonio.fernandez@email.com'),
-  ('89012345', 'Sara López', '912345685', '654321980', 'Calle Mayor 8', 'sara.lopez@email.com'),
-  ('90123456', 'Carlos Gómez', '912345686', '654321979', 'Calle Mayor 9', 'carlos.gomez@email.com'),
-  ('01234567', 'Laura Pérez', '912345687', '654321978', 'Calle Mayor 10', 'laura.perez@email.com');
+  ('12345678', 'Juan PÚrez', '912345678', '654321987', 'Calle Mayor 1', 'juan.perez@email.com'),
+  ('23456789', 'Ana GarcÝa', '912345679', '654321986', 'Calle Mayor 2', 'ana.garcia@email.com'),
+  ('34567890', 'Pedro Sßnchez', '912345680', '654321985', 'Calle Mayor 3', 'pedro.sanchez@email.com'),
+  ('45678901', 'MarÝa RodrÝguez', '912345681', '654321984', 'Calle Mayor 4', 'maria.rodriguez@email.com'),
+  ('56789012', 'Luis MartÝnez', '912345682', '654321983', 'Calle Mayor 5', 'luis.martinez@email.com'),
+  ('67890123', 'Marta RamÝrez', '912345683', '654321982', 'Calle Mayor 6', 'marta.ramirez@email.com'),
+  ('78901234', 'Antonio Fernßndez', '912345684', '654321981', 'Calle Mayor 7', 'antonio.fernandez@email.com'),
+  ('89012345', 'Sara L¾pez', '912345685', '654321980', 'Calle Mayor 8', 'sara.lopez@email.com'),
+  ('90123456', 'Carlos G¾mez', '912345686', '654321979', 'Calle Mayor 9', 'carlos.gomez@email.com'),
+  ('01234567', 'Laura PÚrez', '912345687', '654321978', 'Calle Mayor 10', 'laura.perez@email.com');
 
 -- agencies
 
@@ -113,7 +130,7 @@ INSERT INTO jobs (
   ('Analista de datos'),
   ('Ingeniero de software'),
   ('Especialista en marketing digital'),
-  ('Diseñador gráfico'),
+  ('Dise±ador grßfico'),
   ('Gestor de proyectos'),
   ('Ingeniero de redes'),
   ('Contador'),
@@ -151,17 +168,17 @@ INSERT INTO clients (
   main_phone, 
   secondary_phone
 ) VALUES
-  ('12345678', 'Pedro Pérez', 'pedro.perez@gmail.com', '04121234567', '02121234567'),
-  ('23456789', 'María González', 'maria.gonzalez@hotmail.com', '04241234567', '02121234567'),
-  ('34567890', 'Juan Rodríguez', 'juan.rodriguez@yahoo.com', '04161234567', '02121234567'),
+  ('12345678', 'Pedro PÚrez', 'pedro.perez@gmail.com', '04121234567', '02121234567'),
+  ('23456789', 'MarÝa Gonzßlez', 'maria.gonzalez@hotmail.com', '04241234567', '02121234567'),
+  ('34567890', 'Juan RodrÝguez', 'juan.rodriguez@yahoo.com', '04161234567', '02121234567'),
   ('45678901', 'Ana Ruiz', 'ana.ruiz@gmail.com', '04261234567', '02121234567'),
-  ('56789012', 'Carlos Hernández', 'carlos.hernandez@hotmail.com', '04181234567', '02121234567'),
-  ('67890123', 'Gabriela Sánchez', 'gabriela.sanchez@yahoo.com', '04281234567', '02121234567'),
-  ('78901234', 'Luisa Martínez', 'luisa.martinez@gmail.com', '04191234567', '02121234567'),
-  ('89012345', 'Jorge Gómez', 'jorge.gomez@hotmail.com', '04291234567', '02121234567'),
-  ('90123456', 'Mónica Pérez', 'monica.perez@yahoo.com', '04121234568', '02121234569'),
-  ('01234567', 'José González', 'jose.gonzalez@gmail.com', '04121234569', '02121234568'),
-  ('11111111', 'José Pñrez 🎉', 'jose.perez@gmail.com', '04121234567', '02121234567');
+  ('56789012', 'Carlos Hernßndez', 'carlos.hernandez@hotmail.com', '04181234567', '02121234567'),
+  ('67890123', 'Gabriela Sßnchez', 'gabriela.sanchez@yahoo.com', '04281234567', '02121234567'),
+  ('78901234', 'Luisa MartÝnez', 'luisa.martinez@gmail.com', '04191234567', '02121234567'),
+  ('89012345', 'Jorge G¾mez', 'jorge.gomez@hotmail.com', '04291234567', '02121234567'),
+  ('90123456', 'M¾nica PÚrez', 'monica.perez@yahoo.com', '04121234568', '02121234569'),
+  ('01234567', 'JosÚ Gonzßlez', 'jose.gonzalez@gmail.com', '04121234569', '02121234568'),
+  ('11111111', 'JosÚ P±rez 🎉', 'jose.perez@gmail.com', '04121234567', '02121234567');
 
 -- models
 
@@ -197,10 +214,10 @@ INSERT INTO vehicles (
   model_id,
   client_dni
 ) VALUES
-  ('BB123FG', '1G1BL52P2TR115520', 'K20A2-1234567', '2003-10-15', 'Amarillo', 'bonito', 'cada 3 años', 'Agencias Buenos Aires', 'Civic', '12345678'),
-  ('CC456TH', 'JTEBU5JR3G5340762', '1NZ-FE-9876543', '2001-09-10', 'Negro', 'feo', 'cada 4 años', 'Agencias Todo bien', 'Aveo', '12345678'),
-  ('DD789JK', '5FNRL5H66EB104579', 'LS2-3456789', '2013-12-20', 'Blanco', 'bonito', 'cada 2 años', 'Agencias Madrid', 'Model S', '89012345'),
-  ('EE012MN', '1C4HJXDG5JW287685', 'F20C1-2345678', '2023-01-30', 'Rojo', 'medio medio', 'cada año', 'Agencias Barinas', 'Evolution', '90123456'),
+  ('BB123FG', '1G1BL52P2TR115520', 'K20A2-1234567', '2003-10-15', 'Amarillo', 'bonito', 'cada 3 a±os', 'Agencias Buenos Aires', 'Civic', '12345678'),
+  ('CC456TH', 'JTEBU5JR3G5340762', '1NZ-FE-9876543', '2001-09-10', 'Negro', 'feo', 'cada 4 a±os', 'Agencias Todo bien', 'Aveo', '12345678'),
+  ('DD789JK', '5FNRL5H66EB104579', 'LS2-3456789', '2013-12-20', 'Blanco', 'bonito', 'cada 2 a±os', 'Agencias Madrid', 'Model S', '89012345'),
+  ('EE012MN', '1C4HJXDG5JW287685', 'F20C1-2345678', '2023-01-30', 'Rojo', 'medio medio', 'cada a±o', 'Agencias Barinas', 'Evolution', '90123456'),
   ('FF345PR', '3FA6P0HD9JR137451', 'B16B-1234567', '2006-03-01', 'Azul', 'xd', 'cada 3 meses', 'Agencias Barcelona', 'Odyssea', '23456789');
 
 -- Services
@@ -209,10 +226,10 @@ INSERT INTO services (
   description
 ) VALUES 
   ('Mantenimiento de frenos'),
-  ('Reparación de motor'),
+  ('Reparaci¾n de motor'),
   ('Cambio de llantas'),
   ('Lavado de auto'),
-  ('Cambio de batería');
+  ('Cambio de baterÝa');
 
 -- Activities
 
@@ -221,26 +238,26 @@ INSERT INTO activities (
   description, 
   cost_hour
 ) VALUES 
-  (1, 'Revisión de pastillas de freno', 25.00),
+  (1, 'Revisi¾n de pastillas de freno', 25.00),
   (1, 'Cambio de pastillas de freno', 50.00),
   (1, 'Cambio de discos de freno', 75.00),
   (1, 'Sangrado del sistema de frenos', 40.00),
-  (2, 'Revisión y diagnóstico de motor', 50.00),
-  (2, 'Reemplazo de bujías', 35.00),
-  (2, 'Reemplazo de correa de distribución', 100.00),
+  (2, 'Revisi¾n y diagn¾stico de motor', 50.00),
+  (2, 'Reemplazo de bujÝas', 35.00),
+  (2, 'Reemplazo de correa de distribuci¾n', 100.00),
   (2, 'Reemplazo de bomba de agua', 80.00),
   (3, 'Retiro de llantas antiguas', 10.00),
-  (3, 'Instalación de llantas nuevas', 20.00),
+  (3, 'Instalaci¾n de llantas nuevas', 20.00),
   (3, 'Balanceo de llantas', 15.00),
-  (3, 'Alineación de llantas', 30.00),
+  (3, 'Alineaci¾n de llantas', 30.00),
   (4, 'Lavado exterior a mano', 20.00),
-  (4, 'Lavado de llantas y neumáticos', 10.00),
+  (4, 'Lavado de llantas y neumßticos', 10.00),
   (4, 'Limpieza de ventanas', 10.00),
   (4, 'Aspirado de alfombras y asientos', 30.00),
-  (5, 'Retiro de batería antigua', 10.00),
-  (5, 'Instalación de batería nueva', 30.00),
-  (5, 'Verificación de carga del alternador', 20.00),
-  (5, 'Conexión de bornes y cableado', 15.00);
+  (5, 'Retiro de baterÝa antigua', 10.00),
+  (5, 'Instalaci¾n de baterÝa nueva', 30.00),
+  (5, 'Verificaci¾n de carga del alternador', 20.00),
+  (5, 'Conexi¾n de bornes y cableado', 15.00);
 
 -- Services_Per_Models
 
@@ -283,21 +300,22 @@ INSERT INTO employees_coordinate_services (
 -- Bookings
 
 INSERT INTO bookings (
+  agency_rif,
   expedition_date, 
   expiration_date, 
   client_dni, 
   license_plate
 ) VALUES
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 DAY', '12345678', 'BB123FG'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '2 DAY', '12345678', 'CC456TH'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '3 DAY', '12345678', 'BB123FG'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '4 DAY', '89012345', 'DD789JK'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 DAY', '90123456', 'EE012MN'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '6 DAY', '23456789', 'FF345PR'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '7 DAY', '12345678', 'BB123FG'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '8 DAY', '89012345', 'DD789JK'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '9 DAY', '90123456', 'EE012MN'),
-  (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '10 DAY', '23456789', 'FF345PR');
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 DAY', '12345678', 'BB123FG'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '2 DAY', '12345678', 'CC456TH'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '3 DAY', '12345678', 'BB123FG'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '4 DAY', '89012345', 'DD789JK'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 DAY', '90123456', 'EE012MN'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '6 DAY', '23456789', 'FF345PR'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '7 DAY', '12345678', 'BB123FG'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '8 DAY', '89012345', 'DD789JK'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '9 DAY', '90123456', 'EE012MN'),
+  ('1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '10 DAY', '23456789', 'FF345PR');
 
 -- Bookings_Per_Services
 
@@ -411,10 +429,10 @@ INSERT INTO payments (
 INSERT INTO supply_lines (
   name
 ) VALUES 
-  ('Neumáticos'),
-  ('Baterías'),
+  ('Neumßticos'),
+  ('BaterÝas'),
   ('Filtros de aceite'),
-  ('Líquido de frenos'),
+  ('LÝquido de frenos'),
   ('Aceite de motor');
 
 -- Products

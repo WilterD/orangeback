@@ -14,9 +14,9 @@ const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getPayments)
-router.get('/:billId/:paymentId', tokenGuard(), verifyToken(), getPaymentById)
+router.get('/bill/:billId/payment/:paymentId', tokenGuard(), verifyToken(), getPaymentById)
 router.post('/', tokenGuard(), verifyToken(), schemaGuard(createPaymentsSchema), addPayment)
-router.put('/:billId/:paymentId', tokenGuard(), verifyToken(), schemaGuard(updatePaymentsSchema), updatePayment)
-router.delete('/:billId/:paymentId', tokenGuard(), verifyToken(), deletePayment)
+router.put('/bill/:billId/payment/:paymentId', tokenGuard(), verifyToken(), schemaGuard(updatePaymentsSchema), updatePayment)
+router.delete('/bill/:billId/payment/:paymentId', tokenGuard(), verifyToken(), deletePayment)
 
 export default router

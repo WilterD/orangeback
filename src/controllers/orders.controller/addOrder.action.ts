@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Request, Response } from 'express'
 import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import camelizeObject from '../../utils/camelizeObject'
 import { OrderCreate } from '../../schemas/orders.schema'
+import { StatusError } from '../../utils/responses/status-error'
 
 export const getOrdersDataFromRequestBody = (req: Request): any[] => {
   const {
@@ -42,11 +44,21 @@ export const addOrder = async (
   try {
     const [newOrder, newActivities] = getOrdersDataFromRequestBody(req)
 
-    /*
-      TO-DO:
-      1. Validar que si la reserva ya tiene
-      orden no se puede volver a crear
-    */
+    const { rows: alreadyHasAnOrder } = await pool.query({
+      text: `
+        SELECT COUNT(*)
+        FROM orders
+        WHERE booking_id = $1
+      `,
+      values: [req.body.bookingId]
+    })
+
+    if (alreadyHasAnOrder[0].count > 0) {
+      throw new StatusError({
+        message: `Ya existe una orden para la reserva de id: ${req.body.bookingId}`,
+        statusCode: STATUS.NOT_FOUND
+      })
+    }
 
     const insertar = await pool.query({
       text: `
