@@ -1,24 +1,16 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Request, Response } from 'express'
 import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import camelizeObject from '../../utils/camelizeObject'
 import { BookingData } from './interface'
+import { StatusError } from '../../utils/responses/status-error'
 
 const getBookingsDataFromRequestBody = (req: Request): [any[], number[]] => {
-  const {
-    expirationDate,
-    clientDni,
-    licensePlate,
-    agencyRif,
-    servicesIds
-  } = req.body as BookingData
-  const newBooking = [
-    expirationDate,
-    clientDni,
-    licensePlate,
-    agencyRif
-  ]
+  const { expirationDate, clientDni, licensePlate, agencyRif, servicesIds } =
+    req.body as BookingData
+  const newBooking = [expirationDate, clientDni, licensePlate, agencyRif]
   return [newBooking, servicesIds]
 }
 
@@ -27,7 +19,34 @@ export const addBooking = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newBooking = getBookingsDataFromRequestBody(req)
+    const [newBooking, servicesIds] = getBookingsDataFromRequestBody(req)
+
+    const { rows: servicesInAgency } = await pool.query({
+      text: `
+        SELECT
+          s.service_id
+        FROM
+          employees as e,
+          employees_coordinate_services AS ecs,
+          services AS s
+        WHERE
+          e.agency_rif = $1 AND
+          e.employee_dni = ecs.employee_dni AND
+          ecs.service_id = s.service_id
+      `,
+      values: [req.body.agencyRif]
+    })
+
+    const haveCorrectServices = servicesIds.every((service) =>
+      servicesInAgency.some((item) => item.service_id === service)
+    )
+
+    if (!haveCorrectServices) {
+      throw new StatusError({
+        message: `Los servicios que desea agregar a la reserva no están presentes en la agencia ${req.body.agencyRif}`,
+        statusCode: STATUS.BAD_REQUEST
+      })
+    }
 
     const insertar = await pool.query({
       text: `
@@ -39,13 +58,13 @@ export const addBooking = async (
         ) VALUES ($1, $2, $3, $4) 
         RETURNING booking_id
       `,
-      values: newBooking[0]
+      values: [...newBooking]
     })
     const insertedBookingId: string = insertar.rows[0].booking_id
-    for (let i = 0; i < newBooking[1].length; i++) {
+    for (let i = 0; i < servicesIds.length; i++) {
       await pool.query({
         text: 'INSERT INTO bookings_per_services (service_id, booking_id) VALUES ($1, $2)',
-        values: [newBooking[1][i], insertedBookingId]
+        values: [servicesIds[i], insertedBookingId]
       })
     }
     const responseBooking = await pool.query({
@@ -56,12 +75,10 @@ export const addBooking = async (
       text: 'SELECT s.service_id, s.description FROM services AS s, bookings_per_services AS bps WHERE bps.booking_id = $1 AND bps.service_id = s.service_id',
       values: [insertedBookingId]
     })
-    return res
-      .status(STATUS.CREATED)
-      .json({
-        ...camelizeObject(responseBooking.rows[0]),
-        services: camelizeObject(responseServices.rows)
-      })
+    return res.status(STATUS.CREATED).json({
+      ...camelizeObject(responseBooking.rows[0]),
+      services: camelizeObject(responseServices.rows)
+    })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
