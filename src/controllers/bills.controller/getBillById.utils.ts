@@ -50,13 +50,18 @@ async function getOrderDetailsRawByBillId (
   billId: number
 ): Promise<OrderDetailsRaw[]> {
   const response = await pool.query({
-    text: `SELECT od.cost_hour, od.hours_taken, a.description AS activity_description, e.name employee_name
-           FROM bills b
-           INNER JOIN orders o ON b.order_id = o.order_id 
-           INNER JOIN order_details od ON o.order_id = od.order_id 
-           INNER JOIN activities a ON od.service_id = a.service_id AND od.activity_id = a.activity_id 
-           INNER JOIN employees e ON od.employee_dni = e.employee_dni
-           WHERE b.bill_id = $1`,
+    text: `
+      SELECT 
+        od.cost_hour, 
+        od.hours_taken, 
+        a.description AS activity_description, 
+        e.name AS employee_name
+        FROM bills b
+        INNER JOIN orders o ON b.order_id = o.order_id 
+        INNER JOIN order_details od ON o.order_id = od.order_id 
+        INNER JOIN activities a ON od.service_id = a.service_id AND od.activity_id = a.activity_id 
+        INNER JOIN employees e ON od.employee_dni = e.employee_dni
+        WHERE b.bill_id = $1`,
     values: [billId]
   })
 
