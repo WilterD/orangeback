@@ -43,7 +43,7 @@ export const addBooking = async (
 
     if (!haveCorrectServices) {
       throw new StatusError({
-        message: `Los servicios que desea agregar a la orden no están presentes en la agencia ${req.body.agencyRif}`,
+        message: `Los servicios que desea agregar a la reserva no están presentes en la agencia ${req.body.agencyRif}`,
         statusCode: STATUS.BAD_REQUEST
       })
     }
