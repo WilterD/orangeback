@@ -33,16 +33,6 @@ export const createPaymentsSchema = z.object({
     .max(32, 'La tarjeta debe ser menor a 32  carácteres')
     .regex(/^\d+$/, 'La tarjeta debe contener solo números')
     .nullable()
-}).refine(({ paymentMethod, cardNumber }) => {
-  // Si paymentMethod es TD o TC, cardNumber no puede ser nulo
-  if (['TD', 'TC'].includes(paymentMethod)) {
-    return cardNumber !== null
-  }
-  // Si paymentMethod es E, D, o T, cardNumber puede ser nulo
-  return true
-}, {
-  message: 'El número de tarjeta es requerido para TD o TC',
-  path: ['cardNumber']
 })
 
 export const updatePaymentsSchema = z.object({
@@ -76,14 +66,4 @@ export const updatePaymentsSchema = z.object({
     .max(32, 'La tarjeta debe ser menor a 32  carácteres')
     .regex(/^\d+$/, 'La tarjeta debe contener solo números')
     .nullable()
-}).refine(({ paymentMethod, cardNumber }) => {
-  // Si paymentMethod es TD o TC, cardNumber no puede ser nulo
-  if (['TD', 'TC'].includes(paymentMethod)) {
-    return cardNumber !== null
-  }
-  // Si paymentMethod es E, D, o T, cardNumber puede ser nulo
-  return true
-}, {
-  message: 'El número de tarjeta es requerido para TD o TC',
-  path: ['cardNumber']
 })
