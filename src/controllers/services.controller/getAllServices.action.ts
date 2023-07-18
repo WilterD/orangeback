@@ -43,6 +43,19 @@ async function executeGetAllServices (
     req.query?.onlyForAgencyRif !== 'null' &&
     req.query?.onlyForAgencyRif !== ''
   ) {
+    let discriminantServicesConditional = 'e.agency_rif = $1 AND'
+    const whereArgs = [req.query.onlyForAgencyRif]
+    if (
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      !!req.query?.includeServicesIds &&
+      req.query?.includeServicesIds !== null &&
+      req.query?.includeServicesIds !== 'null' &&
+      req.query?.includeServicesIds !== ''
+    ) {
+      discriminantServicesConditional = '(e.agency_rif = $1 OR s.service_id IN ($2)) AND'
+      whereArgs.push(req.query?.includeServicesIds)
+    }
+
     text = `
       SELECT
         s.service_id,
@@ -55,10 +68,10 @@ async function executeGetAllServices (
         services AS s,
         activities AS a
       WHERE
-        e.agency_rif = $1 AND
+        ${discriminantServicesConditional}
         e.employee_dni = ecs.employee_dni AND
         ecs.service_id = s.service_id AND
-        s.service_id = a.service_id
+        s.service_id = a.service_id 
       GROUP BY
         s.service_id,
         s.description,
@@ -66,7 +79,7 @@ async function executeGetAllServices (
       ORDER BY description
     `
 
-    response = await pool.query({ text, values: [req.query.onlyForAgencyRif] })
+    response = await pool.query({ text, values: whereArgs })
   } else {
     response = await pool.query({ text })
   }
