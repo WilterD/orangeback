@@ -16,5 +16,6 @@ FROM
 WHERE
   o.order_id = 1 AND
   o.employee_dni = e.employee_dni AND
-  e.agency_rif = d.agency_rif;
+  e.agency_rif = d.agency_rif AND
+  ();
   
