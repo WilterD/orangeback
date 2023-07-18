@@ -3,8 +3,6 @@ import { z } from 'zod'
 export const createPaymentsSchema = z.object({
   billId: z
     .number(),
-  paymentId: z
-    .number(),
   cost: z
     .number(),
   paymentDate: z
