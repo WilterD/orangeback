@@ -23,7 +23,12 @@ export const getRecommendations = async (
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM services_per_models ORDER BY model_id LIMIT $1 OFFSET $2',
+      text: `
+        SELECT * 
+        FROM services_per_models 
+        ORDER BY model_id 
+        LIMIT $1 OFFSET $2
+      `,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {
