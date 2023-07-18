@@ -53,7 +53,7 @@ export const addPayment = async (
           payment_date,
           payment_method,
           card_number,
-          payment_id,
+          payment_id
         ) VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING bill_id, payment_id
       `,
