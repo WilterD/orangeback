@@ -1,24 +1,32 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import { pool } from '../../database'
 import camelizeObject from '../../utils/camelizeObject'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import { STATUS } from '../../utils/constants'
 import { StatusError } from '../../utils/responses/status-error'
 
-export const getEmployeeWorkList = async (
-  req: Request,
+export const getBestSellingProducts = async (
   res: Response
 ): Promise<Response> => {
   try {
     const response = await pool.query({
-      text: `SELECT e.name AS employee_name, COUNT(o.order_id) AS order_count, SUM(od.hours_taken) AS service_count
-      FROM employees e
-      LEFT JOIN orders o ON e.employee_dni = o.employee_dni
-      LEFT JOIN order_details od ON o.order_id = od.order_id
-      WHERE DATE_TRUNC(month, o.entry_time) = DATE_TRUNC(month, CAST($1 AS DATE))
-      GROUP BY e.name
-      ORDER BY order_count DESC`,
-      values: [req.params.month]
+      text: `SELECT 
+      p.product_id, 
+      p.short_name_product, 
+      p.price, 
+      SUM(pod.quantity) AS total_quantity_sold
+  FROM 
+      products p
+      INNER JOIN products_in_order_details pod ON p.product_id = pod.product_id
+      INNER JOIN order_details od ON pod.service_id = od.service_id AND pod.activity_id = od.activity_id
+      INNER JOIN activities a ON od.service_id = a.service_id AND od.activity_id = a.activity_id
+      INNER JOIN services s ON a.service_id = s.service_id
+  GROUP BY 
+      p.product_id, 
+      p.short_name_product, 
+      p.price
+  ORDER BY 
+      total_quantity_sold DESC;`
     })
     if (response.rowCount === 0) {
       throw new StatusError({
