@@ -305,7 +305,6 @@ CREATE TABLE orders (
   CONSTRAINT fk_employee_dni FOREIGN KEY (employee_dni) REFERENCES employees(employee_dni) 
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  CONSTRAINT chk_entry_time CHECK (entry_time >= CURRENT_TIMESTAMP),
   CONSTRAINT chk_estimated_departure CHECK (estimated_departure > entry_time),
   CONSTRAINT chk_real_departure CHECK (real_departure > entry_time)
 );
