@@ -47,7 +47,11 @@ export default async function getServiceById (serviceId: number): Promise<Servic
   const responseBookings = await pool.query({
     text: `
       SELECT 
-        b.booking_id, b.expedition_date, b.expiration_date, b.client_dni, b.license_plate, b.created_at 
+        b.booking_id, 
+        b.expedition_date, 
+        b.expiration_date, 
+        b.client_dni, 
+        b.license_plate
       FROM 
         bookings_per_services as bps, bookings as b 
       WHERE 

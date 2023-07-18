@@ -6,6 +6,7 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import camelizeObject from '../../utils/camelizeObject'
 import { BookingData } from './interface'
 import { StatusError } from '../../utils/responses/status-error'
+import { dateParser } from '../../utils/dateParser'
 
 const getBookingsDataFromRequestBody = (req: Request): [any[], number[]] => {
   const { expirationDate, clientDni, licensePlate, agencyRif, servicesIds } =
@@ -20,6 +21,17 @@ export const addBooking = async (
 ): Promise<Response> => {
   try {
     const [newBooking, servicesIds] = getBookingsDataFromRequestBody(req)
+
+    const { expirationDate } = req.body
+
+    const f1 = dateParser(expirationDate)
+    const now = new Date()
+    if (now.getTime() > f1.getTime()) {
+      throw new StatusError({
+        message: 'La fecha de expiración no puede ser menor a la fecha actual',
+        statusCode: STATUS.BAD_REQUEST
+      })
+    }
 
     const { rows: servicesInAgency } = await pool.query({
       text: `
