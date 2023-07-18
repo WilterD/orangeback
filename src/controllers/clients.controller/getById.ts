@@ -17,16 +17,16 @@ export const getClientById = async (
                 clients 
               WHERE 
                 client_dni = $1`,
-      values: [req.params.clientDni],
+      values: [req.params.clientDni]
     });
     if (response.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de id: ${req.params.clientDni}`,
-        statusCode: STATUS.NOT_FOUND,
+        statusCode: STATUS.NOT_FOUND
       });
     }
-    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]));
+    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
-    return handleControllerError(error, res);
+    return handleControllerError(error, res)
   }
 };
