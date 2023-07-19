@@ -5,6 +5,8 @@ import { getBestSellingProducts } from '../../controllers/stats.controller/getBe
 import { getFakeClients } from '../../controllers/stats.controller/getFakeClients'
 // import { getEmployeesQuantityServicesPerMonth } from '../../controllers/stats.controller/getEmployeesQuantityServicesPerMonth'
 // import { getAgenciesEarnings } from '../../controllers/stats.controller/getAgenciesEarnings'
+import { getFrequentModelsByService } from '../../controllers/stats.controller/getFrequentModelsByService'
+// import { getFrequentModelsByDate } from '../../controllers/stats.controller/getFrequentModelsByDate'
 
 const router = Router()
 
@@ -19,4 +21,8 @@ router.get('/fake-clients', getFakeClients)
 
 // Casi funciona falta manejo de fechas en la query
 // router.get('/agecies-earnings/start/:dateInit/end/:dateEnd', getAgenciesEarnings)
+
+router.get('/fequent-model/service/:serviceId', getFrequentModelsByService)
+// Falata arregla fecha
+// router.get('/fequent-model/start/:dateInit/end/:dateEnd', getFrequentModelsByDate)
 export default router
