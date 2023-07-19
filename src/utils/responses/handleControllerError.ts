@@ -4,6 +4,7 @@ import { errorResponse } from '.'
 import { STATUS } from '../constants'
 
 export const handleControllerError = (error: any, res: Response): Response => {
+  console.log('HANDLE ERROR', error)
   if (error instanceof StatusError) {
     return errorResponse(res, error.getStatus(), error.message)
   }

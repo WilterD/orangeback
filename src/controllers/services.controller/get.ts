@@ -34,10 +34,10 @@ export const getServices = async (
         COUNT(bps.service_id) AS total_appearances, 
         s.created_at
       FROM 
-        services AS s,
-        bookings_per_services AS bps
-      WHERE 
-        s.service_id = bps.service_id
+        services AS s
+      LEFT JOIN
+        bookings_per_services bps
+        ON s.service_id = bps.service_id
       GROUP BY 
         s.service_id, 
         s.description, 
@@ -68,10 +68,9 @@ export const getServices = async (
           COUNT(bps.service_id) AS total_appearances, 
           s.created_at
         FROM 
-          services AS s,
-          bookings_per_services AS bps
-        WHERE 
-          s.service_id = bps.service_id
+          services AS s
+        LEFT JOIN
+          bookings_per_services bps ON s.service_id = bps.service_id
         GROUP BY 
           s.service_id, 
           s.description, 
