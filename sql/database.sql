@@ -177,6 +177,9 @@ CREATE TABLE vehicles (
     ON UPDATE CASCADE
 );
 
+CREATE INDEX idx_nro_serial_nro_motor ON vehicles (nro_serial, nro_motor);
+
+
 -- 12
 
 CREATE TABLE services (
