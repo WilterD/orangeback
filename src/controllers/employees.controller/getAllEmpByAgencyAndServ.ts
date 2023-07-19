@@ -11,11 +11,16 @@ export const getAllEmployeesByAgencyAndService = async (
   try {
     const { rows } = await pool.query({
       text: `
-        SELECT * 
+        SELECT
+          e.name AS employee_name
         FROM
           employees AS e,
-          
-        ORDER BY name
+          employees_coordinate_services AS ecs
+        WHERE
+          e.agency_rif = $1 AND
+          e.employee_dni = ecs.employee_dni AND
+          ecs.service_id = $2
+        ORDER BY e.name
       `,
       values: [req.body.agencyRif, req.body.serviceId]
     })
