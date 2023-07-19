@@ -26,7 +26,7 @@ export const addBillingProduct = async (
         WHERE
           product_id = $1
       `,
-      values: [req.params.productId]
+      values: [req.body.productId]
     })
 
     const insertar = await pool.query({
@@ -37,10 +37,10 @@ export const addBillingProduct = async (
           order_id, 
           product_id,
           price
-        ) VALUES ($1, $2, $3, $4, $5, $6) 
+        ) VALUES ($1, $2, $3, $4, $5) 
         RETURNING service_id, activity_id, order_id, product_id
       `,
-      values: [...newbillingProduct, price]
+      values: [...newbillingProduct, price.rows[0].price]
     })
     const insertedServiceId: string = insertar.rows[0].service_id
     const insertedActivityId: string = insertar.rows[0].activity_id
@@ -67,6 +67,7 @@ export const addBillingProduct = async (
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
+    console.log(error)
     return handleControllerError(error, res)
   }
 }
