@@ -42,7 +42,6 @@ export const getRecommendedServices = async (
     }
     return res.status(STATUS.OK).json(camelizeObject(response.rows))
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

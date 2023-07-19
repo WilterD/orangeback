@@ -56,7 +56,6 @@ export const getServices = async (
         req.query?.orderByTotalAppearance === 'DESC'
       )
     ) {
-      console.log('aqui')
       text = `
         SELECT 
           s.service_id, 
@@ -99,7 +98,6 @@ export const getServices = async (
       pagination
     )
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

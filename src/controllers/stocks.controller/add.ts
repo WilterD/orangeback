@@ -42,7 +42,6 @@ export const addProductPerAgency = async (
       `,
       values: newProductPerAgency
     })
-    console.log(insertar)
     const insertedProductId: string = insertar.rows[0].product_id
     const insertedAgencyRif: string = insertar.rows[0].agency_rif
     const response = await pool.query({

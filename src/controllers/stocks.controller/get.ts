@@ -113,7 +113,6 @@ export const getProductsPerAgencies = async (
       pagination
     )
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

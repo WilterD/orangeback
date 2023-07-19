@@ -129,7 +129,6 @@ export const getEmployeesCoordinateServices = async (
       pagination
     )
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
