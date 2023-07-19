@@ -70,7 +70,6 @@ export const getFrequentModelsByService = async (
     }
     return paginatedItemsResponse(res, STATUS.OK, camelizeObject(response.rows) as any, pagination)
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

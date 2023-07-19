@@ -41,7 +41,6 @@ export const addBillingActivity = async (
       `,
       values: [req.body.serviceId, req.body.activityId]
     })
-    console.log('aaa', [...newBillingActivity, costHour[0].cost_hour])
     await pool.query({
       text: `
         INSERT INTO order_details (
@@ -69,7 +68,6 @@ export const addBillingActivity = async (
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

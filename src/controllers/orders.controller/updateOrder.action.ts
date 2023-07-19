@@ -55,7 +55,6 @@ export default async function updateOrder (
     }
     return res.status(STATUS.OK).json({ message: 'Orden modificada exitosamente' })
   } catch (error: unknown) {
-    console.log('a', error)
     return handleControllerError(error, res)
   }
 }
