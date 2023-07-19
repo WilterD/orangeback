@@ -4,9 +4,7 @@ import { getNoEcoProductsAll } from '../../controllers/stats.controller/getNoEco
 import { getBestSellingProducts } from '../../controllers/stats.controller/getBestSellingProducts'
 import { getFakeClients } from '../../controllers/stats.controller/getFakeClients'
 // import { getEmployeesQuantityServicesPerMonth } from '../../controllers/stats.controller/getEmployeesQuantityServicesPerMonth'
-// import { getFrequentModelsService } from '../../controllers/stats.controller/GetFrequentModelsService'
-// import { getFrequentModelsDate } from '../../controllers/stats.controller/GetFrequentModelsDate'
-// import { getAgenciesEarnsMost } from '../../controllers/stats.controller/GetAgenciesEarnsMost'
+// import { getAgenciesEarnings } from '../../controllers/stats.controller/getAgenciesEarnings'
 
 const router = Router()
 
@@ -15,8 +13,10 @@ router.get('/no-eco-products-all', getNoEcoProductsAll)
 router.get('/no-eco-products-by-agency/:agencyRif', getNoEcoProductsByAgency)
 router.get('/best-selling-products', getBestSellingProducts)
 router.get('/fake-clients', getFakeClients)
-// router.get('/employee-work-list', getEmployeesQuantityServicesPerMonth)
-// router.get('/frequent-models-service', getFrequentModelsService)
-// router.get('/frequent-models-date', getFrequentModelsDate)
-// router.get('/agencies-earns-most', getAgenciesEarnsMost)
+
+// No sirve, necesita validación en el param para recibir un mes valido
+// router.get('/employee-services-per-month/:month', getEmployeesQuantityServicesPerMonth)
+
+// Casi funciona falta manejo de fechas en la query
+// router.get('/agecies-earnings/start/:dateInit/end/:dateEnd', getAgenciesEarnings)
 export default router

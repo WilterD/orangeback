@@ -37,14 +37,14 @@ router.post(
   addBillingProduct
 )
 router.put(
-  '/services/:serviceId/services/:activityId/orders/:orderId/products/:productId',
+  '/services/:serviceId/activities/:activityId/orders/:orderId/products/:productId',
   tokenGuard(),
   verifyToken(),
   schemaGuard(updatebillingProductsSchema),
   updateBillingProduct
 )
 router.delete(
-  '/services/:serviceId/services/:activityId/orders/:orderId/products/:productId',
+  '/services/:serviceId/activities/:activityId/orders/:orderId/products/:productId',
   tokenGuard(),
   verifyToken(),
   deleteBillingProduct

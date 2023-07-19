@@ -12,7 +12,10 @@ export const createBillingActivitySchema = z.object({
     .min(1, 'el id debe ser mayor o igual a 1'),
   employeeDni: z
     .string()
-    .nonempty('La cantidad de asientos debe ser mayor o igual a 1')
+    .nonempty('La cantidad de asientos debe ser mayor o igual a 1'),
+  hoursTaken: z
+    .number()
+    .min(0.1, 'la cantidad de horas debe ser al menos 0.1')
 })
 
 export const updateBillingActivitySchema = z.object({
