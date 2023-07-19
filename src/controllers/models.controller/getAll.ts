@@ -9,7 +9,13 @@ export const getAllModels = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { rows } = await pool.query({ text: 'SELECT * FROM models ORDER BY model_id' })
+    const { rows } = await pool.query({
+      text: `
+        SELECT * 
+        FROM models 
+        ORDER BY model_id
+      `
+    })
     return res.status(STATUS.OK).json(camelizeObject(rows))
   } catch (error: unknown) {
     return handleControllerError(error, res)

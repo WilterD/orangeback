@@ -26,8 +26,6 @@ async function executeGetAllOrders (body: GetAllOrdersOptions): Promise<Order[]>
   const whereValues = []
   let text = 'SELECT * FROM orders ORDER BY created_at DESC'
 
-  console.log('a')
-
   if (body.onlyWithoutBill) {
     let includeOrderComplement = ''
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
@@ -47,8 +45,6 @@ async function executeGetAllOrders (body: GetAllOrdersOptions): Promise<Order[]>
       ORDER BY created_at DESC
     `
   }
-
-  console.log('b', text, whereValues)
 
   const { rows } = await pool.query({ text, values: whereValues })
   return camelizeObject(rows) as unknown as Order[]

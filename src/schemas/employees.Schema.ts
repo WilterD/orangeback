@@ -64,3 +64,13 @@ export const updateEmployeesSchema = z.object({
     .array(z.number().min(1, 'El id de servicio debe ser mayor o igual a 1'))
     .nonempty('Es necesario indicar al menos un id de servicio')
 })
+
+export const getAllEmpAgServ = z.object({
+  agencyRif: z
+    .string()
+    .nonempty('Es necesario indicar un rif')
+    .max(32, 'El Rif debe ser menor a 32  carácteres'),
+  serviceId: z
+    .number()
+    .min(1, 'el id debe ser mayor o igual a 1')
+})

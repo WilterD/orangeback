@@ -14,7 +14,12 @@ export const getAllBills = async (
         SELECT
           c.client_dni,
           c.name,
-          b.*
+          b.bill_id,
+          b.bill_date,
+          b.discount_value,
+          b.total_cost,
+          b.order_id,
+          ((1 - (b.discount_value/100)) * total_cost) AS total_cost_final
         FROM 
           bills AS b,
           orders AS o,

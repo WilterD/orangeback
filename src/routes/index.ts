@@ -55,8 +55,8 @@ router.use('/stocks', stocksRouter)
 router.use('/cardbanks', cardBanksRouter)
 router.use('/bills', billsRouter)
 router.use('/payments', paymentsRouter)
-router.use('/billing-products', billingProductsRouter)
 router.use('/billing-activities', billingActivitiesRouter)
+router.use('/billing-products', billingProductsRouter)
 router.use('/stats', statsRouter)
 
 export default router

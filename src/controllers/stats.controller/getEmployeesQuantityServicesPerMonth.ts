@@ -6,7 +6,7 @@ import { DEFAULT_PAGE, STATUS } from '../../utils/constants'
 import { StatusError } from '../../utils/responses/status-error'
 import { PaginateSettings, paginatedItemsResponse } from '../../utils/responses'
 
-export const getBestSellingProducts = async (
+export const getEmployeesQuantityServicesPerMonth = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -23,13 +23,14 @@ export const getBestSellingProducts = async (
       text: `
         SELECT 
           COUNT(*)
-        FROM 
-          products p
-        INNER JOIN products_in_order_details pod ON p.product_id = pod.product_id
-        INNER JOIN order_details od ON pod.service_id = od.service_id AND pod.activity_id = od.activity_id
-        INNER JOIN activities a ON od.service_id = a.service_id AND od.activity_id = a.activity_id
-        INNER JOIN services s ON a.service_id = s.service_id
-      `
+        FROM employees e
+        LEFT JOIN orders o ON e.employee_dni = o.employee_dni
+        LEFT JOIN order_details od ON o.order_id = od.order_id
+        WHERE 
+          o.entry_time >= DATE_TRUNC('month', CAST($1 AS DATE)) AND
+          o.entry_time <= (DATE_TRUNC('month', CAST($1 AS DATE)) + INTERVAL '1 month - 1 millisecond')
+      `,
+      values: [req.params.month]
     })
 
     let text
@@ -47,22 +48,17 @@ export const getBestSellingProducts = async (
     ) {
       text = `
         SELECT 
-          p.product_id, 
-          p.short_name_product, 
-          p.price, 
-          SUM(pod.quantity) AS total_quantity_sold
-        FROM 
-          products p
-        INNER JOIN products_in_order_details pod ON p.product_id = pod.product_id
-        INNER JOIN order_details od ON pod.service_id = od.service_id AND pod.activity_id = od.activity_id
-        INNER JOIN activities a ON od.service_id = a.service_id AND od.activity_id = a.activity_id
-        INNER JOIN services s ON a.service_id = s.service_id
-        GROUP BY 
-            p.product_id, 
-            p.short_name_product, 
-            p.price
-        ORDER BY 
-            total_quantity_sold ${req.query.orderBy}
+          e.name AS employee_name, 
+          COUNT(o.order_id) AS order_count, 
+          SUM(od.hours_taken) AS service_count
+        FROM employees e
+        LEFT JOIN orders o ON e.employee_dni = o.employee_dni
+        LEFT JOIN order_details od ON o.order_id = od.order_id
+        WHERE 
+          o.entry_time >= DATE_TRUNC('month', CAST($1 AS DATE)) AND
+          o.entry_time <= (DATE_TRUNC('month', CAST($1 AS DATE)) + INTERVAL '1 month - 1 millisecond')
+        GROUP BY e.name
+        ORDER BY order_count ${req.query.orderBy}
         LIMIT $1 OFFSET $2
       `
     } else {

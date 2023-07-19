@@ -24,7 +24,7 @@ router.get(
   getBillingActivities
 )
 router.get(
-  '/services/:servicesId/services/:activityId/orders/:orderId',
+  '/services/:servicesId/activities/:activityId/orders/:orderId',
   tokenGuard(),
   verifyToken(),
   getBillingActivityById
@@ -37,7 +37,7 @@ router.post(
   addBillingActivity
 )
 router.put(
-  '/services/:servicesId/services/:activityId/orders/:orderId',
+  '/services/:servicesId/activities/:activityId/orders/:orderId',
   tokenGuard(),
   verifyToken(),
   schemaGuard(updateBillingActivitySchema),

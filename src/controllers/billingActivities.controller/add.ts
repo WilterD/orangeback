@@ -9,13 +9,15 @@ const getBillingActivityCreateDataFromRequestBody = (req: Request): any[] => {
     serviceId,
     activityId,
     orderId,
-    employeeDni
+    employeeDni,
+    hoursTaken
   } = req.body
   const newBillingActivity = [
     serviceId,
     activityId,
     orderId,
-    employeeDni
+    employeeDni,
+    hoursTaken
   ]
   return newBillingActivity
 }
@@ -37,14 +39,19 @@ export const addBillingActivity = async (
           service_id = $1 AND
           activity_id = $2
       `,
-      values: [req.params.serviceId, req.params.activityId]
+      values: [req.body.serviceId, req.body.activityId]
     })
 
     const insertar = await pool.query({
       text: `
         INSERT INTO order_details (
-          service_id, activity_id, order_id, employee_dni, cost_hour
-        ) VALUES ($1, $2, $3, $4, $5) 
+          service_id, 
+          activity_id, 
+          order_id, 
+          employee_dni, 
+          hours_taken, 
+          cost_hour
+        ) VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING service_id, activity_id, order_id
       `,
       values: [...newBillingActivity, costHour]

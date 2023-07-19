@@ -157,6 +157,7 @@ CREATE TABLE models (
 -- 11
 
 CREATE TABLE vehicles (
+  client_dni dom_dni NOT NULL,
   license_plate VARCHAR(16),
   nro_serial VARCHAR(64) UNIQUE NOT NULL,
   nro_motor VARCHAR(64) UNIQUE NOT NULL,
@@ -166,9 +167,8 @@ CREATE TABLE vehicles (
   maintenance_summary VARCHAR(255),
   agency_seller VARCHAR(64) NOT NULL,
   model_id VARCHAR(64) NOT NULL,
-  client_dni dom_dni NOT NULL,
   created_at dom_created_at,
-  PRIMARY KEY (license_plate),
+  PRIMARY KEY (license_plate, client_dni),
   CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
@@ -262,10 +262,8 @@ CREATE TABLE bookings (
   license_plate VARCHAR(16) NOT NULL,
   agency_rif dom_agency_rif NOT NULL,
   PRIMARY KEY (booking_id),
-  CONSTRAINT fk_client_dni FOREIGN KEY (client_dni) REFERENCES clients (client_dni) 
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_license_plate FOREIGN KEY (license_plate) REFERENCES vehicles (license_plate) 
+  CONSTRAINT fk_vehicles FOREIGN KEY (client_dni, license_plate) 
+    REFERENCES vehicles (client_dni, license_plate)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT fk_agency_rif FOREIGN KEY (agency_rif) REFERENCES agencies (agency_rif)
