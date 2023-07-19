@@ -29,7 +29,50 @@ export const getBillById = async (
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json(camelizeObject(responseBill.rows[0]))
+
+    const { rows: responseActivityItems } = await pool.query({
+      text: `
+        SELECT
+          a.description,
+          od.cost_hour AS price,
+          od.hours_taken AS quantity
+        FROM
+          bills AS b,
+          order_details AS od,
+          activities AS a
+        WHERE
+          b.bill_id = $1 AND
+          b.order_id = od.order_id AND
+          od.service_id = a.service_id AND
+          od.activity_id = a.activity_id
+      `,
+      values: [req.params.billId]
+    })
+
+    const { rows: responseProductItems } = await pool.query({
+      text: `
+        SELECT
+          p.short_name_product AS description,
+          piod.price,
+          piod.quantity
+        FROM
+          bills AS b,
+          products_in_order_details AS piod,
+          products AS p
+        WHERE
+          b.bill_id = $1 AND
+          b.order_id = piod.order_id AND
+          piod.product_id = p.product_id
+      `,
+      values: [req.params.billId]
+    })
+
+    const items = [...responseActivityItems, ...responseProductItems]
+
+    return res.status(STATUS.OK).json({
+      ...camelizeObject(responseBill.rows[0]),
+      items
+    })
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
