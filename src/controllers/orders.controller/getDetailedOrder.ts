@@ -21,6 +21,52 @@ export const getDetailedOrder = async (orderId: string): Promise<Order> => {
     })
   }
 
+  const { rows: responseOrderActivities } = await pool.query({
+    text: `
+      SELECT
+        od.order_id,
+        od.service_id,
+        od.activity_id,
+        a.description,
+        od.employee_dni,
+        e.name AS employee_name,
+        od.cost_hour,
+        od.hours_taken,
+        od.created_at
+      FROM
+        order_details AS od,
+        employees AS e,
+        activities AS a
+      WHERE
+        od.order_id = $1 AND
+        od.employee_dni = e.employee_dni AND
+        od.service_id = a.service_id AND
+        od.activity_id = a.activity_id
+    `,
+    values: [orderId]
+  })
+
+  const { rows: responseOrderProducts } = await pool.query({
+    text: `
+      SELECT
+        piod.order_id,
+        piod.service_id,
+        piod.activity_id,
+        piod.product_id,
+        p.short_name_product AS description,
+        piod.price,
+        piod.quantity,
+        piod.created_at
+      FROM
+        products_in_order_details AS piod,
+        products AS p
+      WHERE
+        piod.order_id = $1 AND
+        piod.product_id = p.product_id
+    `,
+    values: [orderId]
+  })
+
   const { rows: responseActivityItems } = await pool.query({
     text: `
       SELECT
@@ -56,7 +102,12 @@ export const getDetailedOrder = async (orderId: string): Promise<Order> => {
 
   const items = [...responseActivityItems, ...responseProductItems]
 
-  return { ...camelizeObject(responseOrder.rows[0]), items } as unknown as Order
+  return {
+    ...camelizeObject(responseOrder.rows[0]),
+    items,
+    orderActivities: camelizeObject(responseOrderActivities),
+    orderProducts: camelizeObject(responseOrderProducts)
+  } as unknown as Order
 }
 
 export default getDetailedOrder
