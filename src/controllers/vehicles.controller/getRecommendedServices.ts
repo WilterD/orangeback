@@ -3,13 +3,13 @@ import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import camelizeObject from '../../utils/camelizeObject'
-import { StatusError } from '../../utils/responses/status-error'
 
 export const getRecommendedServices = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
+    console.log('get recomendatsion service', [req.params.licensePlate, req.params.mileage])
     const response = await pool.query({
       text: `
         SELECT
@@ -22,26 +22,30 @@ export const getRecommendedServices = async (
           vehicles AS v,
           services_per_models AS spm,
           services AS s,
-          activities AS a
+          activities AS a,
+          employees_coordinate_services AS ecs,
+          employees AS e
         WHERE 
           v.license_plate = $1 AND
           v.model_id = spm.model_id AND
-          spm.mileage = $2 AND
+          (spm.mileage BETWEEN $2-20 AND $2+20) AND
           spm.service_id = s.service_id AND
-          s.service_id = a.service_id
+          s.service_id = a.service_id AND
+          ecs.service_id = s.service_id AND
+          ecs.employee_dni = e.employee_dni AND
+          e.agency_rif = $3
         GROUP BY
           s.service_id, s.description, spm.mileage, spm.use_time
       `,
-      values: [req.params.licensePlate, req.params.mileage]
+      values: [req.params.licensePlate, req.params.mileage, req.params.agencyRif]
     })
+    console.log('respuesta :3', response.rows)
     if (response.rowCount === 0) {
-      throw new StatusError({
-        message: `No se pudo encontrar servicios recomendados para id: ${req.params.licensePlate} con kilometraje: ${req.params.mileage}`,
-        statusCode: STATUS.NOT_FOUND
-      })
+      return res.status(STATUS.OK).json([])
     }
     return res.status(STATUS.OK).json(camelizeObject(response.rows))
   } catch (error: unknown) {
+    console.log('error', error)
     return handleControllerError(error, res)
   }
 }

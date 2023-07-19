@@ -27,7 +27,7 @@ router.get(
 )
 router.get('/:licensePlate', tokenGuard(), verifyToken(), getVehicleById)
 router.get(
-  '/license-plate/:licensePlate/mileage/:mileage',
+  '/license-plate/:licensePlate/mileage/:mileage/agencyRif/:agencyRif',
   tokenGuard(),
   verifyToken(),
   getRecommendedServices
