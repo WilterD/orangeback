@@ -59,7 +59,7 @@ export const getEmployeesQuantityServicesPerMonth = async (
           o.entry_time <= (DATE_TRUNC('month', CAST($1 AS DATE)) + INTERVAL '1 month - 1 millisecond')
         GROUP BY e.name
         ORDER BY order_count ${req.query.orderBy}
-        LIMIT $1 OFFSET $2
+        LIMIT $2 OFFSET $3
       `
     } else {
       throw new StatusError({
@@ -70,7 +70,7 @@ export const getEmployeesQuantityServicesPerMonth = async (
 
     const response = await pool.query({
       text,
-      values: [size, offset]
+      values: [req.params.month, size, offset]
     })
 
     const pagination: PaginateSettings = {
