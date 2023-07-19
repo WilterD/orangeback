@@ -41,7 +41,7 @@ export const addBillingActivity = async (
       `,
       values: [req.body.serviceId, req.body.activityId]
     })
-
+    console.log('aaa', [...newBillingActivity, costHour[0].cost_hour])
     await pool.query({
       text: `
         INSERT INTO order_details (
