@@ -6,6 +6,7 @@ import { handleControllerError } from '../../utils/responses/handleControllerErr
 import camelizeObject from '../../utils/camelizeObject'
 import { OrderCreate } from '../../schemas/orders.schema'
 import { StatusError } from '../../utils/responses/status-error'
+import { dateParser } from '../../utils/dateParser'
 
 export const getOrdersDataFromRequestBody = (req: Request): any[] => {
   const {
@@ -43,6 +44,26 @@ export const addOrder = async (
 ): Promise<Response> => {
   try {
     const [newOrder, newActivities] = getOrdersDataFromRequestBody(req)
+
+    const { estimatedDeparture, realDeparture } = req.body
+
+    const f1 = dateParser(estimatedDeparture)
+    const now = new Date()
+    if (realDeparture !== undefined || realDeparture === null) {
+      const f2 = dateParser(realDeparture)
+      if (now.getTime() > f2.getTime()) {
+        throw new StatusError({
+          message: 'La fecha de expiración no puede ser menor a la fecha actual',
+          statusCode: STATUS.BAD_REQUEST
+        })
+      }
+    }
+    if (now.getTime() > f1.getTime()) {
+      throw new StatusError({
+        message: 'La fecha de expiración no puede ser menor a la fecha actual',
+        statusCode: STATUS.BAD_REQUEST
+      })
+    }
 
     const { rows: alreadyHasAnOrder } = await pool.query({
       text: `

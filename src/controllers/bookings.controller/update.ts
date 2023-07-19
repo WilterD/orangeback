@@ -3,6 +3,7 @@ import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
 import { StatusError } from '../../utils/responses/status-error'
+import { dateParser } from '../../utils/dateParser'
 
 const getBookingsUpdateDataFromRequestBody = (req: Request): [any[], number[]] => {
   const {
@@ -21,6 +22,18 @@ export const updateBooking = async (
 ): Promise<Response> => {
   try {
     const updatedBooking = getBookingsUpdateDataFromRequestBody(req)
+
+    const { expirationDate } = req.body
+
+    const f1 = dateParser(expirationDate)
+    const now = new Date()
+    if (now.getTime() > f1.getTime()) {
+      throw new StatusError({
+        message: 'La fecha de expiración no puede ser menor a la fecha actual',
+        statusCode: STATUS.BAD_REQUEST
+      })
+    }
+
     const response = await pool.query({
       text: 'UPDATE bookings SET expiration_date = $1 WHERE booking_id = $2',
       values: [updatedBooking[0], req.params.bookingId]
