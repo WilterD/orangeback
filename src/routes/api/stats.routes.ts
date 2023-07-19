@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { getNoEcoProductsByAgency } from '../../controllers/stats.controller/getNoEcoProductsByAgency'
 import { getNoEcoProductsAll } from '../../controllers/stats.controller/getNoEcoProductsAll'
-import { getBestSellingProducts } from '../../controllers/stats.controller/getBestSellingProducts'
+import { getBestSellingProducts } from '../../controllers/stats.controller/GetBestSellingProducts'
 import { getFakeClients } from '../../controllers/stats.controller/getFakeClients'
 // import { getEmployeesQuantityServicesPerMonth } from '../../controllers/stats.controller/getEmployeesQuantityServicesPerMonth'
 // import { getAgenciesEarnings } from '../../controllers/stats.controller/getAgenciesEarnings'
