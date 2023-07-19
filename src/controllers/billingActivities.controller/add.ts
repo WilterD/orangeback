@@ -29,7 +29,7 @@ export const addBillingActivity = async (
   try {
     const newBillingActivity = getBillingActivityCreateDataFromRequestBody(req)
 
-    const costHour = await pool.query({
+    const { rows: costHour } = await pool.query({
       text: `
         SELECT
           cost_hour
@@ -42,36 +42,34 @@ export const addBillingActivity = async (
       values: [req.body.serviceId, req.body.activityId]
     })
 
-    const insertar = await pool.query({
+    await pool.query({
       text: `
         INSERT INTO order_details (
           service_id, 
           activity_id, 
           order_id, 
           employee_dni, 
-          hours_taken, 
+          hours_taken,
           cost_hour
-        ) VALUES ($1, $2, $3, $4, $5, $6) 
-        RETURNING service_id, activity_id, order_id
+        ) VALUES ($1, $2, $3, $4, $5, $6)
       `,
-      values: [...newBillingActivity, costHour]
+      values: [...newBillingActivity, costHour[0].cost_hour]
     })
-    const insertedServiceId: string = insertar.rows[0].serviceId
-    const insertedActivityId: string = insertar.rows[0].activityId
-    const insertedOrderId: string = insertar.rows[0].orderId
+
     const response = await pool.query({
       text: `
         SELECT * 
-        FROM order_detail 
+        FROM order_details
         WHERE 
           service_id = $1 AND 
           activity_id = $2 AND 
           order_id = $3
       `,
-      values: [insertedServiceId, insertedActivityId, insertedOrderId]
+      values: [req.body.serviceId, req.body.activityId, req.body.orderId]
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
+    console.log(error)
     return handleControllerError(error, res)
   }
 }
