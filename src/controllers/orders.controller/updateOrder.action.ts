@@ -19,9 +19,9 @@ export const getOrdersUpdateDataFromRequestBody = (req: Request): any[] => {
     estimatedDeparture,
     bookingId,
     employeeDni,
+    (realDeparture === undefined) ? null : realDeparture,
     (responsibleDni === undefined) ? null : responsibleDni,
-    (responsibleName === undefined) ? null : responsibleName,
-    (realDeparture === undefined) ? null : realDeparture
+    (responsibleName === undefined) ? null : responsibleName
   ]
 
   return updatedOrder
