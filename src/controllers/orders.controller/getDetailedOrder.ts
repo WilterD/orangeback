@@ -24,7 +24,6 @@ export const getDetailedOrder = async (orderId: string): Promise<Order> => {
   const { rows: responseOrderActivities } = await pool.query({
     text: `
       SELECT
-        od.order_id,
         od.service_id,
         od.activity_id,
         a.description,
@@ -49,7 +48,6 @@ export const getDetailedOrder = async (orderId: string): Promise<Order> => {
   const { rows: responseOrderProducts } = await pool.query({
     text: `
       SELECT
-        piod.order_id,
         piod.service_id,
         piod.activity_id,
         piod.product_id,
