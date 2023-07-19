@@ -24,9 +24,16 @@ export const getBills = async (
     })
 
     const response = await pool.query({
-      text: `SELECT *
-               FROM bills 
-               ORDER BY bill_id LIMIT $1 OFFSET $2`,
+      text: `
+        SELECT
+          bill_id,
+          bill_date,
+          discount_value,
+          total_cost,
+          order_id,
+          ((1 - (discount_value/100)) * total_cost) AS total_cost_final
+        FROM bills 
+        ORDER BY bill_id LIMIT $1 OFFSET $2`,
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

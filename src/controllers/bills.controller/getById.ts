@@ -10,19 +10,26 @@ export const getBillById = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const response = await pool.query({
-      text: `SELECT * 
-              FROM bills 
-              WHERE bill_id = $1`,
+    const responseBill = await pool.query({
+      text: `
+        SELECT
+          bill_id,
+          bill_date,
+          discount_value,
+          total_cost,
+          order_id,
+          ((1 - (discount_value/100)) * total_cost) AS total_cost_final
+        FROM bills 
+        WHERE bill_id = $1`,
       values: [req.params.billId]
     })
-    if (response.rowCount === 0) {
+    if (responseBill.rowCount === 0) {
       throw new StatusError({
         message: `No se pudo encontrar el registro de: ${req.params.billId}`,
         statusCode: STATUS.NOT_FOUND
       })
     }
-    return res.status(STATUS.OK).json(camelizeObject(response.rows[0]))
+    return res.status(STATUS.OK).json(camelizeObject(responseBill.rows[0]))
   } catch (error: unknown) {
     return handleControllerError(error, res)
   }
