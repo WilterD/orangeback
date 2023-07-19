@@ -31,7 +31,7 @@ export const getOrders = async (
 
     const response = await pool.query({
       text: `
-              SELECT * 
+              SELECT *
               FROM orders
               ORDER BY created_at DESC
               LIMIT $1 OFFSET $2

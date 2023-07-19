@@ -32,7 +32,7 @@ export const getServices = async (
           WHERE service_id = s.service_id
         ) AS total_cost,
         COUNT(bps.service_id) AS total_appearances, 
-        s.created_at
+        TO_CHAR(s.created_at, 'YYYY-MM-DD HH:MI:SS') as created_at
       FROM 
         services AS s
       LEFT JOIN

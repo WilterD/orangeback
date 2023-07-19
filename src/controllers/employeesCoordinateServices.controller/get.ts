@@ -33,7 +33,7 @@ export const getEmployeesCoordinateServices = async (
         s.description AS service_name,
         ecs.reservation_time,
         ecs.capacity,
-        ecs.created_at
+        TO_CHAR(ecs.created_at, 'YYYY-MM-DD HH:MI:SS') as created_at
       FROM 
         employees_coordinate_services AS ecs,
         employees AS e,

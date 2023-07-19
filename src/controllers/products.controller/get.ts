@@ -26,7 +26,7 @@ export const getProducts = async (
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM products ORDER BY product_id LIMIT $1 OFFSET $2',
+      text: "SELECT *, TO_CHAR(created_at, 'YYYY-MM-DD HH:MI:SS') as created_at FROM products ORDER BY product_id LIMIT $1 OFFSET $2",
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

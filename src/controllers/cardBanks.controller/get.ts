@@ -23,7 +23,7 @@ export const getCardBanks = async (
     })
 
     const response = await pool.query({
-      text: 'SELECT * FROM card_banks ORDER BY card_number LIMIT $1 OFFSET $2',
+      text: "SELECT *, TO_CHAR(created_at, 'YYYY-MM-DD HH:MI:SS') as created_at FROM card_banks ORDER BY card_number LIMIT $1 OFFSET $2",
       values: [size, offset]
     })
     const pagination: PaginateSettings = {

@@ -27,7 +27,7 @@ export const getBills = async (
       text: `
         SELECT
           bill_id,
-          bill_date,
+          TO_CHAR(bill_date, 'YYYY-MM-DD HH:MI:SS') as bill_date,
           discount_value,
           total_cost,
           order_id,
