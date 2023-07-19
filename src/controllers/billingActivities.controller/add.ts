@@ -39,7 +39,7 @@ export const addBillingActivity = async (
           service_id = $1 AND
           activity_id = $2
       `,
-      values: [req.params.serviceId, req.params.activityId]
+      values: [req.body.serviceId, req.body.activityId]
     })
 
     const insertar = await pool.query({
