@@ -43,7 +43,6 @@ export const updateRecommendations = async (
       .status(STATUS.OK)
       .json({ message: 'Servicio recomendado modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

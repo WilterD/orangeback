@@ -22,10 +22,70 @@ export const getServices = async (
       text: 'SELECT COUNT(*) FROM services'
     })
 
+    let text = `
+      SELECT 
+        s.service_id, 
+        s.description, 
+        (
+          SELECT SUM(cost_hour)
+          FROM activities
+          WHERE service_id = s.service_id
+        ) AS total_cost,
+        COUNT(bps.service_id) AS total_appearances, 
+        s.created_at
+      FROM 
+        services AS s,
+        bookings_per_services AS bps
+      WHERE 
+        s.service_id = bps.service_id
+      GROUP BY 
+        s.service_id, 
+        s.description, 
+        s.created_at 
+      ORDER BY description LIMIT $1 OFFSET $2
+    `
+
+    if (
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      req.query?.orderByTotalAppearance &&
+      req.query?.orderByTotalAppearance !== null &&
+      req.query?.orderByTotalAppearance !== 'null' &&
+      req.query?.orderByTotalAppearance !== '' &&
+      (
+        req.query?.orderByTotalAppearance === 'ASC' ||
+        req.query?.orderByTotalAppearance === 'DESC'
+      )
+    ) {
+      text = `
+        SELECT 
+          s.service_id, 
+          s.description, 
+          (
+            SELECT SUM(cost_hour)
+            FROM activities
+            WHERE service_id = s.service_id
+          ) AS total_cost,
+          COUNT(bps.service_id) AS total_appearances, 
+          s.created_at
+        FROM 
+          services AS s,
+          bookings_per_services AS bps
+        WHERE 
+          s.service_id = bps.service_id
+        GROUP BY 
+          s.service_id, 
+          s.description, 
+          s.created_at 
+        ORDER BY total_appearances ${req.query?.orderByTotalAppearance}
+        LIMIT $1 OFFSET $2
+      `
+    }
+
     const response = await pool.query({
-      text: 'SELECT s.service_id, s.description, SUM(a.cost_hour) AS total_cost, s.created_at FROM services AS s, activities AS a WHERE s.service_id = a.service_id GROUP BY s.service_id, s.description, s.created_at ORDER BY description LIMIT $1 OFFSET $2',
+      text,
       values: [size, offset]
     })
+
     const pagination: PaginateSettings = {
       total: Number(rows[0].count),
       page: Number(page),

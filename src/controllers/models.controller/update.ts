@@ -79,7 +79,6 @@ export const updateModel = async (
       .status(STATUS.OK)
       .json({ message: 'Modelo modificado exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }

@@ -41,7 +41,6 @@ export const updatePayment = async (
     }
     return res.status(STATUS.OK).json({ message: 'Pago Modificado Exitosamente' })
   } catch (error: unknown) {
-    console.log(error)
     return handleControllerError(error, res)
   }
 }
