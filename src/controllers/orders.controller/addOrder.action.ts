@@ -49,7 +49,7 @@ export const addOrder = async (
 
     const f1 = dateParser(estimatedDeparture)
     const now = new Date()
-    if (realDeparture !== undefined || realDeparture === null) {
+    if (realDeparture !== undefined && realDeparture !== null && realDeparture !== '') {
       const f2 = dateParser(realDeparture)
       if (now.getTime() > f2.getTime()) {
         throw new StatusError({
@@ -132,6 +132,7 @@ export const addOrder = async (
     })
     return res.status(STATUS.CREATED).json(camelizeObject(response.rows[0]))
   } catch (error: unknown) {
+    console.log('error concreto', error)
     return handleControllerError(error, res)
   }
 }

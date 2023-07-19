@@ -35,11 +35,11 @@ export const ordersSchema = z.object({
         if (!regex.test(fecha)) {
           return false
         }
-        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
-        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
-          hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
-          return false
-        }
+        // const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        // if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        //   hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+        //   return false
+        // }
         return true
       },
       {
@@ -55,11 +55,11 @@ export const ordersSchema = z.object({
         if (!regex.test(fecha)) {
           return false
         }
-        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
-        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
-        hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
-          return false
-        }
+        // const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        // if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        // hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+        //   return false
+        // }
         return true
       },
       {
@@ -75,11 +75,11 @@ export const ordersSchema = z.object({
         if (!regex.test(fecha)) {
           return false
         }
-        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
-        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
-        hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
-          return false
-        }
+        // const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        // if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        // hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+        //   return false
+        // }
         return true
       },
       {
@@ -123,11 +123,11 @@ export const updateOrdersSchema = z.object({
         if (!regex.test(fecha)) {
           return false
         }
-        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
-        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
-          hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
-          return false
-        }
+        // const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        // if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        //   hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+        //   return false
+        // }
         return true
       },
       {
@@ -143,11 +143,11 @@ export const updateOrdersSchema = z.object({
         if (!regex.test(fecha)) {
           return false
         }
-        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
-        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
-        hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
-          return false
-        }
+        // const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        // if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        // hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+        //   return false
+        // }
         return true
       },
       {
@@ -163,11 +163,11 @@ export const updateOrdersSchema = z.object({
         if (!regex.test(fecha)) {
           return false
         }
-        const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
-        if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
-        hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
-          return false
-        }
+        // const [dia, mes, anio, hora, minutos, segundos] = fecha.split(/[-\s:]/).map(Number)
+        // if (dia < 1 || dia > 30 || mes < 1 || mes > 12 || anio < 1900 || anio > 2100 ||
+        // hora < 0 || hora > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+        //   return false
+        // }
         return true
       },
       {
