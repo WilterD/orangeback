@@ -7,8 +7,8 @@ import { StatusError } from '../../utils/responses/status-error'
 const getBillingActivityUpdateDataFromRequestBody = (req: Request): any[] => {
   const { hoursTaken, employeeDni } = req.body
 
-  const updatedBillingActivity = [hoursTaken, employeeDni]
-  return updatedBillingActivity
+  const updatedBillActivity = [hoursTaken, employeeDni]
+  return updatedBillActivity
 }
 
 export const updatedBillingActivity = async (
@@ -16,7 +16,7 @@ export const updatedBillingActivity = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const updatedBillingActivity = getBillingActivityUpdateDataFromRequestBody(req)
+    const updatedBillActivity = getBillingActivityUpdateDataFromRequestBody(req)
     const response = await pool.query({
       text: `
         UPDATE order_details SET 
@@ -28,7 +28,7 @@ export const updatedBillingActivity = async (
           order_id = $5
       `,
       values: [
-        ...updatedBillingActivity,
+        ...updatedBillActivity,
         req.params.serviceId,
         req.params.activityId,
         req.params.orderId
