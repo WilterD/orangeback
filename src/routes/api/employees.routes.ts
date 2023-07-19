@@ -23,13 +23,6 @@ const router = Router()
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getEmployees)
 router.get('/all', tokenGuard(), verifyToken(), getEmployeesAll)
-router.post(
-  '/all',
-  tokenGuard(),
-  verifyToken(),
-  schemaGuard(getAllEmpAgServ),
-  getAllEmployeesByAgencyAndService
-)
 router.get('/:employeeDni', tokenGuard(), verifyToken(), getEmployeeById)
 router.post(
   '/',
@@ -37,6 +30,13 @@ router.post(
   verifyToken(),
   schemaGuard(createEmployeesSchema),
   addEmployee
+)
+router.post(
+  '/all',
+  tokenGuard(),
+  verifyToken(),
+  schemaGuard(getAllEmpAgServ),
+  getAllEmployeesByAgencyAndService
 )
 router.put(
   '/:employeeDni',
