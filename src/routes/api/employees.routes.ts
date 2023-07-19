@@ -10,17 +10,26 @@ import { deleteEmployee } from '../../controllers/employees.controller/delete'
 import { schemaGuard } from '../../middlewares/schemaGuard'
 import {
   createEmployeesSchema,
+  getAllEmpAgServ,
   updateEmployeesSchema
 } from '../../schemas/employees.Schema'
 import { paginationGuard } from '../../middlewares/paginationGuard'
 import { tokenGuard } from '../../middlewares/tokenGuard'
 import { verifyToken } from '../../middlewares/auth'
+import { getAllEmployeesByAgencyAndService } from '../../controllers/employees.controller/getAllEmpByAgencyAndServ'
 
 const router = Router()
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get('/', tokenGuard(), verifyToken(), paginationGuard(), getEmployees)
 router.get('/all', tokenGuard(), verifyToken(), getEmployeesAll)
+router.post(
+  '/all',
+  tokenGuard(),
+  verifyToken(),
+  schemaGuard(getAllEmpAgServ),
+  getAllEmployeesByAgencyAndService
+)
 router.get('/:employeeDni', tokenGuard(), verifyToken(), getEmployeeById)
 router.post(
   '/',

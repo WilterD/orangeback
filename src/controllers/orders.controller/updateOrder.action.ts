@@ -3,14 +3,36 @@ import { pool } from '../../database'
 import { STATUS } from '../../utils/constants'
 import { StatusError } from '../../utils/responses/status-error'
 import { handleControllerError } from '../../utils/responses/handleControllerError'
-import { getOrdersDataFromRequestBody } from './addOrder.action'
+
+export const getOrdersUpdateDataFromRequestBody = (req: Request): any[] => {
+  const {
+    entryTime,
+    estimatedDeparture,
+    bookingId,
+    employeeDni,
+    realDeparture,
+    responsibleDni,
+    responsibleName
+  } = req.body
+  const updatedOrder = [
+    entryTime,
+    estimatedDeparture,
+    bookingId,
+    employeeDni,
+    (responsibleDni === undefined) ? null : responsibleDni,
+    (responsibleName === undefined) ? null : responsibleName,
+    (realDeparture === undefined) ? null : realDeparture
+  ]
+
+  return updatedOrder
+}
 
 export default async function updateOrder (
   req: Request,
   res: Response
 ): Promise<Response> {
   try {
-    const [updatedOrder] = getOrdersDataFromRequestBody(req)
+    const updatedOrder = getOrdersUpdateDataFromRequestBody(req)
     const response = await pool.query({
       text: `
         UPDATE orders SET 
