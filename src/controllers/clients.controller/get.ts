@@ -30,7 +30,7 @@ export const getClients = async (
 
     const response = await pool.query({
       text: `SELECT 
-                  * 
+                  *, TO_CHAR(created_at, 'YYYY-MM-DD HH:MI:SS') as created_at
                 FROM 
                   clients 
                 ORDER BY 

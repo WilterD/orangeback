@@ -24,7 +24,7 @@ export const getCities = async (
     })
 
     const response = await pool.query({
-      text: `SELECT * 
+      text: `SELECT *, TO_CHAR(created_at, 'YYYY-MM-DD HH:MI:SS') as created_at
                 FROM cities 
                 ORDER BY name LIMIT $1 OFFSET $2`,
       values: [size, offset]

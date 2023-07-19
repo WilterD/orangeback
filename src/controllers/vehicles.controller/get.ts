@@ -24,7 +24,7 @@ export const getVehicles = async (
     })
 
     const response = await pool.query({
-      text: `SELECT * 
+      text: `SELECT *, TO_CHAR(created_at, 'YYYY-MM-DD HH:MI:SS') as created_at  
                   FROM vehicles 
                   ORDER BY license_plate 
                   LIMIT $1 OFFSET $2`,

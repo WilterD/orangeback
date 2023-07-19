@@ -24,7 +24,7 @@ export const getModels = async (
 
     const response = await pool.query({
       text: `
-        SELECT * 
+        SELECT *, TO_CHAR(created_at, 'YYYY-MM-DD HH:MI:SS') as created_at
         FROM models 
         ORDER BY model_id 
         LIMIT $1 OFFSET $2
