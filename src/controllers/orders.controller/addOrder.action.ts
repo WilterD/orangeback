@@ -53,14 +53,14 @@ export const addOrder = async (
       const f2 = dateParser(realDeparture)
       if (now.getTime() > f2.getTime()) {
         throw new StatusError({
-          message: 'La fecha de expiración no puede ser menor a la fecha actual',
+          message: 'La fecha real de salida no puede ser menor a la fecha actual',
           statusCode: STATUS.BAD_REQUEST
         })
       }
     }
     if (now.getTime() > f1.getTime()) {
       throw new StatusError({
-        message: 'La fecha de expiración no puede ser menor a la fecha actual',
+        message: 'La fecha estimada de salida no puede ser menor a la fecha actual',
         statusCode: STATUS.BAD_REQUEST
       })
     }
